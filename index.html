@@ -1,0 +1,2815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo Oficial de Fixture - Plexcel.Py Edition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        fifa: {
+                            gold: '#d4af37',
+                            goldglow: '#f3e5ab',
+                            dark: '#030712',
+                            panel: 'rgba(15, 23, 42, 0.5)',
+                            emerald: '#059669',
+                            emeraldglow: '#34d399'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:ital,wght@0,300;0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
+    <!-- FontAwesome para iconos limpios y profesionales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- GSAP para animaciones fluidas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 50% 0%, #064e3b33 0%, #020617 70%);
+        }
+        .fifa-text-glow {
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Formato Estricto de Instagram Live */
+        .instagram-live-container {
+            width: 100%;
+            max-width: 420px;
+            height: 85vh;
+            max-height: 800px;
+            border: 6px solid #1e293b;
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Floating reaction animation */
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-300px) scale(1.4) rotate(15deg); opacity: 0; }
+        }
+        .heart-float {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            animation: flyUp 3s ease-out forwards;
+            pointer-events: none;
+        }
+
+        /* --- Estilo de Impresión Premium A4 Horizontal Ultra Compacto --- */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0.2cm;
+            }
+            html, body {
+                height: 100% !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-family: 'Inter', sans-serif !important;
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            body * {
+                visibility: hidden;
+            }
+            .print-only, .print-only * {
+                visibility: visible !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 29.7cm !important;
+                height: 21.0cm !important;
+                box-sizing: border-box !important;
+            }
+            /* Cuadrícula compacta adaptable para encajar el fixture en una carilla */
+            .print-grid-layout {
+                display: grid !important;
+                grid-template-columns: var(--print-cols, repeat(5, 1fr)) !important;
+                grid-template-rows: var(--print-rows, repeat(3, 1fr)) !important;
+                gap: 4px !important;
+                width: 29.3cm !important;
+                height: 18.8cm !important;
+                box-sizing: border-box !important;
+                padding: 2px !important;
+            }
+            .print-card-date {
+                border: 1px solid #1e293b !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 4px !important;
+                border-radius: 4px !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                overflow: hidden !important;
+                page-break-inside: avoid !important;
+            }
+            .print-card-date h3 {
+                font-size: 8px !important;
+                font-weight: 900 !important;
+                border-bottom: 1.5px solid #000000 !important;
+                margin-bottom: 2px !important;
+                padding-bottom: 1px !important;
+                text-transform: uppercase !important;
+                color: #000000 !important;
+            }
+            .print-match-row {
+                border-bottom: 0.5px dashed #94a3b8 !important;
+                padding: 1px 0 !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                font-size: 6.5px !important;
+                line-height: 1.0 !important;
+                color: #000000 !important;
+            }
+            .print-match-row:last-child {
+                border-bottom: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen relative flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950 overflow-x-hidden">
+
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,_var(--tw-gradient-stops))] from-emerald-950/20 via-slate-950/95 to-slate-950 -z-10 no-print"></div>
+    <div class="absolute top-0 left-1/4 w-[800px] h-[350px] bg-emerald-500/5 rounded-full blur-3xl -z-10 no-print"></div>
+
+    <!-- PANTALLA DE SEGURIDAD (PASSWORD LOCK) -->
+    <div id="pantalla-login" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4 no-print">
+        <div class="w-full max-w-md glass-panel p-8 rounded-2xl border border-emerald-500/20 shadow-2xl text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-yellow-500 to-emerald-500"></div>
+            <div class="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-500/20">
+                <i class="fa-solid fa-shield-halved text-slate-950 text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-extrabold tracking-tight text-white uppercase mb-1 font-display">Acceso de Seguridad</h2>
+            <p class="text-slate-400 text-[10px] tracking-wider uppercase mb-6">Módulo de Sorteo Plexcel.Py • FIFA 2026</p>
+            
+            <div class="space-y-4 text-left">
+                <div>
+                    <label class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1.5">Contraseña de Administrador</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                            <i class="fa-solid fa-key text-emerald-500"></i>
+                        </span>
+                        <input type="password" id="input-password" placeholder="••••••••" class="w-full bg-slate-900/80 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl pl-10 pr-4 py-3 text-slate-200 text-sm font-semibold transition-all outline-none" onkeydown="if(event.key === 'Enter') validarPassword()">
+                    </div>
+                </div>
+                <button onclick="validarPassword()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black tracking-wider uppercase transition-all duration-300 transform hover:scale-[1.01] shadow-lg text-xs cursor-pointer">
+                    Autenticar Entrada
+                </button>
+            </div>
+            <p id="login-error" class="text-red-400 text-xs font-bold mt-4 hidden animate-pulse">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i> Contraseña incorrecta. Inténtelo de nuevo.
+            </p>
+            <div class="mt-8 pt-4 border-t border-slate-900">
+                <p class="text-[10px] text-slate-500">Acceso restringido. Por defecto: <span class="text-emerald-400 font-mono font-bold">FIFA2026</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CABECERA OFICIAL DE TRANSMISIÓN -->
+    <header class="no-print bg-slate-950/80 border-b border-slate-900 py-4 px-4 sticky top-0 backdrop-blur-md z-40">
+        <div class="container mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-lg flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-trophy text-slate-950 text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-black tracking-wider text-white uppercase font-display flex items-center gap-2">
+                        FIFA DRAW HUB <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono font-bold">2026 PRO</span>
+                    </h1>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Sorteador con Optimización Matemática por Plexcel.Py</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div id="badge-guardado" class="text-[10px] bg-slate-900 text-slate-400 px-3 py-1.5 rounded-lg border border-slate-800 flex items-center gap-1.5 font-bold uppercase">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Guardado Activo
+                </div>
+                <!-- Backup Control buttons -->
+                <button onclick="exportarCopiaSeguridadJSON()" title="Exportar Backup JSON" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold p-2 rounded-lg border border-slate-800 cursor-pointer">
+                    <i class="fa-solid fa-file-export"></i>
+                </button>
+                <button onclick="document.getElementById('import-file-selector').click()" title="Importar Backup JSON" class="bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold p-2 rounded-lg border border-slate-800 cursor-pointer">
+                    <i class="fa-solid fa-file-import"></i>
+                </button>
+                <input type="file" id="import-file-selector" class="hidden" accept=".json" onchange="importarCopiaSeguridadJSON(this)">
+                
+                <button onclick="cerrarSesion()" class="bg-slate-900 hover:bg-red-950/30 hover:border-red-500/30 text-slate-400 hover:text-red-400 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-800 transition-all cursor-pointer">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGADOR DE PESTAÑAS PRINCIPALES -->
+    <div class="no-print container mx-auto px-4 mt-6 max-w-2xl">
+        <nav class="flex justify-between bg-slate-950/85 p-1 rounded-xl border border-slate-900 shadow-xl">
+            <button onclick="switchTab('config')" id="tab-config" class="flex-1 text-center py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 bg-emerald-500 text-slate-950 shadow-md">
+                <i class="fa-solid fa-sliders block sm:inline mb-1 sm:mb-0 sm:mr-1"></i> Config
+            </button>
+            <button onclick="switchTab('sorteo')" id="tab-sorteo" class="flex-1 text-center py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white" disabled>
+                <i class="fa-solid fa-circle-play block sm:inline mb-1 sm:mb-0 sm:mr-1"></i> Sorteo
+            </button>
+            <button onclick="switchTab('fixture')" id="tab-fixture" class="flex-1 text-center py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white" disabled>
+                <i class="fa-solid fa-calendar-days block sm:inline mb-1 sm:mb-0 sm:mr-1"></i> Fixture
+            </button>
+            <button onclick="switchTab('estudios')" id="tab-estudios" class="flex-1 text-center py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white" disabled>
+                <i class="fa-solid fa-scale-balanced block sm:inline mb-1 sm:mb-0 sm:mr-1"></i> Auditoría
+            </button>
+        </nav>
+    </div>
+
+    <!-- CONTENEDOR GENERAL DE PANTALLAS -->
+    <main class="container mx-auto px-4 py-6 max-w-7xl flex-grow print-container">
+
+        <!-- PESTAÑA 1: CONFIGURACIÓN -->
+        <section id="sec-config" class="tab-content block no-print">
+            <div class="glass-panel rounded-2xl p-6 shadow-2xl border border-slate-900 max-w-5xl mx-auto">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-900 pb-4 mb-6 gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-white font-display">Panel de Control de Competencia</h2>
+                            <p class="text-[10px] text-slate-400">Personaliza los nombres de los equipos, canchas, ternas arbitrales y reglas del fixture.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="restablecerPredefinidos()" class="bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Valores por Defecto
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selección de Regla de Fecha Especial y Formato de Torneo -->
+                <div class="bg-slate-950/60 border border-slate-900 p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest block mb-1.5"><i class="fa-solid fa-trophy mr-1"></i> Formato de Torneo</label>
+                        <select id="config-formato-torneo" onchange="actualizarInterfazPorFormato()" class="w-full bg-slate-900 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
+                            <option value="todos">Todos contra Todos (1 Zona de 14 - 15 Fechas)</option>
+                            <option value="zonas">Dos Zonas de 7 Equipos (Fase de Grupos - 7 Fechas)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest block mb-1.5"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Jornada Especial (3 Horarios)</label>
+                        <select id="config-fecha-especial" class="w-full bg-slate-900 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
+                            <option value="primera">La Fecha 1 se juega en 3 Horarios (13, 15 y 17hs)</option>
+                            <option value="ultima">La última Fecha se juega en 3 Horarios (13, 15 y 17hs)</option>
+                        </select>
+                    </div>
+                    <div class="text-slate-400 text-[10px] leading-relaxed flex items-center col-span-1">
+                        <p><i class="fa-solid fa-circle-info text-emerald-500 mr-1.5"></i> <strong>Optimización Plexcel.Py:</strong> El resolvedor restringe estrictamente que <strong>ningún equipo quede libre por dos jornadas consecutivas</strong>, garantizando equidad deportiva absoluta.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Configuración de Equipos -->
+                    <div class="lg:col-span-2">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center justify-between">
+                            <span id="titulo-roster-equipos">Equipos Registrados (14)</span>
+                            <span class="text-[9px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded font-mono">1.0 Roster</span>
+                        </h3>
+                        <div id="equipos-inputs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[380px] overflow-y-auto pr-1 no-scrollbar">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Configuración de Árbitros y Canchas -->
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Ternas Arbitrales</h3>
+                            <div id="ternas-inputs-grid" class="space-y-2">
+                                <!-- Inyectado por JS -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Sedes / Canchas Fijas</h3>
+                            <div id="canchas-inputs-grid" class="space-y-2">
+                                <!-- Inyectado por JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-900 flex justify-end">
+                    <button onclick="guardarConfigYProceder()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-650 hover:to-emerald-705 text-slate-950 font-black px-10 py-3 rounded-lg shadow-lg shadow-emerald-500/10 transition-all uppercase tracking-wider text-xs cursor-pointer">
+                        Validar y Cargar Bolillero <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 2: SORTEO INTERACTIVO -->
+        <section id="sec-sorteo" class="tab-content hidden no-print">
+            <!-- Barra de Modos de Sorteo (TV Mode / Instagram Live Mode) -->
+            <div class="bg-slate-950/80 border border-slate-900 p-3 rounded-xl mb-6 flex flex-wrap justify-between items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300 font-display">Señal Oficial de Sorteo FIFA Live</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleModoInstagram()" id="btn-insta-mode" class="bg-slate-900 hover:bg-slate-850 text-pink-500 border border-slate-800 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                        <i class="fa-brands fa-instagram mr-1"></i> Modo Instagram Live (9:16)
+                    </button>
+                    <button onclick="toggleModoTV()" id="btn-tv-mode" class="bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                        <i class="fa-solid fa-tv mr-1.5 text-emerald-400"></i> Modo Proyector / TV
+                    </button>
+                    <button onclick="toggleAudioAmbiente()" id="btn-audio" class="bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                        <i class="fa-solid fa-volume-high mr-1"></i> Himno: OFF
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR PRINCIPAL DEL SORTEO -->
+            <div id="sorteo-layout-wrapper" class="flex justify-center transition-all duration-500">
+                
+                <!-- VISTA LIGA / DESKTOP / TV -->
+                <div id="sorteo-pantalla-estandar" class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full transition-all duration-500">
+                    <!-- Bolillero -->
+                    <div class="lg:col-span-1 bg-gradient-to-b from-slate-950 to-slate-900 border border-slate-900 rounded-2xl p-6 flex flex-col justify-between items-center shadow-2xl relative overflow-hidden min-h-[460px]">
+                        <div class="text-center z-10">
+                            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-widest">Bombo Unificado</span>
+                            <h2 class="text-lg font-black text-white uppercase tracking-tight mt-1.5 font-display">Sorteo de Posiciones</h2>
+                        </div>
+
+                        <!-- Canvas del Bolillero -->
+                        <div class="relative w-48 h-48 rounded-full border-4 border-slate-850 bg-slate-950/85 shadow-2xl flex items-center justify-center overflow-hidden my-4">
+                            <canvas id="canvas-bolillero" width="200" height="200" class="absolute inset-0 w-full h-full"></canvas>
+                        </div>
+
+                        <div class="w-full space-y-2 z-10">
+                            <button id="btn-extraer" onclick="extraerBolillaInteractiva()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black py-3.5 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.01] uppercase tracking-wider text-xs cursor-pointer">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Extraer Bolilla
+                            </button>
+                            <div class="flex justify-between text-[10px] text-slate-400">
+                                <button onclick="ejecutarSorteoCompletoInstantaneo()" class="hover:text-emerald-400 underline font-semibold">Simular instantáneamente</button>
+                                <span id="conteo-sorteo-restante" class="font-bold">Restan: 14</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Retransmisión y Mapeo -->
+                    <div class="lg:col-span-2 bg-slate-950/40 border border-slate-900 rounded-2xl p-6 shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                        <div class="mb-4">
+                            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Transmisión de TV en Directo
+                            </h2>
+                            
+                            <!-- Pantalla de Revelación Visual -->
+                            <div id="revelador-pantalla-gigante" class="bg-slate-950 border border-slate-900 rounded-xl p-8 text-center min-h-[170px] flex flex-col items-center justify-center transition-all duration-500 shadow-inner relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-500/5 to-transparent -z-10"></div>
+                                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Esperando extracción de bolillas...</p>
+                            </div>
+                        </div>
+
+                        <!-- Grilla de Mapeo de Posiciones Sorteadoras -->
+                        <div>
+                            <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Mapeo de Slots de Fixture</h3>
+                            <div id="grid-posiciones-draw" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                <!-- Inyectado por JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODO INSTAGRAM LIVE (9:16) -->
+                <div id="sorteo-pantalla-instagram" class="instagram-live-container hidden p-4 flex flex-col justify-between relative text-white">
+                    <!-- Overlay En Vivo -->
+                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center z-20">
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-red-600 text-white text-[9px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider animate-pulse flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span> VIVO
+                            </span>
+                            <span class="bg-black/60 backdrop-blur-md text-[9px] text-slate-200 px-2 py-0.5 rounded font-bold">
+                                <i class="fa-solid fa-eye mr-1"></i> 1.4K
+                            </span>
+                        </div>
+                        <div class="bg-black/60 backdrop-blur-md text-[8px] text-amber-400 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-widest">
+                            FIFA DRAW '26
+                        </div>
+                    </div>
+
+                    <!-- Bolillero Compacto Vertical -->
+                    <div class="flex flex-col items-center mt-10">
+                        <div class="w-32 h-32 rounded-full border-4 border-emerald-500/30 bg-slate-950/90 shadow-xl flex items-center justify-center relative overflow-hidden mb-2">
+                            <canvas id="canvas-bolillero-insta" width="130" height="130" class="absolute inset-0 w-full h-full"></canvas>
+                        </div>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest text-center" id="insta-conteo-restante">Bolillas Restantes: 14</p>
+                    </div>
+
+                    <!-- Revelación Directa Instagram -->
+                    <div id="insta-revelador" class="bg-gradient-to-b from-slate-900/90 to-slate-950/95 border border-slate-800 rounded-2xl p-6 my-4 text-center min-h-[140px] flex flex-col items-center justify-center relative">
+                        <span class="text-slate-500 text-[10px] uppercase font-bold tracking-widest">A la espera del bolillero...</span>
+                    </div>
+
+                    <!-- Sección Chat Falso y Controles -->
+                    <div class="space-y-3 z-10">
+                        <!-- Chat animado flotante -->
+                        <div class="bg-gradient-to-t from-black/80 to-transparent p-3 rounded-t-xl max-h-[110px] overflow-y-auto no-scrollbar space-y-1.5 text-[10px]" id="insta-chat-box">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+
+                        <!-- Botón de Acción Instagram -->
+                        <div class="flex gap-2">
+                            <button onclick="extraerBolillaInteractiva()" class="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-extrabold py-3 rounded-xl shadow-lg text-[11px] uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Extraer Bola
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor reacciones flotantes -->
+                    <div id="insta-reacciones-container" class="absolute inset-0 pointer-events-none z-10"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PESTAÑA 3: FIXTURE -->
+        <section id="sec-fixture" class="tab-content hidden print-container">
+            <!-- Menú de Filtros, Impresión y Exportación -->
+            <div class="no-print glass-panel rounded-xl p-4 mb-6 border border-slate-900 flex flex-col xl:flex-row items-center justify-between gap-4 shadow-xl">
+                <div>
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2 font-display">
+                        <i class="fa-solid fa-calendar text-emerald-500"></i> Calendario Programado
+                    </h2>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Filtra partidos o exporta la agenda oficial en formatos compatibles.</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2 w-full xl:w-auto justify-end">
+                    <!-- Ajuste de Escala No-Print -->
+                    <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-lg text-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold">Escala Impresión:</span>
+                        <input type="range" id="print-font-scale" min="6" max="11" value="7" step="0.5" onchange="aplicarEscalaFuenteImpresion(this.value)" class="w-16 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                        <span id="print-font-scale-lbl" class="font-mono text-[10px] text-emerald-400 font-bold">7px</span>
+                    </div>
+
+                    <!-- Filtro Jornada -->
+                    <div class="flex items-center gap-1 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-900 text-[10px] sm:text-xs">
+                        <span class="text-slate-400"><i class="fa-solid fa-hashtag text-emerald-500"></i></span>
+                        <select id="select-fecha" onchange="renderizarFixtureView()" class="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer">
+                            <!-- Inyectado por JS -->
+                        </select>
+                    </div>
+
+                    <!-- Filtro Club -->
+                    <div class="flex items-center gap-1 bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-900 text-[10px] sm:text-xs">
+                        <span class="text-slate-400"><i class="fa-solid fa-shield-halved text-emerald-500"></i></span>
+                        <select id="select-club" onchange="renderizarFixtureView()" class="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer">
+                            <!-- Inyectado por JS -->
+                        </select>
+                    </div>
+
+                    <!-- Exportar iCal (.ics) -->
+                    <button onclick="exportarGoogleCalendar()" class="bg-slate-950 hover:bg-slate-900 text-[10px] sm:text-xs text-emerald-400 font-bold px-3 py-2 rounded-lg border border-slate-900 transition-all cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-calendar-plus"></i> Sincronizar Calendario (.ics)
+                    </button>
+
+                    <!-- Exportar Story (PNG) -->
+                    <button onclick="abrirCreadorStories()" class="bg-slate-950 hover:bg-slate-900 text-[10px] sm:text-xs text-yellow-500 font-bold px-3 py-2 rounded-lg border border-slate-900 transition-all cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-image"></i> Diseñar Flyer
+                    </button>
+
+                    <!-- Imprimir A4 -->
+                    <button onclick="ejecutarImpresionHorizontal()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-slate-950 text-[10px] sm:text-xs font-black px-4 py-2 rounded-lg shadow-lg transition-all cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Imprimir Hoja A4
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cabecera de Documento para Impresión (Solo visible en A4 Horizontal) -->
+            <div class="hidden print-only mb-1 text-center">
+                <h1 class="text-xs font-extrabold uppercase tracking-wide text-black">FIXTURE COMPLETO - LIGA CHIVILCOY 2026</h1>
+                <p class="text-[7px] text-slate-600 font-black uppercase tracking-widest mb-1">Desarrollado por Plexcel.Py • Formato Compacto A4 de una Sola Carilla</p>
+                <div class="border-t border-b border-black py-0.5 grid grid-cols-3 text-[7px] font-bold text-black text-center mb-1">
+                    <div id="print-canchas-label">SEDES: ...</div>
+                    <div>SISTEMA: Todos Contra Todos (15 Fechas)</div>
+                    <div id="print-ternas-label">ÁRBITROS: ...</div>
+                </div>
+            </div>
+
+            <!-- Contenedor del Fixture (Para visualización en pantalla) -->
+            <div id="contenedor-principal-fixture" class="space-y-6 no-print">
+                <!-- Se inyectan dinámicamente las jornadas -->
+            </div>
+
+            <!-- Contenedor de Impresión A4 Horizontal Estricto -->
+            <div id="contenedor-impresion-a4" class="hidden print-grid-layout print-only">
+                <!-- Inyectado por JS para impresión optimizada en una sola hoja -->
+            </div>
+        </section>
+
+        <!-- PESTAÑA 4: ESTADÍSTICAS / EQUIDAD -->
+        <section id="sec-estudios" class="tab-content hidden no-print">
+            <!-- Sección de Simulación de Resultados y Posiciones -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+                <!-- Simulador de Partidos de Fecha -->
+                <div class="xl:col-span-1 glass-panel rounded-2xl p-6 border border-slate-900 shadow-xl">
+                    <div class="flex justify-between items-center border-b border-slate-900 pb-3 mb-4">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-gamepad text-emerald-500"></i> Predictor de Resultados
+                        </h3>
+                        <select id="select-sim-fecha" onchange="actualizarSimuladorPartidos()" class="bg-slate-950 border border-slate-800 text-[10px] text-slate-300 rounded px-2 py-1 font-bold outline-none cursor-pointer">
+                            <!-- Dinámico -->
+                        </select>
+                    </div>
+                    
+                    <div id="simulador-partidos-list" class="space-y-2.5 max-h-[350px] overflow-y-auto no-scrollbar pr-1">
+                        <!-- Inputs de goles dinámicos -->
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-900 flex gap-2">
+                        <button onclick="simularResultadosAleatorios()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] font-bold py-2 rounded-lg border border-slate-800 transition-all cursor-pointer">
+                            <i class="fa-solid fa-dice mr-1"></i> Auto-Simular
+                        </button>
+                        <button onclick="limpiarResultadosSimulados()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] font-bold py-2 rounded-lg border border-slate-800 transition-all cursor-pointer">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Borrar Todo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tablas de Posiciones de la Liga en Vivo (Soporta Zonas o Unica) -->
+                <div class="xl:col-span-2 glass-panel rounded-2xl p-6 border border-slate-900 shadow-xl">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-900 pb-3 mb-4">
+                        <i class="fa-solid fa-ranking-star text-emerald-500"></i> Tabla de Posiciones Simulada
+                    </h3>
+                    <div id="contenedor-tablas-posiciones" class="space-y-6">
+                        <!-- Inyectado dinámicamente según el formato de torneo -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Auditoría General de Equidad -->
+            <div class="glass-panel rounded-2xl p-6 shadow-2xl border border-slate-900">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-900 pb-5 mb-6">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2 font-display">
+                            <i class="fa-solid fa-scale-balanced text-emerald-500"></i> Auditoría de Distribución de Slots (Equidad Avanzada)
+                        </h2>
+                        <p class="text-[10px] text-slate-400 mt-1">Análisis de la distribución de asignaciones calculadas por el motor de recocido simulado.</p>
+                    </div>
+                    <div id="badge-indicador-costo" class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-3 py-1.5 rounded-lg border border-emerald-500/20 uppercase tracking-widest font-mono">
+                        Costo Heurístico: 0.00
+                    </div>
+                </div>
+
+                <!-- Tabla de Equidad y Reparto -->
+                <div class="overflow-x-auto rounded-xl border border-slate-900/80">
+                    <table class="w-full text-left text-[11px] border-collapse min-w-[950px]">
+                        <thead>
+                            <tr class="bg-slate-950 border-b border-slate-900 text-slate-400 uppercase tracking-wider">
+                                <th class="p-3 font-bold text-white">Equipo</th>
+                                <th class="p-3 text-center font-bold bg-blue-950/30 text-blue-300">PJ</th>
+                                <th class="p-3 text-center font-bold bg-purple-950/30 text-purple-300">Libre</th>
+                                <th id="th-cancha-0" class="p-3 text-center font-bold border-l border-slate-900 text-emerald-400">Cancha 1</th>
+                                <th id="th-cancha-1" class="p-3 text-center font-bold text-emerald-400">Cancha 2</th>
+                                <th id="th-cancha-2" class="p-3 text-center font-bold text-emerald-400">Cancha 3</th>
+                                <th class="p-3 text-center font-bold border-l border-slate-900">13hs</th>
+                                <th class="p-3 text-center font-bold">14hs</th>
+                                <th class="p-3 text-center font-bold">15hs</th>
+                                <th class="p-3 text-center font-bold">16hs</th>
+                                <th class="p-3 text-center font-bold">17hs</th>
+                                <th id="th-terna-0" class="p-3 text-center font-bold border-l border-slate-900 text-yellow-500">Terna 1</th>
+                                <th id="th-terna-1" class="p-3 text-center font-bold text-yellow-500">Terna 2</th>
+                                <th id="th-terna-2" class="p-3 text-center font-bold text-yellow-500">Terna 3</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo-auditoria" class="divide-y divide-slate-900 bg-slate-900/10 text-slate-300">
+                            <!-- Inyectado dinámicamente por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL PREMIUM: CREADOR DE STORIES PARA REDES SOCIALES (PNG CANVAS) -->
+    <div id="modal-stories" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 relative">
+            <button onclick="cerrarCreadorStories()" class="absolute top-4 right-4 text-slate-500 hover:text-white cursor-pointer text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2 font-display"><i class="fa-solid fa-image text-emerald-500 mr-1.5"></i> Creador de Flyers para Instagram</h3>
+            <p class="text-[10px] text-slate-400 mb-4">Genera una tarjeta personalizada en formato story vertical (9:16) con los partidos oficiales de tu club o jornada.</p>
+            
+            <div class="space-y-3 mb-6">
+                <div>
+                    <label class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Tipo de Flyer</label>
+                    <select id="story-select-tipo" onchange="adaptarControlesStory()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none">
+                        <option value="club">Agenda Completa de un Club</option>
+                        <option value="fecha">Partidos de una Fecha Única</option>
+                        <option value="rango">Rango de Fechas del Torneo</option>
+                    </select>
+                </div>
+                <!-- Control Club -->
+                <div id="story-ctrl-club">
+                    <label class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Seleccionar Club</label>
+                    <select id="story-select-club" onchange="actualizarPrevisualizacionStory()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none">
+                        <!-- Cargado por JS -->
+                    </select>
+                </div>
+                <!-- Control Fecha Única -->
+                <div id="story-ctrl-fecha" class="hidden">
+                    <label class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Seleccionar Jornada</label>
+                    <select id="story-select-fecha-unica" onchange="actualizarPrevisualizacionStory()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none">
+                        <!-- Cargado por JS -->
+                    </select>
+                </div>
+                <!-- Control Rango -->
+                <div id="story-ctrl-rango" class="hidden grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Desde Fecha</label>
+                        <select id="story-select-desde" onchange="actualizarPrevisualizacionStory()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none">
+                            <!-- Cargado por JS -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Hasta Fecha</label>
+                        <select id="story-select-hasta" onchange="actualizarPrevisualizacionStory()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none">
+                            <!-- Cargado por JS -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas de Renderizado -->
+            <div class="flex justify-center mb-6">
+                <div class="border border-slate-800 rounded-lg p-1 bg-slate-950">
+                    <canvas id="canvas-story" width="360" height="640" class="w-[180px] h-[320px] rounded-md bg-slate-900"></canvas>
+                </div>
+            </div>
+
+            <button onclick="descargarPNGStory()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-655 hover:to-teal-655 text-slate-950 font-black py-3 rounded-lg text-xs tracking-wider uppercase transition-all cursor-pointer">
+                <i class="fa-solid fa-download mr-1.5"></i> Descargar Imagen PNG
+            </button>
+        </div>
+    </div>
+
+    <!-- PANTALLA CARGANDO: OPTIMIZACIÓN EN CURSO -->
+    <div id="pantalla-cargando" class="fixed inset-0 z-50 bg-slate-950/95 hidden flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md text-center">
+            <div class="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mx-auto mb-6"></div>
+            <h3 class="text-lg font-black text-white font-display uppercase tracking-widest mb-2 animate-pulse">Sintonizando Equidad Matemática</h3>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto mb-6">El motor de Recocido Simulado (Simulated Annealing) está iterando sobre 30,000 combinaciones térmicas garantizando descansos no consecutivos y balance de campos.</p>
+            <div class="w-full bg-slate-900 rounded-full h-2.5 mb-2 overflow-hidden border border-slate-850">
+                <div id="barra-progreso-cargando" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2.5 w-0 rounded-full transition-all duration-300"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-mono text-emerald-400">
+                <span id="label-iteracion">Iteraciones: 0/30000</span>
+                <span id="label-costo">Energía (Costo): Calculating...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CINEMÁTICA REVELACIÓN 3D BALL OPENING MODAL -->
+    <div id="modal-reveal-ball" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-lg text-center overflow-hidden flex flex-col items-center justify-center h-[500px]">
+            <div class="absolute w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl" id="reveal-light-flash"></div>
+            
+            <div class="relative w-64 h-64 flex items-center justify-center" id="container-bolilla-reveal">
+                <!-- Mitad Izquierda Bolilla -->
+                <div class="absolute w-32 h-64 overflow-hidden left-0 transition-transform duration-1000 ease-out origin-right" id="ball-left-half">
+                    <div class="w-64 h-64 rounded-full border-4 border-amber-600/60 bg-gradient-to-r from-yellow-500 via-amber-500 to-amber-700 shadow-2xl absolute left-0"></div>
+                </div>
+                <!-- Mitad Derecha Bolilla -->
+                <div class="absolute w-32 h-64 overflow-hidden right-0 transition-transform duration-1000 ease-out origin-left" id="ball-right-half">
+                    <div class="w-64 h-64 rounded-full border-4 border-amber-600/60 bg-gradient-to-l from-yellow-500 via-amber-500 to-amber-700 shadow-2xl absolute right-0"></div>
+                </div>
+                <!-- Papel interior brillante -->
+                <div class="absolute w-44 h-24 bg-gradient-to-br from-yellow-50 via-amber-100 to-yellow-50 text-slate-900 border-2 border-yellow-300 rounded-lg p-2 flex flex-col items-center justify-center shadow-2xl scale-0 opacity-0 transition-all duration-1000" id="ball-paper-inner">
+                    <span class="text-[8px] font-black tracking-widest text-emerald-600 uppercase mb-1">Bolilla Oficial</span>
+                    <h4 class="text-sm font-black text-slate-950 font-display uppercase tracking-wider" id="ball-paper-text-name">CLUB REVELADO</h4>
+                    <span class="text-[9px] bg-slate-900 text-white font-black px-1.5 py-0.5 rounded mt-1" id="ball-paper-text-abbr">ABR</span>
+                </div>
+            </div>
+
+            <!-- Título de animación -->
+            <div class="mt-8 z-10 transition-all duration-500 scale-0 opacity-0" id="reveal-title-box">
+                <span class="text-emerald-400 font-extrabold text-[10px] tracking-widest uppercase">¡Extracción Exitosa!</span>
+                <h3 class="text-3xl font-black text-white font-display uppercase tracking-wide mt-1" id="reveal-club-fullname">CLUB SELECCIONADO</h3>
+                <p class="text-xs text-slate-400 mt-1" id="reveal-assigned-slot">Asignado a la Posición X del Fixture</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PAGINA OFICIAL -->
+    <footer class="no-print bg-slate-950/80 border-t border-slate-900 py-4 text-center text-[10px] text-slate-500">
+        <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 max-w-7xl font-semibold">
+            <p>Ecosistema de Sorteo con Balance de Restricciones Cruzadas.</p>
+            <p class="uppercase tracking-wider">Desarrollado por <span class="text-emerald-400 font-bold">Plexcel.Py</span> • Argentina 2026</p>
+        </div>
+    </footer>
+
+    <!-- LOGICAS EXCLUSIVAS DE PROGRAMACION (JS) -->
+    <script>
+        
+        function validarPassword() {
+            const passInput = document.getElementById('input-password').value;
+            const errorMsg = document.getElementById('login-error');
+            
+            if (passInput === "FIFA2026" || passInput === "Plexcel.Py") {
+                sintetizarSonidoFifa(440, 0.1, 'sine');
+                setTimeout(() => sintetizarSonidoFifa(880, 0.25, 'triangle'), 100);
+                document.getElementById('pantalla-login').style.display = 'none';
+                inicializarAudio();
+            } else {
+                errorMsg.classList.remove('hidden');
+                sintetizarSonidoFifa(150, 0.45, 'sawtooth');
+            }
+        }
+
+        function cerrarSesion() {
+            document.getElementById('input-password').value = "";
+            document.getElementById('pantalla-login').style.display = 'flex';
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        // --- INSTANCIACIÓN DE DATOS, ARREGLOS Y PERSISTENCIA ---
+        const PRESETS_CLUBES = [
+            { nombre: "Boca Juniors", abreviatura: "BOC", color1: "#003893", color2: "#fabc05" },
+            { nombre: "River Plate", abreviatura: "CAR", color1: "#e51d2e", color2: "#ffffff" },
+            { nombre: "San Lorenzo", abreviatura: "CAS", color1: "#002a54", color2: "#c60c30" },
+            { nombre: "Racing Club", abreviatura: "RAC", color1: "#8dc6ed", color2: "#ffffff" },
+            { nombre: "Independiente", abreviatura: "CAI", color1: "#c60c30", color2: "#ffffff" },
+            { nombre: "Velez Sarsfield", abreviatura: "VEL", color1: "#ffffff", color2: "#003893" },
+            { nombre: "Huracán", abreviatura: "HUR", color1: "#c60c30", color2: "#ffffff" },
+            { nombre: "Lanús", abreviatura: "LAN", color1: "#800020", color2: "#ffffff" },
+            { nombre: "Banfield", abreviatura: "BAN", color1: "#006d33", color2: "#ffffff" },
+            { nombre: "Rosario Central", abreviatura: "CEN", color1: "#002d62", color2: "#fcd116" },
+            { nombre: "Newell's", abreviatura: "NOB", color1: "#000000", color2: "#e51d2e" },
+            { nombre: "Estudiantes LP", abreviatura: "ELP", color1: "#e51d2e", color2: "#ffffff" },
+            { nombre: "Gimnasia LP", abreviatura: "GEL", color1: "#002d62", color2: "#ffffff" },
+            { nombre: "Talleres", bg: "#002040", color1: "#002040", color2: "#ffffff" }
+        ];
+
+        let nombresEquiposInput = [...PRESETS_CLUBES];
+        let nombresTernasInput = ["Terna Arbitral T1", "Terna Arbitral T2", "Terna Arbitral T3"];
+        let nombresCanchasInput = ["Martija 1", "Martija 2", "Benítez"];
+
+        // Variables de Formato de Torneo
+        let tipoTorneo = "todos"; // "todos" o "zonas"
+
+        let bolsaSorteoClubes = [];
+        let ordenSorteadoPosiciones = Array(14).fill(null);
+        let contadorSorteo = 0;
+
+        let baseEstructuraPartidos = null; 
+        let fixtureFinalMaquetado = []; 
+
+        // Resultados de simulación: { 'fecha_id-partido_idx': { golL: X, golV: Y } }
+        let resultadosSimulados = {};
+
+        window.onload = function() {
+            cargarDatosDesdeLocalStorage();
+            renderizarInputsConfig();
+            iniciarSimulacionFisicaBolillero();
+            iniciarSimulacionFisicaInstagram();
+        };
+
+        function cargarDatosDesdeLocalStorage() {
+            try {
+                const eqSaved = localStorage.getItem('fifa_draw_equipos');
+                const terSaved = localStorage.getItem('fifa_draw_ternas');
+                const canSaved = localStorage.getItem('fifa_draw_canchas');
+                const ruleSaved = localStorage.getItem('fifa_draw_rule');
+                const fmtSaved = localStorage.getItem('fifa_draw_formato');
+                const fixtureSaved = localStorage.getItem('fifa_draw_fixture');
+                const sorteoSaved = localStorage.getItem('fifa_draw_sorteo');
+                const contadorSaved = localStorage.getItem('fifa_draw_contador');
+                const resultadosSaved = localStorage.getItem('fifa_draw_resultados');
+
+                if (eqSaved) nombresEquiposInput = JSON.parse(eqSaved);
+                if (terSaved) nombresTernasInput = JSON.parse(terSaved);
+                if (canSaved) nombresCanchasInput = JSON.parse(canSaved);
+                if (ruleSaved) document.getElementById('config-fecha-especial').value = ruleSaved;
+                if (fmtSaved) {
+                    tipoTorneo = fmtSaved;
+                    document.getElementById('config-formato-torneo').value = fmtSaved;
+                    actualizarInterfazPorFormato();
+                }
+                if (fixtureSaved) fixtureFinalMaquetado = JSON.parse(fixtureSaved);
+                if (sorteoSaved) ordenSorteadoPosiciones = JSON.parse(sorteoSaved);
+                if (contadorSaved) contadorSorteo = parseInt(contadorSaved, 10);
+                if (resultadosSaved) resultadosSimulados = JSON.parse(resultadosSaved);
+
+                if (fixtureFinalMaquetado && fixtureFinalMaquetado.length > 0) {
+                    document.getElementById('tab-sorteo').removeAttribute('disabled');
+                    document.getElementById('tab-fixture').removeAttribute('disabled');
+                    document.getElementById('tab-estudios').removeAttribute('disabled');
+                    
+                    cargarSelectoresFiltro();
+                    actualizarSimuladorPartidos();
+                    calcularTablaPosicionesSimuladas();
+                }
+            } catch(e) {
+                console.error("Error al leer de localStorage", e);
+            }
+        }
+
+        function guardarDatosEnLocalStorage() {
+            try {
+                localStorage.setItem('fifa_draw_equipos', JSON.stringify(nombresEquiposInput));
+                localStorage.setItem('fifa_draw_ternas', JSON.stringify(nombresTernasInput));
+                localStorage.setItem('fifa_draw_canchas', JSON.stringify(nombresCanchasInput));
+                localStorage.setItem('fifa_draw_rule', document.getElementById('config-fecha-especial').value);
+                localStorage.setItem('fifa_draw_formato', tipoTorneo);
+                localStorage.setItem('fifa_draw_fixture', JSON.stringify(fixtureFinalMaquetado));
+                localStorage.setItem('fifa_draw_sorteo', JSON.stringify(ordenSorteadoPosiciones));
+                localStorage.setItem('fifa_draw_contador', contadorSorteo.toString());
+                localStorage.setItem('fifa_draw_resultados', JSON.stringify(resultadosSimulados));
+            } catch(e) {
+                console.error("Error al escribir en localStorage", e);
+            }
+        }
+
+        function actualizarInterfazPorFormato() {
+            tipoTorneo = document.getElementById('config-formato-torneo').value;
+            const tituloRoster = document.getElementById('titulo-roster-equipos');
+            const selectEspecial = document.getElementById('config-fecha-especial');
+
+            if (tipoTorneo === "zonas") {
+                tituloRoster.innerText = "Equipos Registrados (14 Equipos - 7 por Zona)";
+                selectEspecial.options[0].text = "La Fecha 1 se juega en 3 Horarios - Fecha 7 normal";
+                selectEspecial.options[1].text = "La Fecha 7 se juega en 3 Horarios - Fecha 1 normal";
+            } else {
+                tituloRoster.innerText = "Equipos Registrados (14 Equipos - Todos Contra Todos)";
+                selectEspecial.options[0].text = "La Fecha 1 se juega en 3 Horarios - Fecha 15 normal";
+                selectEspecial.options[1].text = "La Fecha 15 se juega en 3 Horarios - Fecha 1 normal";
+            }
+        }
+
+        // --- SISTEMA DE COPIA DE SEGURIDAD (IMPORT/EXPORT JSON) ---
+        function exportarCopiaSeguridadJSON() {
+            try {
+                const backupData = {
+                    equipos: nombresEquiposInput,
+                    ternas: nombresTernasInput,
+                    canchas: nombresCanchasInput,
+                    rule: document.getElementById('config-fecha-especial').value,
+                    formato: tipoTorneo,
+                    fixture: fixtureFinalMaquetado,
+                    sorteo: ordenSorteadoPosiciones,
+                    contador: contadorSorteo,
+                    resultados: resultadosSimulados
+                };
+                const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `backup_torneo_plexcel_${Date.now()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                sintetizarSonidoFifa(700, 0.25, 'sine');
+            } catch (error) {
+                console.error("No se pudo exportar la copia", error);
+            }
+        }
+
+        function importarCopiaSeguridadJSON(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.equipos) nombresEquiposInput = data.equipos;
+                    if (data.ternas) nombresTernasInput = data.ternas;
+                    if (data.canchas) nombresCanchasInput = data.canchas;
+                    if (data.rule) document.getElementById('config-fecha-especial').value = data.rule;
+                    if (data.formato) {
+                        tipoTorneo = data.formato;
+                        document.getElementById('config-formato-torneo').value = data.formato;
+                        actualizarInterfazPorFormato();
+                    }
+                    if (data.fixture) fixtureFinalMaquetado = data.fixture;
+                    if (data.sorteo) ordenSorteadoPosiciones = data.sorteo;
+                    if (data.contador !== undefined) contadorSorteo = data.contador;
+                    if (data.resultados) resultadosSimulados = data.resultados;
+
+                    guardarDatosEnLocalStorage();
+                    renderizarInputsConfig();
+                    
+                    if (fixtureFinalMaquetado && fixtureFinalMaquetado.length > 0) {
+                        document.getElementById('tab-sorteo').removeAttribute('disabled');
+                        document.getElementById('tab-fixture').removeAttribute('disabled');
+                        document.getElementById('tab-estudios').removeAttribute('disabled');
+                        
+                        cargarSelectoresFiltro();
+                        renderizarFixtureView();
+                        renderizarAuditoriaEquidad();
+                        actualizarSimuladorPartidos();
+                        calcularTablaPosicionesSimuladas();
+                        switchTab('fixture');
+                    }
+                    sintetizarSonidoFifa(880, 0.3, 'sine');
+                } catch (err) {
+                    console.error("Error al importar el archivo JSON", err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function restablecerPredefinidos() {
+            nombresEquiposInput = [...PRESETS_CLUBES];
+            nombresTernasInput = ["Terna Arbitral T1", "Terna Arbitral T2", "Terna Arbitral T3"];
+            nombresCanchasInput = ["Martija 1", "Martija 2", "Benítez"];
+            document.getElementById('config-fecha-especial').value = "primera";
+            document.getElementById('config-formato-torneo').value = "todos";
+            tipoTorneo = "todos";
+            actualizarInterfazPorFormato();
+            resultadosSimulados = {};
+            renderizarInputsConfig();
+            guardarDatosEnLocalStorage();
+            sintetizarSonidoFifa(300, 0.2, 'sine');
+        }
+
+        function renderizarInputsConfig() {
+            const containerEquipos = document.getElementById('equipos-inputs-grid');
+            containerEquipos.innerHTML = '';
+            nombresEquiposInput.forEach((eq, idx) => {
+                containerEquipos.innerHTML += `
+                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-900">
+                        <span class="text-xs font-bold text-emerald-500/80 w-6 text-center">${idx + 1}</span>
+                        <input type="text" id="inp-eq-${idx}" value="${eq.nombre}" class="bg-transparent text-xs text-slate-200 focus:outline-none w-full font-bold">
+                        <input type="text" id="inp-abr-${idx}" value="${eq.abreviatura}" maxlength="3" class="bg-slate-900 border border-slate-800 text-slate-400 text-center text-[10px] font-bold rounded p-1 w-12 uppercase">
+                        <input type="color" id="inp-col1-${idx}" value="${eq.color1}" class="w-6 h-6 rounded cursor-pointer border-0 p-0">
+                        <input type="color" id="inp-col2-${idx}" value="${eq.color2}" class="w-6 h-6 rounded cursor-pointer border-0 p-0">
+                    </div>
+                `;
+            });
+
+            const containerTernas = document.getElementById('ternas-inputs-grid');
+            containerTernas.innerHTML = '';
+            nombresTernasInput.forEach((terna, idx) => {
+                containerTernas.innerHTML += `
+                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-900">
+                        <span class="text-xs font-bold text-yellow-500">T${idx+1}</span>
+                        <input type="text" id="inp-ter-${idx}" value="${terna}" class="bg-transparent text-xs text-slate-200 focus:outline-none w-full font-bold">
+                    </div>
+                `;
+            });
+
+            const containerCanchas = document.getElementById('canchas-inputs-grid');
+            containerCanchas.innerHTML = '';
+            nombresCanchasInput.forEach((cancha, idx) => {
+                containerCanchas.innerHTML += `
+                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-900">
+                        <span class="text-xs font-bold text-emerald-400">🏟️</span>
+                        <input type="text" id="inp-can-${idx}" value="${cancha}" class="bg-transparent text-xs text-slate-200 focus:outline-none w-full font-bold">
+                    </div>
+                `;
+            });
+        }
+
+        let audioCtx = null;
+        let ambientGain = null;
+        let isAudioPlaying = false;
+
+        function inicializarAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function sintetizarSonidoFifa(frequency = 440, duration = 0.1, type = 'sine', gainVal = 0.08) {
+            try {
+                if (!audioCtx) inicializarAudio();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {
+                console.log("Web Audio no activado");
+            }
+        }
+
+        function toggleAudioAmbiente() {
+            if (!audioCtx) inicializarAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const btn = document.getElementById('btn-audio');
+
+            if (isAudioPlaying) {
+                if (ambientGain) {
+                    ambientGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                    setTimeout(() => {
+                        if (ambientGain) {
+                            ambientGain.disconnect();
+                            ambientGain = null;
+                        }
+                    }, 600);
+                }
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Himno: OFF';
+                isAudioPlaying = false;
+            } else {
+                ambientGain = audioCtx.createGain();
+                ambientGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                ambientGain.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 1);
+                ambientGain.connect(audioCtx.destination);
+
+                createHarmonicVoice(110, 'sine', ambientGain); 
+                createHarmonicVoice(165, 'triangle', ambientGain); 
+                createHarmonicVoice(220, 'sine', ambientGain); 
+
+                btn.innerHTML = '<i class="fa-solid fa-volume-high text-emerald-400"></i> Himno: ON';
+                isAudioPlaying = true;
+            }
+        }
+
+        function createHarmonicVoice(freq, type, destinationNode) {
+            const osc = audioCtx.createOscillator();
+            const lfo = audioCtx.createOscillator();
+            const lfoGain = audioCtx.createGain();
+
+            osc.type = type;
+            osc.frequency.value = freq;
+
+            lfo.frequency.value = 0.2; 
+            lfoGain.gain.value = 0.3;
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency); 
+            
+            osc.connect(destinationNode);
+            osc.start();
+            lfo.start();
+        }
+
+        function dispararEfectoWhooshSorteo() {
+            sintetizarSonidoFifa(300, 0.4, 'sine', 0.12);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.6);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.6);
+            } catch(e) {}
+        }
+
+        function guardarConfigYProceder() {
+            tipoTorneo = document.getElementById('config-formato-torneo').value;
+            for(let i=0; i<14; i++) {
+                nombresEquiposInput[i] = {
+                    nombre: document.getElementById(`inp-eq-${i}`).value.trim() || `Club ${i+1}`,
+                    abreviatura: document.getElementById(`inp-abr-${i}`).value.trim().toUpperCase() || `C${i+1}`,
+                    color1: document.getElementById(`inp-col1-${i}`).value,
+                    color2: document.getElementById(`inp-col2-${i}`).value
+                };
+            }
+            for(let i=0; i<3; i++) {
+                nombresTernasInput[i] = document.getElementById(`inp-ter-${i}`).value.trim() || `Terna ${i+1}`;
+            }
+            for(let i=0; i<3; i++) {
+                nombresCanchasInput[i] = document.getElementById(`inp-can-${i}`).value.trim() || `Cancha ${i+1}`;
+            }
+
+            bolsaSorteoClubes = [...nombresEquiposInput];
+            bolsaSorteoClubes.sort(() => Math.random() - 0.5);
+
+            document.getElementById('tab-sorteo').removeAttribute('disabled');
+            switchTab('sorteo');
+            prepararEstructuraSorteoFifa();
+            guardarDatosEnLocalStorage();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = "flex-1 text-center py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white";
+            });
+            const btnActivo = document.getElementById(`tab-${tabId}`);
+            btnActivo.className = "flex-1 text-center py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 bg-emerald-500 text-slate-950 shadow-md";
+        }
+
+        // --- MOTOR DE SIMULACIÓN FÍSICA ---
+        let canvas = null, canvasInsta = null;
+        let ctx = null, ctxInsta = null;
+        let esferasBolillero = [], esferasBolilleroInsta = [];
+        let animationFrameId = null, animationFrameIdInsta = null;
+
+        class EsferaFisica {
+            constructor(x, y, radius, color1, color2, label) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 6;
+                this.vy = (Math.random() - 0.5) * 6;
+                this.radius = radius;
+                this.color1 = color1;
+                this.color2 = color2;
+                this.label = label;
+                this.mass = 1;
+            }
+
+            dibujar(ctx) {
+                ctx.save();
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
+                const grad = ctx.createRadialGradient(
+                    this.x - this.radius*0.3, this.y - this.radius*0.3, this.radius*0.1,
+                    this.x, this.y, this.radius
+                );
+                grad.addColorStop(0, '#ffffff');
+                grad.addColorStop(0.2, '#f5deb3');
+                grad.addColorStop(0.8, '#b8860b');
+                grad.addColorStop(1, '#523c00');
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius*0.4, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+                ctx.fill();
+
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${Math.floor(this.radius * 0.75)}px Montserrat, sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.label, this.x, this.y);
+
+                ctx.restore();
+            }
+
+            actualizar(width, height) {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.vx *= 0.992;
+                this.vy *= 0.992;
+
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const radiusContainer = width / 2 - 8;
+
+                const dx = this.x - centerX;
+                const dy = this.y - centerY;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+
+                if (dist + this.radius > radiusContainer) {
+                    const angle = Math.atan2(dy, dx);
+                    this.x = centerX + (radiusContainer - this.radius) * Math.cos(angle);
+                    this.y = centerY + (radiusContainer - this.radius) * Math.sin(angle);
+
+                    const normalX = Math.cos(angle);
+                    const normalY = Math.sin(angle);
+                    const dot = this.vx * normalX + this.vy * normalY;
+
+                    this.vx = (this.vx - 2 * dot * normalX) * 0.85;
+                    this.vy = (this.vy - 2 * dot * normalY) * 0.85;
+
+                    this.vx += (Math.random() - 0.5) * 0.4;
+                    this.vy += (Math.random() - 0.5) * 0.4;
+                }
+            }
+        }
+
+        function iniciarSimulacionFisicaBolillero() {
+            canvas = document.getElementById('canvas-bolillero');
+            ctx = canvas.getContext('2d');
+            esferasBolillero = [];
+            for (let i = 0; i < 14; i++) {
+                esferasBolillero.push(new EsferaFisica(
+                    canvas.width / 2 + (Math.random() - 0.5) * 40,
+                    canvas.height / 2 + (Math.random() - 0.5) * 40,
+                    12, '#e6b800', '#997300', (i + 1).toString()
+                ));
+            }
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            loopFisicoBolillero();
+        }
+
+        function loopFisicoBolillero() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2 - 4, 0, Math.PI*2);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            for (let i = 0; i < esferasBolillero.length; i++) {
+                for (let j = i + 1; j < esferasBolillero.length; j++) {
+                    resolverColisionEsferas(esferasBolillero[i], esferasBolillero[j]);
+                }
+            }
+            esferasBolillero.forEach(esf => {
+                esf.actualizar(canvas.width, canvas.height);
+                esf.dibujar(ctx);
+            });
+            if (Math.random() < 0.04 && esferasBolillero.length > 0) {
+                esferasBolillero.forEach(esf => {
+                    esf.vx += (Math.random() - 0.5) * 5;
+                    esf.vy += (Math.random() - 0.5) * 5;
+                });
+                sintetizarSonidoFifa(Math.random()*150 + 200, 0.02, 'sine', 0.008);
+            }
+            animationFrameId = requestAnimationFrame(loopFisicoBolillero);
+        }
+
+        function iniciarSimulacionFisicaInstagram() {
+            canvasInsta = document.getElementById('canvas-bolillero-insta');
+            ctxInsta = canvasInsta.getContext('2d');
+            esferasBolilleroInsta = [];
+            for (let i = 0; i < 14; i++) {
+                esferasBolilleroInsta.push(new EsferaFisica(
+                    canvasInsta.width / 2 + (Math.random() - 0.5) * 30,
+                    canvasInsta.height / 2 + (Math.random() - 0.5) * 30,
+                    9, '#e6b800', '#997300', (i + 1).toString()
+                ));
+            }
+            if (animationFrameIdInsta) cancelAnimationFrame(animationFrameIdInsta);
+            loopFisicoInstagram();
+        }
+
+        function loopFisicoInstagram() {
+            ctxInsta.clearRect(0, 0, canvasInsta.width, canvasInsta.height);
+            ctxInsta.beginPath();
+            ctxInsta.arc(canvasInsta.width/2, canvasInsta.height/2, canvasInsta.width/2 - 3, 0, Math.PI*2);
+            ctxInsta.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctxInsta.lineWidth = 2;
+            ctxInsta.stroke();
+
+            for (let i = 0; i < esferasBolilleroInsta.length; i++) {
+                for (let j = i + 1; j < esferasBolilleroInsta.length; j++) {
+                    resolverColisionEsferas(esferasBolilleroInsta[i], esferasBolilleroInsta[j]);
+                }
+            }
+            esferasBolilleroInsta.forEach(esf => {
+                esf.actualizar(canvasInsta.width, canvasInsta.height);
+                esf.dibujar(ctxInsta);
+            });
+            if (Math.random() < 0.04 && esferasBolilleroInsta.length > 0) {
+                esferasBolilleroInsta.forEach(esf => {
+                    esf.vx += (Math.random() - 0.5) * 4;
+                    esf.vy += (Math.random() - 0.5) * 4;
+                });
+            }
+            animationFrameIdInsta = requestAnimationFrame(loopFisicoInstagram);
+        }
+
+        function resolverColisionEsferas(e1, e2) {
+            const dx = e2.x - e1.x;
+            const dy = e2.y - e1.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+
+            if (dist < e1.radius + e2.radius) {
+                const overlap = (e1.radius + e2.radius) - dist;
+                const nx = dx / dist;
+                const ny = dy / dist;
+
+                e1.x -= nx * overlap * 0.5;
+                e1.y -= ny * overlap * 0.5;
+                e2.x += nx * overlap * 0.5;
+                e2.y += ny * overlap * 0.5;
+
+                const rvx = e2.vx - e1.vx;
+                const rvy = e2.vy - e1.vy;
+                const velAlongNormal = rvx*nx + rvy*ny;
+
+                if (velAlongNormal < 0) {
+                    const restitution = 0.75;
+                    let impulse = -(1 + restitution) * velAlongNormal;
+                    impulse /= (1/e1.mass + 1/e2.mass);
+
+                    e1.vx -= (impulse / e1.mass) * nx;
+                    e1.vy -= (impulse / e1.mass) * ny;
+                    e2.vx += (impulse / e2.mass) * nx;
+                    e2.vy += (impulse / e2.mass) * ny;
+                }
+            }
+        }
+
+        function prepararEstructuraSorteoFifa() {
+            ordenSorteadoPosiciones = Array(14).fill(null);
+            contadorSorteo = 0;
+            document.getElementById('btn-extraer').disabled = false;
+            document.getElementById('btn-extraer').style.opacity = '1';
+            document.getElementById('conteo-sorteo-restante').innerHTML = `Restan: 14`;
+            document.getElementById('insta-conteo-restante').innerHTML = `Bolillas Restantes: 14`;
+
+            const grid = document.getElementById('grid-posiciones-draw');
+            grid.innerHTML = '';
+
+            if (tipoTorneo === "zonas") {
+                grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6 w-full";
+                grid.innerHTML = `
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-black text-emerald-400 uppercase tracking-widest border-b border-slate-900 pb-2">ZONA A</h4>
+                        <div id="draw-zona-a-slots" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+                    </div>
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-black text-teal-400 uppercase tracking-widest border-b border-slate-900 pb-2">ZONA B</h4>
+                        <div id="draw-zona-b-slots" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+                    </div>
+                `;
+                const containerA = document.getElementById('draw-zona-a-slots');
+                const containerB = document.getElementById('draw-zona-b-slots');
+
+                for (let i = 0; i < 7; i++) {
+                    containerA.innerHTML += `
+                        <div id="caja-slot-draw-${i}" class="bg-slate-950/80 border border-slate-900 rounded-lg p-2.5 flex flex-col justify-between min-h-[55px] transition-all">
+                            <span class="text-[8px] font-bold text-slate-500 tracking-wider uppercase font-display">Posición A${i+1}</span>
+                            <div id="text-slot-draw-${i}" class="text-[10px] font-bold text-slate-600 italic">— Vacante —</div>
+                        </div>
+                    `;
+                    containerB.innerHTML += `
+                        <div id="caja-slot-draw-${i+7}" class="bg-slate-950/80 border border-slate-900 rounded-lg p-2.5 flex flex-col justify-between min-h-[55px] transition-all">
+                            <span class="text-[8px] font-bold text-slate-500 tracking-wider uppercase font-display">Posición B${i+1}</span>
+                            <div id="text-slot-draw-${i+7}" class="text-[10px] font-bold text-slate-600 italic">— Vacante —</div>
+                        </div>
+                    `;
+                }
+            } else {
+                grid.className = "grid grid-cols-2 sm:grid-cols-4 gap-2.5";
+                for (let i = 0; i < 14; i++) {
+                    grid.innerHTML += `
+                        <div id="caja-slot-draw-${i}" class="bg-slate-950/80 border border-slate-900 rounded-lg p-2.5 flex flex-col justify-between min-h-[60px] transition-all">
+                            <span class="text-[8px] font-bold text-slate-500 tracking-wider uppercase font-display">Posición ${i+1}</span>
+                            <div id="text-slot-draw-${i}" class="text-[10px] font-bold text-slate-600 italic">— Vacante —</div>
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('revelador-pantalla-gigante').innerHTML = `
+                <div class="text-emerald-400 font-extrabold text-xs tracking-widest uppercase flex items-center gap-2"><i class="fa-solid fa-compact-disc animate-spin"></i> Copa FIFA Cargada</div>
+                <p class="text-slate-400 text-[10px] mt-1">Presiona "Extraer Bolilla" para simular el sorteo.</p>
+            `;
+            document.getElementById('insta-revelador').innerHTML = `
+                <span class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">¡Transmisión Lista!</span>
+                <p class="text-slate-500 text-[9px] mt-1">Sorteando posiciones en vivo para Instagram.</p>
+            `;
+            iniciarSimulacionFisicaBolillero();
+            iniciarSimulacionFisicaInstagram();
+            iniciarFalsoChatInstagram();
+        }
+
+        let isModoTV = false, tvInterval = null;
+        function toggleModoTV() {
+            const container = document.getElementById('sorteo-pantalla-estandar');
+            const btn = document.getElementById('btn-tv-mode');
+            if (isModoTV) {
+                container.className = "grid grid-cols-1 lg:grid-cols-3 gap-6 w-full transition-all duration-500";
+                btn.innerHTML = '<i class="fa-solid fa-tv mr-1.5 text-emerald-400"></i> Modo Proyector / TV';
+                isModoTV = false;
+                if (tvInterval) { clearInterval(tvInterval); tvInterval = null; }
+            } else {
+                desactivarModoInstagramSiEstaActivo();
+                container.className = "grid grid-cols-1 lg:grid-cols-3 gap-6 w-full max-w-5xl mx-auto scale-105 my-8 transition-all duration-500";
+                btn.innerHTML = '<i class="fa-solid fa-tv mr-1.5 text-red-500"></i> Desactivar Modo TV';
+                isModoTV = true;
+
+                tvInterval = setInterval(() => {
+                    if (contadorSorteo < 14) {
+                        extraerBolillaInteractiva();
+                    } else {
+                        clearInterval(tvInterval);
+                    }
+                }, 6000);
+            }
+        }
+
+        let isModoInsta = false;
+        function toggleModoInstagram() {
+            const wrapper = document.getElementById('sorteo-layout-wrapper');
+            const estandar = document.getElementById('sorteo-pantalla-estandar');
+            const insta = document.getElementById('sorteo-pantalla-instagram');
+            const btn = document.getElementById('btn-insta-mode');
+
+            if (isModoInsta) {
+                estandar.classList.remove('hidden');
+                insta.classList.add('hidden');
+                btn.classList.remove('bg-pink-600', 'text-white');
+                isModoInsta = false;
+            } else {
+                if (isModoTV) toggleModoTV();
+                estandar.classList.add('hidden');
+                insta.classList.remove('hidden');
+                btn.classList.add('bg-pink-600', 'text-white');
+                isModoInsta = true;
+            }
+        }
+
+        function desactivarModoInstagramSiEstaActivo() {
+            if (isModoInsta) {
+                toggleModoInstagram();
+            }
+        }
+
+        // --- CHAT FALSO PARA INSTAGRAM LIVE ---
+        const MENSAJES_FALSOS = [
+            { user: "juan_gol23", text: "¡Qué nervios por Dios! 😳" },
+            { user: "carla.fc", text: "Plexcel.Py haciendo magia como siempre 🔥" },
+            { user: "leito_chivilcoy", text: "Espero que no me toque de visitante la primera" },
+            { user: "chivilcoy_deportes", text: "La terna 2 es la más dura de dirigir" },
+            { user: "mariana_lobos", text: "¡Sorteen ya! Quiero ver contra quién jugamos ⚽" },
+            { user: "el_pibe_del_potrero", text: "Excelente la animación, es igual al sorteo de la Champions!" },
+            { user: "boca_chivilcoy", text: "Qué grupazo nos va a tocar" },
+            { user: "benitez_hincha", text: "Benítez va a ser una caldera esta temporada" }
+        ];
+
+        function iniciarFalsoChatInstagram() {
+            const chatBox = document.getElementById('insta-chat-box');
+            chatBox.innerHTML = '';
+            setInterval(() => {
+                if (!isModoInsta) return;
+                let item = MENSAJES_FALSOS[Math.floor(Math.random() * MENSAJES_FALSOS.length)];
+                chatBox.innerHTML += `
+                    <div><span class="font-extrabold text-pink-400">${item.user}:</span> <span class="text-slate-100">${item.text}</span></div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                if(chatBox.children.length > 5) {
+                    chatBox.children[0].remove();
+                }
+                dispararCorazonInstagram();
+            }, 3000);
+        }
+
+        function dispararCorazonInstagram() {
+            const container = document.getElementById('insta-reacciones-container');
+            const heart = document.createElement('div');
+            heart.className = "heart-float text-red-500 text-sm";
+            heart.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+            heart.style.right = `${15 + Math.random()*20}px`;
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        function extraerBolillaInteractiva() {
+            if (contadorSorteo >= 14) return;
+
+            const btn = document.getElementById('btn-extraer');
+            btn.disabled = true;
+
+            dispararEfectoWhooshSorteo();
+
+            if (esferasBolillero.length > 0) esferasBolillero.pop();
+            if (esferasBolilleroInsta.length > 0) esferasBolilleroInsta.pop();
+
+            let clubSeleccionado = bolsaSorteoClubes.pop();
+            
+            // Si es por zonas, alternamos el sorteo: par a Zona A, impar a Zona B
+            let targetSlotIdx = contadorSorteo;
+            if (tipoTorneo === "zonas") {
+                if (contadorSorteo % 2 === 0) {
+                    targetSlotIdx = Math.floor(contadorSorteo / 2); // 0, 1, 2, 3, 4, 5, 6 (Zona A)
+                } else {
+                    targetSlotIdx = Math.floor(contadorSorteo / 2) + 7; // 7, 8, 9, 10, 11, 12, 13 (Zona B)
+                }
+            }
+
+            ordenSorteadoPosiciones[targetSlotIdx] = clubSeleccionado;
+
+            ejecutarCinematicaAperturaBolilla(clubSeleccionado, () => {
+                const screen = document.getElementById('revelador-pantalla-gigante');
+                let targetPosLabel = tipoTorneo === "zonas" 
+                    ? (targetSlotIdx < 7 ? `Zona A - Posición ${targetSlotIdx + 1}` : `Zona B - Posición ${targetSlotIdx - 6}`)
+                    : `Posición ${targetSlotIdx + 1}`;
+
+                screen.innerHTML = `
+                    <div class="flex items-center gap-4 animate-bounce">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center border-2 shadow-lg" style="background-color: ${clubSeleccionado.color1}; border-color: ${clubSeleccionado.color2}">
+                            <span class="text-white font-black text-xs font-display">${clubSeleccionado.abreviatura}</span>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-emerald-400 font-extrabold text-[8px] tracking-widest uppercase">¡Bolilla Revelada!</span>
+                            <h3 class="text-lg md:text-xl font-black text-white uppercase tracking-tight">${clubSeleccionado.nombre}</h3>
+                            <p class="text-[9px] text-slate-400">Asignado al slot de competencia de la <span class="text-emerald-400 font-bold">${targetPosLabel}</span>.</p>
+                        </div>
+                    </div>
+                `;
+
+                const instaScreen = document.getElementById('insta-revelador');
+                instaScreen.innerHTML = `
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 mx-auto mb-2" style="background-color: ${clubSeleccionado.color1}; border-color: ${clubSeleccionado.color2}">
+                        <span class="text-white font-black text-[10px]">${clubSeleccionado.abreviatura}</span>
+                    </div>
+                    <span class="text-pink-500 font-black text-[8px] uppercase tracking-wider">Revelado</span>
+                    <h3 class="text-sm font-black text-white uppercase tracking-tight">${clubSeleccionado.nombre}</h3>
+                    <p class="text-[8px] text-slate-400">${targetPosLabel}</p>
+                `;
+
+                const slotBox = document.getElementById(`caja-slot-draw-${targetSlotIdx}`);
+                slotBox.className = "bg-slate-900 border-2 rounded-lg p-2.5 flex flex-col justify-between min-h-[55px] scale-105 shadow-lg transition-all";
+                slotBox.style.borderColor = clubSeleccionado.color1;
+
+                const textSlot = document.getElementById(`text-slot-draw-${targetSlotIdx}`);
+                textSlot.className = "text-[10px] font-black text-slate-100 uppercase truncate";
+                textSlot.innerHTML = `<span class="inline-block w-2 h-2 rounded-full mr-1.5" style="background-color:${clubSeleccionado.color1}"></span>${clubSeleccionado.nombre}`;
+
+                contadorSorteo++;
+                document.getElementById('conteo-sorteo-restante').innerHTML = `Restan: ${14 - contadorSorteo}`;
+                document.getElementById('insta-conteo-restante').innerHTML = `Bolillas Restantes: ${14 - contadorSorteo}`;
+
+                btn.disabled = false;
+
+                if (contadorSorteo === 14) {
+                    finalizarSorteoFifaOficial();
+                }
+            });
+        }
+
+        function ejecutarCinematicaAperturaBolilla(club, callbackAlTerminar) {
+            const modal = document.getElementById('modal-reveal-ball');
+            const leftHalf = document.getElementById('ball-left-half');
+            const rightHalf = document.getElementById('ball-right-half');
+            const paper = document.getElementById('ball-paper-inner');
+            const titleBox = document.getElementById('reveal-title-box');
+
+            document.getElementById('ball-paper-text-name').innerText = club.nombre;
+            document.getElementById('ball-paper-text-abbr').innerText = club.abreviatura;
+            document.getElementById('reveal-club-fullname').innerText = club.nombre;
+
+            let targetPosLabel = tipoTorneo === "zonas" 
+                ? (contadorSorteo % 2 === 0 ? `Zona A - Slot ${(contadorSorteo/2) + 1}` : `Zona B - Slot ${Math.floor(contadorSorteo/2) + 1}`)
+                : `Posición ${contadorSorteo + 1}`;
+            document.getElementById('reveal-assigned-slot').innerText = `Asignado a la ${targetPosLabel} del Fixture`;
+
+            // Resetear estados visuales
+            leftHalf.style.transform = 'translateX(0)';
+            rightHalf.style.transform = 'translateX(0)';
+            paper.classList.remove('scale-100', 'opacity-100');
+            paper.classList.add('scale-0', 'opacity-0');
+            titleBox.classList.remove('scale-100', 'opacity-100');
+            titleBox.classList.add('scale-0', 'opacity-0');
+
+            modal.classList.remove('hidden');
+
+            // Sonido de misterio ascendente
+            sintetizarSonidoFifa(200, 0.8, 'triangle', 0.1);
+            setTimeout(() => sintetizarSonidoFifa(350, 0.8, 'triangle', 0.1), 300);
+
+            let tl = gsap.timeline();
+            tl.fromTo("#container-bolilla-reveal", { scale: 0.1, rotation: -360 }, { duration: 1.5, scale: 1, rotation: 0, ease: "back.out(1)" });
+            
+            tl.add(() => {
+                sintetizarSonidoFifa(523.25, 0.2, 'sine', 0.12);
+                setTimeout(() => sintetizarSonidoFifa(659.25, 0.2, 'sine', 0.12), 100);
+                setTimeout(() => sintetizarSonidoFifa(783.99, 0.4, 'sawtooth', 0.1), 200);
+            }, "+=0.2");
+
+            tl.to(leftHalf, { duration: 0.8, transform: 'translateX(-120px)', ease: "power2.out" });
+            tl.to(rightHalf, { duration: 0.8, transform: 'translateX(120px)', ease: "power2.out" }, "-=0.8");
+            
+            tl.add(() => {
+                paper.classList.remove('scale-0', 'opacity-0');
+                paper.classList.add('scale-100', 'opacity-100');
+                titleBox.classList.remove('scale-0', 'opacity-0');
+                titleBox.classList.add('scale-100', 'opacity-100');
+            }, "-=0.2");
+
+            tl.to({}, { duration: 2.2 }); // Tiempo de visualización
+
+            tl.add(() => {
+                modal.classList.add('hidden');
+                callbackAlTerminar();
+            });
+        }
+
+        function ejecutarSorteoCompletoInstantaneo() {
+            while(contadorSorteo < 14) {
+                let clubSeleccionado = bolsaSorteoClubes.pop();
+                
+                let targetSlotIdx = contadorSorteo;
+                if (tipoTorneo === "zonas") {
+                    if (contadorSorteo % 2 === 0) {
+                        targetSlotIdx = Math.floor(contadorSorteo / 2);
+                    } else {
+                        targetSlotIdx = Math.floor(contadorSorteo / 2) + 7;
+                    }
+                }
+
+                ordenSorteadoPosiciones[targetSlotIdx] = clubSeleccionado;
+
+                const slotBox = document.getElementById(`caja-slot-draw-${targetSlotIdx}`);
+                slotBox.className = "bg-slate-900 border rounded-lg p-2.5 flex flex-col justify-between min-h-[55px] shadow";
+                slotBox.style.borderColor = clubSeleccionado.color1;
+
+                const textSlot = document.getElementById(`text-slot-draw-${targetSlotIdx}`);
+                textSlot.className = "text-[10px] font-black text-slate-100 uppercase truncate";
+                textSlot.innerHTML = `${clubSeleccionado.nombre}`;
+
+                contadorSorteo++;
+            }
+            finalizarSorteoFifaOficial();
+        }
+
+        function finalizarSorteoFifaOficial() {
+            document.getElementById('btn-extraer').disabled = true;
+            document.getElementById('btn-extraer').style.opacity = '0.5';
+            document.getElementById('conteo-sorteo-restante').innerHTML = `Sorteo Completo`;
+
+            if (tvInterval) { clearInterval(tvInterval); tvInterval = null; }
+
+            document.getElementById('revelador-pantalla-gigante').innerHTML = `
+                <div class="text-yellow-500 text-sm font-black uppercase tracking-widest animate-pulse"><i class="fa-solid fa-circle-check"></i> Sorteo Concluido</div>
+                <p class="text-[10px] text-slate-300 mt-1 max-w-sm">La asignación se ha consolidado. Procede a optimizar y construir el fixture equitativo.</p>
+                <button onclick="optimizarYConstruirFixture()" class="mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black text-[10px] px-6 py-2.5 rounded-lg shadow-lg hover:scale-105 transition-all cursor-pointer uppercase tracking-wider">
+                    <i class="fa-solid fa-server mr-1"></i> Optimizar Fixture
+                </button>
+            `;
+            guardarDatosEnLocalStorage();
+        }
+
+        function optimizarYConstruirFixture() {
+            const loadingScreen = document.getElementById('pantalla-cargando');
+            loadingScreen.classList.remove('hidden');
+
+            const bar = document.getElementById('barra-progreso-cargando');
+            const lblIter = document.getElementById('label-iteracion');
+            const lblCosto = document.getElementById('label-costo');
+
+            let iter = 0;
+            const maxIter = 30000;
+
+            let rounds = (tipoTorneo === "zonas") 
+                ? generarMatrizZonas7() 
+                : generarMatrizParejasMetodoCirculoPerfecto();
+
+            let estado = inicializarAsignacionSlots(rounds);
+            let costoActual = evaluarFuncionCosto(estado);
+
+            let temp = 100.0;
+            const coolingRate = 0.9995;
+
+            function ejecutarPasoSA() {
+                const subSteps = 600; 
+                for (let k = 0; k < subSteps; k++) {
+                    let nuevoEstado = mutarEstado(estado);
+                    let nuevoCosto = evaluarFuncionCosto(nuevoEstado);
+
+                    let de = nuevoCosto - costoActual;
+                    if (de < 0 || Math.random() < Math.exp(-de / temp)) {
+                        estado = nuevoEstado;
+                        costoActual = nuevoCosto;
+                    }
+
+                    temp *= coolingRate;
+                    iter++;
+                    if (iter >= maxIter) break;
+                }
+
+                let porc = Math.floor((iter / maxIter) * 100);
+                bar.style.width = `${porc}%`;
+                lblIter.innerHTML = `Iteraciones: ${iter}/${maxIter}`;
+                lblCosto.innerHTML = `Costo Heurístico: ${costoActual.toFixed(2)}`;
+
+                if (iter < maxIter) {
+                    requestAnimationFrame(ejecutarPasoSA);
+                } else {
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        document.getElementById('badge-indicador-costo').innerHTML = `Costo Heurístico: ${costoActual.toFixed(2)}`;
+                        fixtureFinalMaquetado = consolidarFixtureFinal(estado);
+                        
+                        document.getElementById('tab-fixture').removeAttribute('disabled');
+                        document.getElementById('tab-estudios').removeAttribute('disabled');
+
+                        cargarSelectoresFiltro();
+                        switchTab('fixture');
+                        renderizarFixtureView();
+                        renderizarAuditoriaEquidad();
+                        actualizarSimuladorPartidos();
+                        calcularTablaPosicionesSimuladas();
+                        guardarDatosEnLocalStorage();
+                    }, 500);
+                }
+            }
+            requestAnimationFrame(ejecutarPasoSA);
+        }
+
+        // --- BACKTRACKING SOLVER: GENERADORES DE MATRICES DE JORNADAS ---
+        function generarMatrizParejasMetodoCirculoPerfecto() {
+            let numEquipos = 16; 
+            let actualRounds = [];
+            let items = Array.from({length: numEquipos}, (_, i) => i);
+
+            // Generador de Berger estándar
+            for (let r = 0; r < 15; r++) {
+                let rPairs = [];
+                for (let i = 0; i < numEquipos / 2; i++) {
+                    let t1 = items[i];
+                    let t2 = items[numEquipos - 1 - i];
+                    rPairs.push([t1, t2]);
+                }
+                actualRounds.push(rPairs);
+                items.splice(1, 0, items.pop());
+            }
+
+            // Resolvedor iterativo con barajado (backtracking rápido probabilístico)
+            let exitoso = false;
+            let roundsPermutados = [];
+            let intentos = 0;
+
+            while (!exitoso && intentos < 5000) {
+                intentos++;
+                roundsPermutados = [...actualRounds].sort(() => Math.random() - 0.5);
+                exitoso = true;
+
+                // Registro de rondas donde descansa cada club real (0 a 13)
+                let descansosClub = Array.from({length: 14}, () => []);
+                for (let r = 0; r < 15; r++) {
+                    roundsPermutados[r].forEach(p => {
+                        let t1 = p[0];
+                        let t2 = p[1];
+                        if (t1 < 14 && t2 >= 14) descansosClub[t1].push(r);
+                        if (t2 < 14 && t1 >= 14) descansosClub[t2].push(r);
+                    });
+                }
+
+                // Validación estricta: No descansos consecutivos (diferencia == 1)
+                for (let t = 0; t < 14; t++) {
+                    let d = descansosClub[t];
+                    if (d.length > 1) {
+                        d.sort((a,b) => a-b);
+                        for (let i = 0; i < d.length - 1; i++) {
+                            if (d[i+1] - d[i] === 1) {
+                                exitoso = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!exitoso) break;
+                }
+            }
+
+            // Reorganización opcional de la jornada especial
+            let rEspecialIdx = -1;
+            for (let r = 0; r < 15; r++) {
+                let tieneMatchDummies = roundsPermutados[r].some(p => (p[0] === 14 && p[1] === 15) || (p[0] === 15 && p[1] === 14));
+                if (tieneMatchDummies) {
+                    rEspecialIdx = r;
+                    break;
+                }
+            }
+
+            const especialRule = document.getElementById('config-fecha-especial').value;
+            let targetIdx = (especialRule === "primera") ? 0 : 14;
+
+            if (rEspecialIdx !== targetIdx && rEspecialIdx !== -1) {
+                let temp = roundsPermutados[targetIdx];
+                roundsPermutados[targetIdx] = roundsPermutados[rEspecialIdx];
+                roundsPermutados[rEspecialIdx] = temp;
+            }
+
+            return roundsPermutados;
+        }
+
+        function generarMatrizZonas7() {
+            // Un torneo de 7 equipos requiere exactamente 7 fechas para que jueguen todos contra todos (1 libre por fecha por zona).
+            // Zona A (Equipos de posición sorteada 0 a 6). Zona B (Equipos de posición sorteada 7 a 13).
+            let rounds = [];
+            for (let r = 0; r < 7; r++) {
+                let matches = [];
+                // Emparejamientos Zona A (0..6)
+                for (let i = 1; i <= 3; i++) {
+                    let t1 = (r - i + 7) % 7;
+                    let t2 = (r + i) % 7;
+                    matches.push([t1, t2]);
+                }
+                // Emparejamientos Zona B (7..13)
+                for (let i = 1; i <= 3; i++) {
+                    let t1 = ((r - i + 7) % 7) + 7;
+                    let t2 = ((r + i) % 7) + 7;
+                    matches.push([t1, t2]);
+                }
+                rounds.push(matches);
+            }
+
+            // Si el usuario quiere la ultima fecha con horario especial, la movemos al final (ya está al final en r=6).
+            // Si prefiere la primera (r=0), ya está allí.
+            return rounds;
+        }
+
+        function inicializarAsignacionSlots(rounds) {
+            let estado = [];
+            rounds.forEach((juegos, rIdx) => {
+                let numeroFecha = rIdx + 1;
+                let partidosReales = [];
+                let restingClubes = [];
+
+                if (tipoTorneo === "zonas") {
+                    // En 2 zonas de 7, juegos ya contiene los 6 partidos listos (3 de Zona A y 3 de Zona B)
+                    juegos.forEach(p => {
+                        partidosReales.push({ local: p[0], visitante: p[1] });
+                    });
+                    // Determinamos los libres de cada zona en esta fecha rIdx
+                    restingClubes.push(rIdx); // Libre Zona A (0-6)
+                    restingClubes.push(rIdx + 7); // Libre Zona B (7-13)
+                } else {
+                    juegos.forEach(p => {
+                        let t1 = p[0];
+                        let t2 = p[1];
+                        if (t1 < 14 && t2 < 14) {
+                            partidosReales.push({ local: t1, visitante: t2 });
+                        } else {
+                            if (t1 < 14) restingClubes.push(t1);
+                            if (t2 < 14) restingClubes.push(t2);
+                        }
+                    });
+                }
+
+                let slots = [];
+                const especialRule = document.getElementById('config-fecha-especial').value;
+                let maxFechas = (tipoTorneo === "zonas") ? 7 : 15;
+                let esFechaEspecial = (especialRule === "primera" && numeroFecha === 1) || 
+                                      (especialRule === "ultima" && numeroFecha === maxFechas);
+
+                if (esFechaEspecial) {
+                    slots = [
+                        { cancha: nombresCanchasInput[0], hora: "13:00", terna: nombresTernasInput[0] },
+                        { cancha: nombresCanchasInput[0], hora: "15:00", terna: nombresTernasInput[0] },
+                        { cancha: nombresCanchasInput[1], hora: "13:00", terna: nombresTernasInput[1] },
+                        { cancha: nombresCanchasInput[1], hora: "15:00", terna: nombresTernasInput[1] },
+                        { cancha: nombresCanchasInput[2], hora: "13:00", terna: nombresTernasInput[2] },
+                        { cancha: nombresCanchasInput[2], hora: "15:00", terna: nombresTernasInput[2] },
+                        { cancha: nombresCanchasInput[2], hora: "17:00", terna: nombresTernasInput[2] }
+                    ];
+                    // Si es formato Zonas de 7, sólo se juegan 6 partidos por fecha en total, 
+                    // por lo que eliminamos el último slot de 17hs de la cancha Benítez para no sobrecargar
+                    if (tipoTorneo === "zonas") {
+                        slots.pop(); // Quedan 6 slots perfectamente equilibrados de 13hs y 15hs
+                    }
+                } else {
+                    let ternaM1 = nombresTernasInput[(rIdx - 1 + 3) % 3];
+                    let ternaM2 = nombresTernasInput[rIdx % 3];
+                    let ternaBen = nombresTernasInput[(rIdx + 1) % 3];
+
+                    slots = [
+                        { cancha: nombresCanchasInput[0], hora: "14:00", terna: ternaM1 },
+                        { cancha: nombresCanchasInput[0], hora: "16:00", terna: ternaM1 },
+                        { cancha: nombresCanchasInput[1], hora: "14:00", terna: ternaM2 },
+                        { cancha: nombresCanchasInput[1], hora: "16:00", terna: ternaM2 },
+                        { cancha: nombresCanchasInput[2], hora: "14:00", terna: ternaBen },
+                        { cancha: nombresCanchasInput[2], hora: "16:00", terna: ternaBen }
+                    ];
+                }
+
+                let mapeo = [];
+                partidosReales.forEach((p, idx) => {
+                    mapeo.push({
+                        partido: p,
+                        slot: slots[idx]
+                    });
+                });
+
+                estado.push({
+                    fecha: numeroFecha,
+                    mapeo: mapeo,
+                    libres: restingClubes
+                });
+            });
+            return estado;
+        }
+
+        function evaluarFuncionCosto(estado) {
+            let penalizacion = 0;
+            let tracker = Array.from({length: 14}, () => ({
+                canchas: {},
+                horarios: { "13:00": 0, "14:00": 0, "15:00": 0, "16:00": 0, "17:00": 0 },
+                ternas: {}
+            }));
+
+            nombresCanchasInput.forEach(c => {
+                tracker.forEach(t => t.canchas[c] = 0);
+            });
+            nombresTernasInput.forEach(t => {
+                tracker.forEach(tr => tr.ternas[t] = 0);
+            });
+
+            let ultimaCancha = Array(14).fill(null);
+            let ultimoHorario = Array(14).fill(null);
+
+            estado.forEach(jornada => {
+                jornada.mapeo.forEach(m => {
+                    let loc = m.partido.local;
+                    let vis = m.partido.visitante;
+                    let c = m.slot.cancha;
+                    let h = m.slot.hora;
+                    let t = m.slot.terna;
+
+                    [loc, vis].forEach(eq => {
+                        if (tracker[eq].canchas[c] !== undefined) tracker[eq].canchas[c]++;
+                        if (tracker[eq].horarios[h] !== undefined) tracker[eq].horarios[h]++;
+                        if (tracker[eq].ternas[t] !== undefined) tracker[eq].ternas[t]++;
+
+                        if (ultimaCancha[eq] === c) penalizacion += 12; 
+                        if (ultimoHorario[eq] === h) penalizacion += 8;  
+
+                        ultimaCancha[eq] = c;
+                        ultimoHorario[eq] = h;
+                    });
+                });
+
+                jornada.libres.forEach(eq => {
+                    ultimaCancha[eq] = null;
+                    ultimoHorario[eq] = null;
+                });
+            });
+
+            // Ajuste de targets ideales según la duración de la competencia
+            let targetCanchaIdeal = (tipoTorneo === "zonas") ? 2 : 4.33;
+            let targetHora14Ideal = (tipoTorneo === "zonas") ? 3 : 6;
+            let targetHora16Ideal = (tipoTorneo === "zonas") ? 3 : 6;
+
+            tracker.forEach(tr => {
+                Object.values(tr.canchas).forEach(val => {
+                    if (tipoTorneo === "zonas") {
+                        if (val < 1) penalizacion += 30;
+                        if (val > 3) penalizacion += 30;
+                    } else {
+                        if (val < 3) penalizacion += 30;
+                        if (val > 6) penalizacion += 30;
+                    }
+                });
+                let h14 = tr.horarios["14:00"];
+                let h16 = tr.horarios["16:00"];
+                penalizacion += Math.abs(h14 - targetHora14Ideal) * 18;
+                penalizacion += Math.abs(h16 - targetHora16Ideal) * 18;
+            });
+
+            return penalizacion;
+        }
+
+        function mutarEstado(estadoActual) {
+            let nuevoEst = estadoActual.map(jornada => ({
+                fecha: jornada.fecha,
+                mapeo:  jornada.mapeo.map(m => ({ partido: { ...m.partido }, slot: { ...m.slot } })),
+                libres: [...jornada.libres]
+            }));
+
+            let rIdx = Math.floor(Math.random() * nuevoEst.length);
+            let mapeoJornada = nuevoEst[rIdx].mapeo;
+
+            if (mapeoJornada.length > 1) {
+                let idx1 = Math.floor(Math.random() * mapeoJornada.length);
+                let idx2 = Math.floor(Math.random() * mapeoJornada.length);
+                while (idx1 === idx2) {
+                    idx2 = Math.floor(Math.random() * mapeoJornada.length);
+                }
+                let temp = mapeoJornada[idx1].slot;
+                mapeoJornada[idx1].slot = mapeoJornada[idx2].slot;
+                mapeoJornada[idx2].slot = temp;
+            }
+            return nuevoEst;
+        }
+
+        function consolidarFixtureFinal(estadoOptimo) {
+            return estadoOptimo.map(jornada => {
+                let partidosFormat = jornada.mapeo.map(m => {
+                    let locObj = nombresEquiposInput[m.partido.local];
+                    let visObj = nombresEquiposInput[m.partido.visitante];
+                    
+                    // Identificación de Zona basada en la asignación sorteada
+                    let zonaPartido = "Unificada";
+                    if (tipoTorneo === "zonas") {
+                        zonaPartido = (m.partido.local < 7) ? "Zona A" : "Zona B";
+                    }
+
+                    return {
+                        local: locObj.nombre,
+                        localAbr: locObj.abreviatura,
+                        localCol1: locObj.color1,
+                        localCol2: locObj.color2,
+                        visitante: visObj.nombre,
+                        visitanteAbr: visObj.abreviatura,
+                        visitanteCol1: visObj.color1,
+                        visitanteCol2: visObj.color2,
+                        cancha: m.slot.cancha,
+                        hora: m.slot.hora,
+                        terna: m.slot.terna,
+                        zona: zonaPartido
+                    };
+                });
+                let libresFormat = jornada.libres.map(id => nombresEquiposInput[id].nombre);
+                return {
+                    fecha: jornada.fecha,
+                    partidos: partidosFormat,
+                    libres: libresFormat
+                };
+            });
+        }
+
+        function cargarSelectoresFiltro() {
+            let maxFechas = (tipoTorneo === "zonas") ? 7 : 15;
+
+            const selFecha = document.getElementById('select-fecha');
+            selFecha.innerHTML = `<option value="todas">Ver todas las jornadas (1-${maxFechas})</option>`;
+            for(let f=1; f<=maxFechas; f++) {
+                selFecha.innerHTML += `<option value="${f}">Jornada ${f}</option>`;
+            }
+
+            const selClub = document.getElementById('select-club');
+            selClub.innerHTML = '<option value="todos">Todos los Clubes</option>';
+            nombresEquiposInput.forEach(eq => {
+                selClub.innerHTML += `<option value="${eq.nombre}">${eq.nombre}</option>`;
+            });
+
+            // Selectores del Creador de Flyers
+            const storyClub = document.getElementById('story-select-club');
+            storyClub.innerHTML = '';
+            nombresEquiposInput.forEach(eq => {
+                storyClub.innerHTML += `<option value="${eq.nombre}">${eq.nombre}</option>`;
+            });
+
+            const storyFechaUnica = document.getElementById('story-select-fecha-unica');
+            storyFechaUnica.innerHTML = '';
+            for(let f=1; f<=maxFechas; f++) {
+                storyFechaUnica.innerHTML += `<option value="${f}">Fecha ${f}</option>`;
+            }
+
+            const storyDesde = document.getElementById('story-select-desde');
+            const storyHasta = document.getElementById('story-select-hasta');
+            storyDesde.innerHTML = '';
+            storyHasta.innerHTML = '';
+            for(let f=1; f<=maxFechas; f++) {
+                storyDesde.innerHTML += `<option value="${f}">Fecha ${f}</option>`;
+                storyHasta.innerHTML += `<option value="${f}" ${f===3?'selected':''}>Fecha ${f}</option>`;
+            }
+
+            // Selector del simulador predictivo
+            const selectSimFecha = document.getElementById('select-sim-fecha');
+            selectSimFecha.innerHTML = '';
+            for(let f=1; f<=maxFechas; f++) {
+                selectSimFecha.innerHTML += `<option value="${f}">Simular Fecha ${f}</option>`;
+            }
+
+            document.getElementById('th-cancha-0').innerText = nombresCanchasInput[0];
+            document.getElementById('th-cancha-1').innerText = nombresCanchasInput[1];
+            document.getElementById('th-cancha-2').innerText = nombresCanchasInput[2];
+            document.getElementById('th-terna-0').innerText = nombresTernasInput[0].split(' ')[2] || "Terna 1";
+            document.getElementById('th-terna-1').innerText = nombresTernasInput[1].split(' ')[2] || "Terna 2";
+            document.getElementById('th-terna-2').innerText = nombresTernasInput[2].split(' ')[2] || "Terna 3";
+
+            document.getElementById('print-canchas-label').innerText = `SEDES: ${nombresCanchasInput.join(' • ')}`;
+            document.getElementById('print-ternas-label').innerText = `ÁRBITROS: ${nombresTernasInput.join(' • ')}`;
+
+            // Ajustar variables de grilla de impresion horizontal en CSS según la cantidad de fechas
+            const printGridEl = document.getElementById('contenedor-impresion-a4');
+            if (tipoTorneo === "zonas") {
+                printGridEl.style.setProperty('--print-cols', 'repeat(4, 1fr)');
+                printGridEl.style.setProperty('--print-rows', 'repeat(2, 1fr)');
+            } else {
+                printGridEl.style.setProperty('--print-cols', 'repeat(5, 1fr)');
+                printGridEl.style.setProperty('--print-rows', 'repeat(3, 1fr)');
+            }
+        }
+
+        function renderizarFixtureView() {
+            const filterFecha = document.getElementById('select-fecha').value;
+            const filterClub = document.getElementById('select-club').value;
+            
+            const container = document.getElementById('contenedor-principal-fixture');
+            container.innerHTML = '';
+
+            fixtureFinalMaquetado.forEach(jornada => {
+                if (filterFecha !== 'todas' && String(jornada.fecha) !== filterFecha) return;
+
+                let partidosFiltrados = jornada.partidos.filter(p => {
+                    if (filterClub === 'todos') return true;
+                    return p.local === filterClub || p.visitante === filterClub;
+                });
+
+                let estaLibreElClub = jornada.libres.includes(filterClub);
+                if (filterClub !== 'todos' && partidosFiltrados.length === 0 && !estaLibreElClub) return;
+
+                let cardJornada = document.createElement('div');
+                cardJornada.className = "bg-slate-950/85 border border-slate-900 rounded-2xl p-5 md:p-6 shadow-xl relative overflow-hidden";
+                cardJornada.innerHTML = `<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/30 to-teal-500/30"></div>`;
+
+                let headerHtml = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-900 pb-3 mb-4 gap-2">
+                        <span class="text-emerald-400 font-extrabold tracking-widest text-xs uppercase font-display flex items-center gap-2">
+                            <i class="fa-solid fa-trophy text-emerald-500"></i> FECHA PROGRAMADA ${jornada.fecha}
+                        </span>
+                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                            ${jornada.libres.length > 0 
+                                ? `<span class="text-amber-500"><i class="fa-solid fa-mug-hot mr-1"></i> Libre:</span> ${jornada.libres.join(' y ')}` 
+                                : '<span class="text-emerald-400"><i class="fa-solid fa-fire mr-1"></i> ¡Jornada Completa!</span>'}
+                        </div>
+                    </div>
+                `;
+
+                let descansoHtml = "";
+                if (estaLibreElClub) {
+                    descansoHtml = `
+                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs p-4 rounded-xl text-center font-bold uppercase tracking-wider my-3 animate-pulse">
+                            <i class="fa-solid fa-circle-pause mr-1.5"></i> El club seleccionado tiene su jornada de descanso obligatoria
+                        </div>
+                    `;
+                }
+
+                let partidosHtml = "";
+                if (partidosFiltrados.length > 0) {
+                    partidosHtml += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+                    partidosFiltrados.forEach((partido, pIdx) => {
+                        let isFocusLoc = partido.local === filterClub;
+                        let isFocusVis = partido.visitante === filterClub;
+                        
+                        // Rescatar resultado simulado si existe
+                        let resKey = `${jornada.fecha}-${pIdx}`;
+                        let simResultText = "vs";
+                        if(resultadosSimulados[resKey]) {
+                            simResultText = `<span class="text-white font-mono font-black text-xs px-2 bg-slate-900 rounded">${resultadosSimulados[resKey].golL} - ${resultadosSimulados[resKey].golV}</span>`;
+                        }
+
+                        let zoneBadge = (tipoTorneo === "zonas") 
+                            ? `<span class="text-[8px] bg-slate-950 text-emerald-400 px-2 py-0.5 rounded font-bold uppercase tracking-widest border border-emerald-500/15">${partido.zona}</span>`
+                            : `<span class="text-[8px] bg-slate-950 text-slate-500 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Local</span>`;
+
+                        partidosHtml += `
+                            <div class="glass-panel hover:bg-slate-900/50 p-4 rounded-xl border border-slate-900 flex flex-col justify-between transition-all duration-300 hover:border-slate-800">
+                                <div class="flex flex-col gap-3 mb-4">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-full flex items-center justify-center border text-[9px] font-black font-display shadow" style="background-color: ${partido.localCol1}; border-color: ${partido.localCol2}">
+                                                <span class="text-white">${partido.localAbr}</span>
+                                            </div>
+                                            <span class="text-xs font-bold ${isFocusLoc ? 'text-emerald-400 font-black' : 'text-slate-200'}">${partido.local}</span>
+                                        </div>
+                                        ${zoneBadge}
+                                    </div>
+                                    <div class="h-px bg-slate-900/60 relative flex items-center justify-center my-0.5">
+                                        <span class="absolute bg-slate-950 border border-slate-900 text-[8px] font-bold text-slate-600 px-1.5 py-0.5 rounded-full uppercase">${simResultText}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-full flex items-center justify-center border text-[9px] font-black font-display shadow" style="background-color: ${partido.visitanteCol1}; border-color: ${partido.visitanteCol2}">
+                                                <span class="text-white">${partido.visitanteAbr}</span>
+                                            </div>
+                                            <span class="text-xs font-bold ${isFocusVis ? 'text-emerald-400 font-black' : 'text-slate-200'}">${partido.visitante}</span>
+                                        </div>
+                                        <span class="text-[8px] bg-slate-950 text-slate-500 px-2 py-0.5 rounded font-bold uppercase tracking-widest">Visita</span>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-950 border border-slate-900 p-2.5 rounded-lg text-[9px] text-slate-400 grid grid-cols-3 gap-1.5 text-center font-bold uppercase">
+                                    <div class="truncate"><i class="fa-solid fa-clock text-emerald-500 mr-1"></i> ${partido.hora}hs</div>
+                                    <div class="truncate" title="${partido.cancha}"><i class="fa-solid fa-map-pin text-emerald-500 mr-1"></i> ${partido.cancha}</div>
+                                    <div class="truncate" title="${partido.terna}"><i class="fa-solid fa-user-shield text-emerald-500 mr-1"></i> ${partido.terna.split(' ')[2] || 'Terna'}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    partidosHtml += `</div>`;
+                }
+
+                cardJornada.innerHTML += headerHtml + descansoHtml + partidosHtml;
+                container.appendChild(cardJornada);
+            });
+
+            renderizarImpresionA4Estructura();
+        }
+
+        function renderizarImpresionA4Estructura() {
+            const printContainer = document.getElementById('contenedor-impresion-a4');
+            printContainer.innerHTML = '';
+
+            fixtureFinalMaquetado.forEach(jornada => {
+                let cardHtml = `
+                    <div class="print-card-date flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-black">FECHA ${jornada.fecha}</h3>
+                            ${jornada.libres.length > 0 ? `<div class="text-[5.5px] text-slate-600 font-bold mb-0.5 italic">Libre: ${jornada.libres.join(' / ')}</div>` : ''}
+                            <div class="space-y-0.5">
+                `;
+
+                jornada.partidos.forEach((p, pIdx) => {
+                    let resKey = `${jornada.fecha}-${pIdx}`;
+                    let golText = "";
+                    if(resultadosSimulados[resKey]) {
+                        golText = ` [${resultadosSimulados[resKey].golL}-${resultadosSimulados[resKey].golV}]`;
+                    }
+                    let prefixZone = tipoTorneo === "zonas" ? `${p.zona.split(' ')[1]}: ` : '';
+
+                    cardHtml += `
+                        <div class="print-match-row text-black font-semibold flex justify-between">
+                            <span class="truncate max-w-[125px]">${prefixZone}${p.localAbr} vs ${p.visitanteAbr}${golText}</span>
+                            <span class="text-slate-500 text-[5.5px] font-bold">${p.hora.split(':')[0]}hs (${p.cancha.split(' ')[1] || p.cancha.substring(0,3)})</span>
+                        </div>
+                    `;
+                });
+
+                cardHtml += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+                printContainer.innerHTML += cardHtml;
+            });
+        }
+
+        function aplicarEscalaFuenteImpresion(val) {
+            document.getElementById('print-font-scale-lbl').innerText = val + "px";
+            let styleEl = document.getElementById('print-scale-overrides');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'print-scale-overrides';
+                document.head.appendChild(styleEl);
+            }
+            styleEl.innerHTML = `
+                @media print {
+                    .print-match-row {
+                        font-size: ${val}px !important;
+                    }
+                }
+            `;
+        }
+
+        function ejecutarImpresionHorizontal() {
+            sintetizarSonidoFifa(1000, 0.1, 'sine');
+            window.print();
+        }
+
+        // --- EXPORTAR A GOOGLE CALENDAR (.ICS) ---
+        function exportarGoogleCalendar() {
+            const filterClub = document.getElementById('select-club').value;
+            let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Plexcel.Py//Sorteador FIFA//ES\nCALSCALE:GREGORIAN\n";
+
+            let baseDate = new Date();
+            baseDate.setDate(baseDate.getDate() + (6 - baseDate.getDay()) + 1); 
+
+            fixtureFinalMaquetado.forEach((jornada, rIdx) => {
+                let eventDate = new Date(baseDate);
+                eventDate.setDate(eventDate.getDate() + rIdx * 7); 
+
+                jornada.partidos.forEach(p => {
+                    if (filterClub !== 'todos' && p.local !== filterClub && p.visitante !== filterClub) return;
+
+                    let [hh, mm] = p.hora.split(':');
+                    let start = new Date(eventDate);
+                    start.setHours(parseInt(hh, 10), parseInt(mm, 10), 0);
+
+                    let end = new Date(start);
+                    end.setHours(end.getHours() + 2); 
+
+                    const formatICSDate = (date) => {
+                        return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+                    };
+
+                    icsContent += "BEGIN:VEVENT\n";
+                    icsContent += `SUMMARY:⚽ ${p.local} vs ${p.visitante}\n`;
+                    icsContent += `DTSTART:${formatICSDate(start)}\n`;
+                    icsContent += `DTEND:${formatICSDate(end)}\n`;
+                    icsContent += `LOCATION:🏟️ Cancha: ${p.cancha} | Árbitro: ${p.terna}\n`;
+                    icsContent += `DESCRIPTION:Partido correspondiente a la Jornada ${jornada.fecha} (${p.zona || 'Liga'}) del Torneo Chivilcoy 2026.\n`;
+                    icsContent += "END:VEVENT\n";
+                });
+            });
+
+            icsContent += "END:VCALENDAR\n";
+
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = (filterClub === 'todos') ? "fixture_completo.ics" : `agenda_${filterClub.replace(/ /g, "_")}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            sintetizarSonidoFifa(880, 0.2, 'sine');
+        }
+
+        // --- CREADOR DE STORIES PARA REDES SOCIALES (PNG CANVAS) ---
+        function abrirCreadorStories() {
+            document.getElementById('modal-stories').classList.remove('hidden');
+            adaptarControlesStory();
+        }
+
+        function cerrarCreadorStories() {
+            document.getElementById('modal-stories').classList.add('hidden');
+        }
+
+        function adaptarControlesStory() {
+            const tipo = document.getElementById('story-select-tipo').value;
+            document.getElementById('story-ctrl-club').classList.add('hidden');
+            document.getElementById('story-ctrl-fecha').classList.add('hidden');
+            document.getElementById('story-ctrl-rango').classList.add('hidden');
+
+            if (tipo === 'club') {
+                document.getElementById('story-ctrl-club').classList.remove('hidden');
+            } else if (tipo === 'fecha') {
+                document.getElementById('story-ctrl-fecha').classList.remove('hidden');
+            } else if (tipo === 'rango') {
+                document.getElementById('story-ctrl-rango').classList.remove('hidden');
+            }
+            actualizarPrevisualizacionStory();
+        }
+
+        function actualizarPrevisualizacionStory() {
+            const canvasStory = document.getElementById('canvas-story');
+            const ctxStory = canvasStory.getContext('2d');
+            const tipo = document.getElementById('story-select-tipo').value;
+
+            // Limpieza y fondo oscuro premium
+            ctxStory.fillStyle = '#020617';
+            ctxStory.fillRect(0, 0, canvasStory.width, canvasStory.height);
+
+            // Gradiente dorado / esmeralda
+            let radialGrad = ctxStory.createRadialGradient(
+                canvasStory.width / 2, canvasStory.height / 3, 50,
+                canvasStory.width / 2, canvasStory.height / 3, 300
+            );
+            radialGrad.addColorStop(0, '#022c22');
+            radialGrad.addColorStop(1, '#020617');
+            ctxStory.fillStyle = radialGrad;
+            ctxStory.fillRect(0, 0, canvasStory.width, canvasStory.height);
+
+            // Borde oficial
+            ctxStory.strokeStyle = '#d4af37';
+            ctxStory.lineWidth = 4;
+            ctxStory.strokeRect(8, 8, canvasStory.width - 16, canvasStory.height - 16);
+
+            // Cabeceras fijas
+            ctxStory.fillStyle = '#d4af37';
+            ctxStory.font = '900 13px Montserrat, sans-serif';
+            ctxStory.textAlign = 'center';
+            ctxStory.fillText("CRONOGRAMA OFICIAL", canvasStory.width / 2, 40);
+
+            ctxStory.fillStyle = '#ffffff';
+            ctxStory.font = '800 10px Montserrat, sans-serif';
+            ctxStory.fillText("LIGA DE FÚTBOL CHIVILCOY", canvasStory.width / 2, 54);
+
+            let partidosRender = [];
+            let bannerSubtitulo = "";
+            let bannerColor1 = "#003893";
+            let bannerColor2 = "#fabc05";
+            let initialsLogo = "AFA";
+
+            if (tipo === 'club') {
+                const clubName = document.getElementById('story-select-club').value;
+                let clubObj = nombresEquiposInput.find(eq => eq.nombre === clubName) || PRESETS_CLUBES[0];
+                bannerSubtitulo = clubObj.nombre.toUpperCase();
+                bannerColor1 = clubObj.color1;
+                bannerColor2 = clubObj.color2;
+                initialsLogo = clubObj.abreviatura;
+
+                fixtureFinalMaquetado.forEach(jornada => {
+                    let match = jornada.partidos.find(p => p.local === clubName || p.visitante === clubName);
+                    if (match) {
+                        let esLocal = match.local === clubName;
+                        let rival = esLocal ? match.visitante : match.local;
+                        let zonePrefix = tipoTorneo === "zonas" ? `(${match.zona.split(' ')[1]}) ` : '';
+                        partidosRender.push({
+                            labelLeft: esLocal ? "LOCAL" : "VISITA",
+                            labelMain: `${zonePrefix}VS ${rival.toUpperCase()}`,
+                            labelFooter: `FECHA ${jornada.fecha} • ${match.hora}hs • ${match.cancha}`
+                        });
+                    }
+                });
+            } else if (tipo === 'fecha') {
+                const fUnica = parseInt(document.getElementById('story-select-fecha-unica').value, 10);
+                bannerSubtitulo = `PARTIDOS DE LA FECHA ${fUnica}`;
+                bannerColor1 = "#059669";
+                bannerColor2 = "#ffffff";
+                initialsLogo = `F${fUnica}`;
+
+                let jornada = fixtureFinalMaquetado.find(j => j.fecha === fUnica);
+                if (jornada) {
+                    jornada.partidos.forEach(p => {
+                        let zonePrefix = tipoTorneo === "zonas" ? `[${p.zona.split(' ')[1]}] ` : '';
+                        partidosRender.push({
+                            labelLeft: p.hora + " HS",
+                            labelMain: `${zonePrefix}${p.localAbr} vs ${p.visitanteAbr}`,
+                            labelFooter: `Cancha: ${p.cancha} | Árb: ${p.terna.split(' ')[2] || 'Terna'}`
+                        });
+                    });
+                }
+            } else if (tipo === 'rango') {
+                const desde = parseInt(document.getElementById('story-select-desde').value, 10);
+                const hasta = parseInt(document.getElementById('story-select-hasta').value, 10);
+                bannerSubtitulo = `FECHAS DESDE LA ${desde} HASTA LA ${hasta}`;
+                bannerColor1 = "#1e293b";
+                bannerColor2 = "#d4af37";
+                initialsLogo = `${desde}-${hasta}`;
+
+                fixtureFinalMaquetado.forEach(jornada => {
+                    if (jornada.fecha >= desde && jornada.fecha <= hasta) {
+                        jornada.partidos.forEach(p => {
+                            let zonePrefix = tipoTorneo === "zonas" ? `[${p.zona.split(' ')[1]}] ` : '';
+                            partidosRender.push({
+                                labelLeft: `F${jornada.fecha} - ${p.hora}hs`,
+                                labelMain: `${zonePrefix}${p.localAbr} vs ${p.visitanteAbr}`,
+                                labelFooter: `🏟️ ${p.cancha}`
+                            });
+                        });
+                    }
+                });
+            }
+
+            // Dibujar Logo circular decorativo
+            ctxStory.beginPath();
+            ctxStory.arc(canvasStory.width / 2, 110, 26, 0, Math.PI * 2);
+            ctxStory.fillStyle = bannerColor1;
+            ctxStory.fill();
+            ctxStory.strokeStyle = bannerColor2;
+            ctxStory.lineWidth = 3;
+            ctxStory.stroke();
+
+            ctxStory.fillStyle = '#ffffff';
+            ctxStory.font = '900 12px Montserrat, sans-serif';
+            ctxStory.textAlign = 'center';
+            ctxStory.textBaseline = 'middle';
+            ctxStory.fillText(initialsLogo, canvasStory.width / 2, 110);
+
+            // Subtítulo del flyer
+            ctxStory.fillStyle = '#ffffff';
+            ctxStory.font = 'bold 11px Montserrat, sans-serif';
+            ctxStory.textAlign = 'center';
+            ctxStory.textBaseline = 'alphabetic';
+            ctxStory.fillText(bannerSubtitulo, canvasStory.width / 2, 155);
+
+            // Línea divisora
+            ctxStory.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctxStory.lineWidth = 1;
+            ctxStory.beginPath();
+            ctxStory.moveTo(40, 168);
+            ctxStory.lineTo(canvasStory.width - 40, 168);
+            ctxStory.stroke();
+
+            // Dibujar partidos (máximo 7 para no desbordar canvas vertical)
+            let yOffset = 185;
+            ctxStory.textAlign = 'left';
+            
+            partidosRender.slice(0, 7).forEach(p => {
+                ctxStory.fillStyle = 'rgba(15, 23, 42, 0.65)';
+                ctxStory.fillRect(20, yOffset - 5, canvasStory.width - 40, 42);
+
+                ctxStory.fillStyle = '#10b981';
+                ctxStory.font = '900 8px Montserrat, sans-serif';
+                ctxStory.fillText(p.labelLeft, 28, yOffset + 5);
+
+                ctxStory.fillStyle = '#ffffff';
+                ctxStory.font = 'bold 10px Montserrat, sans-serif';
+                ctxStory.fillText(p.labelMain.toUpperCase(), 28, yOffset + 17);
+
+                ctxStory.fillStyle = '#94a3b8';
+                ctxStory.font = '600 7.5px Inter, sans-serif';
+                ctxStory.fillText(p.labelFooter, 28, yOffset + 29);
+
+                yOffset += 50;
+            });
+
+            // Firma de desarrollo
+            ctxStory.textAlign = 'center';
+            ctxStory.fillStyle = 'rgba(255, 255, 255, 0.35)';
+            ctxStory.font = '700 7.5px Montserrat, sans-serif';
+            ctxStory.fillText("DESARROLLADO POR PLEXCEL.PY", canvasStory.width / 2, canvasStory.height - 35);
+        }
+
+        function descargarPNGStory() {
+            const canvasStory = document.getElementById('canvas-story');
+            const link = document.createElement('a');
+            link.download = `story_fixture_plexcel_${Date.now()}.png`;
+            link.href = canvasStory.toDataURL();
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            sintetizarSonidoFifa(1000, 0.15, 'sine');
+        }
+
+        // --- SIMULADOR DE POSICIONES Y PREDICCIONES ---
+        function actualizarSimuladorPartidos() {
+            const fSim = parseInt(document.getElementById('select-sim-fecha').value, 10);
+            const container = document.getElementById('simulador-partidos-list');
+            container.innerHTML = '';
+
+            let jornada = fixtureFinalMaquetado.find(j => j.fecha === fSim);
+            if (!jornada) {
+                container.innerHTML = `<p class="text-xs text-slate-500 italic text-center py-4">No hay fixture activo para simular</p>`;
+                return;
+            }
+
+            jornada.partidos.forEach((p, idx) => {
+                let resKey = `${fSim}-${idx}`;
+                let valL = resultadosSimulados[resKey] ? resultadosSimulados[resKey].golL : '';
+                let valV = resultadosSimulados[resKey] ? resultadosSimulados[resKey].golV : '';
+                let labelZone = (tipoTorneo === "zonas") ? `<span class="text-[7px] text-emerald-500 font-bold block">${p.zona}</span>` : '';
+
+                container.innerHTML += `
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-900 flex flex-col gap-1">
+                        ${labelZone}
+                        <div class="flex items-center justify-between gap-1.5">
+                            <div class="w-1/3 text-right text-[10px] font-bold text-slate-200 truncate" title="${p.local}">${p.local}</div>
+                            
+                            <div class="flex items-center gap-1">
+                                <input type="number" min="0" placeholder="0" value="${valL}" onchange="registrarGolSimulado(${fSim}, ${idx}, 'L', this.value)" class="w-8 bg-slate-900 border border-slate-800 focus:border-emerald-500 text-center text-xs font-black p-1 rounded outline-none text-white">
+                                <span class="text-slate-600 text-[10px] font-bold">vs</span>
+                                <input type="number" min="0" placeholder="0" value="${valV}" onchange="registrarGolSimulado(${fSim}, ${idx}, 'V', this.value)" class="w-8 bg-slate-900 border border-slate-800 focus:border-emerald-500 text-center text-xs font-black p-1 rounded outline-none text-white">
+                            </div>
+
+                            <div class="w-1/3 text-left text-[10px] font-bold text-slate-200 truncate" title="${p.visitante}">${p.visitante}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function registrarGolSimulado(fecha, partidoIdx, lado, goles) {
+            let resKey = `${fecha}-${partidoIdx}`;
+            if (!resultadosSimulados[resKey]) {
+                resultadosSimulados[resKey] = { golL: 0, golV: 0 };
+            }
+            if (lado === 'L') {
+                resultadosSimulados[resKey].golL = goles !== "" ? parseInt(goles, 10) : 0;
+            } else {
+                resultadosSimulados[resKey].golV = goles !== "" ? parseInt(goles, 10) : 0;
+            }
+            guardarDatosEnLocalStorage();
+            calcularTablaPosicionesSimuladas();
+            renderizarFixtureView(); // Refrescar goles en vista fixture
+        }
+
+        function simularResultadosAleatorios() {
+            const fSim = parseInt(document.getElementById('select-sim-fecha').value, 10);
+            let jornada = fixtureFinalMaquetado.find(j => j.fecha === fSim);
+            if (!jornada) return;
+
+            jornada.partidos.forEach((p, idx) => {
+                let resKey = `${fSim}-${idx}`;
+                resultadosSimulados[resKey] = {
+                    golL: Math.floor(Math.random() * 4),
+                    golV: Math.floor(Math.random() * 4)
+                };
+            });
+            guardarDatosEnLocalStorage();
+            actualizarSimuladorPartidos();
+            calcularTablaPosicionesSimuladas();
+            renderizarFixtureView();
+            sintetizarSonidoFifa(600, 0.15, 'sine');
+        }
+
+        function limpiarResultadosSimulados() {
+            resultadosSimulados = {};
+            guardarDatosEnLocalStorage();
+            actualizarSimuladorPartidos();
+            calcularTablaPosicionesSimuladas();
+            renderizarFixtureView();
+            sintetizarSonidoFifa(150, 0.3, 'sawtooth');
+        }
+
+        function calcularTablaPosicionesSimuladas() {
+            let standings = {};
+            nombresEquiposInput.forEach(eq => {
+                standings[eq.nombre] = { nombre: eq.nombre, pts: 0, pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, dg: 0 };
+            });
+
+            fixtureFinalMaquetado.forEach(jornada => {
+                jornada.partidos.forEach((p, idx) => {
+                    let resKey = `${jornada.fecha}-${idx}`;
+                    let res = resultadosSimulados[resKey];
+                    if (res !== undefined) {
+                        let stL = standings[p.local];
+                        let stV = standings[p.visitante];
+                        if (stL && stV) {
+                            stL.pj++;
+                            stV.pj++;
+                            stL.gf += res.golL;
+                            stL.gc += res.golV;
+                            stV.gf += res.golV;
+                            stV.gc += res.golL;
+
+                            if (res.golL > res.golV) {
+                                stL.pts += 3;
+                                stL.pg++;
+                                stV.pp++;
+                            } else if (res.golL < res.golV) {
+                                stV.pts += 3;
+                                stV.pg++;
+                                stL.pp++;
+                            } else {
+                                stL.pts += 1;
+                                stV.pts += 1;
+                                stL.pe++;
+                                stV.pe++;
+                            }
+                        }
+                    }
+                });
+            });
+
+            let arrayStandings = Object.values(standings);
+            arrayStandings.forEach(st => {
+                st.dg = st.gf - st.gc;
+            });
+
+            const contenedor = document.getElementById('contenedor-tablas-posiciones');
+            contenedor.innerHTML = '';
+
+            if (tipoTorneo === "zonas") {
+                // Separamos los stands en Zona A (los primeros 7 según asignación sorteada) 
+                // y Zona B (los restantes 7)
+                let teamsZonaA = ordenSorteadoPosiciones.slice(0, 7).map(e => e.nombre);
+                let teamsZonaB = ordenSorteadoPosiciones.slice(7, 14).map(e => e.nombre);
+
+                let standingsA = arrayStandings.filter(st => teamsZonaA.includes(st.nombre));
+                let standingsB = arrayStandings.filter(st => teamsZonaB.includes(st.nombre));
+
+                ordenarArrayStandings(standingsA);
+                ordenarArrayStandings(standingsB);
+
+                contenedor.innerHTML += `
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-black text-emerald-400 tracking-widest uppercase border-b border-slate-900 pb-1">ZONA A</h4>
+                        <div class="overflow-x-auto rounded-xl border border-slate-900/80">
+                            ${generarHTMLTablaStandings(standingsA)}
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-black text-teal-400 tracking-widest uppercase border-b border-slate-900 pb-1">ZONA B</h4>
+                        <div class="overflow-x-auto rounded-xl border border-slate-900/80">
+                            ${generarHTMLTablaStandings(standingsB)}
+                        </div>
+                    </div>
+                `;
+            } else {
+                ordenarArrayStandings(arrayStandings);
+                contenedor.innerHTML += `
+                    <div class="overflow-x-auto rounded-xl border border-slate-900/80">
+                        ${generarHTMLTablaStandings(arrayStandings)}
+                    </div>
+                `;
+            }
+        }
+
+        function ordenarArrayStandings(arr) {
+            arr.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                if (b.dg !== a.dg) return b.dg - a.dg;
+                if (b.gf !== a.gf) return b.gf - a.gf;
+                return a.nombre.localeCompare(b.nombre);
+            });
+        }
+
+        function generarHTMLTablaStandings(arr) {
+            let bodyHtml = '';
+            arr.forEach((st, idx) => {
+                bodyHtml += `
+                    <tr class="hover:bg-slate-900/40 transition-colors">
+                        <td class="p-2 text-center font-bold text-slate-400 w-8">${idx + 1}</td>
+                        <td class="p-2 font-bold text-slate-100">${st.nombre}</td>
+                        <td class="p-2 text-center font-extrabold text-emerald-400 bg-emerald-950/15 w-10">${st.pts}</td>
+                        <td class="p-2 text-center w-8">${st.pj}</td>
+                        <td class="p-2 text-center text-slate-400 w-8">${st.pg}</td>
+                        <td class="p-2 text-center text-slate-400 w-8">${st.pe}</td>
+                        <td class="p-2 text-center text-slate-400 w-8">${st.pp}</td>
+                        <td class="p-2 text-center text-slate-400 w-8">${st.gf}</td>
+                        <td class="p-2 text-center text-slate-400 w-8">${st.gc}</td>
+                        <td class="p-2 text-center font-bold w-8 ${st.dg >= 0 ? 'text-emerald-500':'text-red-500'}">${st.dg > 0 ? '+' + st.dg : st.dg}</td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <table class="w-full text-left text-[11px] border-collapse min-w-[500px]">
+                    <thead>
+                        <tr class="bg-slate-950 border-b border-slate-900 text-slate-400 uppercase font-bold tracking-widest text-[9px]">
+                            <th class="p-2 text-center w-8">Pos</th>
+                            <th class="p-2">Club</th>
+                            <th class="p-2 text-center w-10">PTS</th>
+                            <th class="p-2 text-center w-8">PJ</th>
+                            <th class="p-2 text-center w-8">PG</th>
+                            <th class="p-2 text-center w-8">PE</th>
+                            <th class="p-2 text-center w-8">PP</th>
+                            <th class="p-2 text-center w-8">GF</th>
+                            <th class="p-2 text-center w-8">GC</th>
+                            <th class="p-2 text-center w-8">DG</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-900 bg-slate-900/10 text-slate-300">
+                        ${bodyHtml}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // --- AUDITORÍA DE DATOS DE LIGA ---
+        function renderizarAuditoriaEquidad() {
+            let tracker = {};
+            nombresEquiposInput.forEach(eq => {
+                tracker[eq.nombre] = { pj: 0, libres: 0, M1: 0, M2: 0, Benitez: 0, h13: 0, h14: 0, h15: 0, h16: 0, h17: 0, t1: 0, t2: 0, t3: 0 };
+            });
+
+            fixtureFinalMaquetado.forEach(jornada => {
+                jornada.libres.forEach(name => {
+                    if (tracker[name]) tracker[name].libres++;
+                });
+
+                jornada.partidos.forEach(p => {
+                    [p.local, p.visitante].forEach(name => {
+                        let aud = tracker[name];
+                        if (!aud) return;
+                        aud.pj++;
+
+                        if (p.cancha === nombresCanchasInput[0]) aud.M1++;
+                        if (p.cancha === nombresCanchasInput[1]) aud.M2++;
+                        if (p.cancha === nombresCanchasInput[2]) aud.Benitez++;
+
+                        if (p.hora === "13:00") aud.h13++;
+                        if (p.hora === "14:00") aud.h14++;
+                        if (p.hora === "15:00") aud.h15++;
+                        if (p.hora === "16:00") aud.h16++;
+                        if (p.hora === "17:00") aud.h17++;
+
+                        if (p.terna === nombresTernasInput[0]) aud.t1++;
+                        if (p.terna === nombresTernasInput[1]) aud.t2++;
+                        if (p.terna === nombresTernasInput[2]) aud.t3++;
+                    });
+                });
+            });
+
+            const tbody = document.getElementById('tabla-cuerpo-auditoria');
+            tbody.innerHTML = '';
+
+            Object.keys(tracker).forEach(name => {
+                let r = tracker[name];
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-900/40 transition-colors">
+                        <td class="p-3 font-bold text-slate-100 text-xs">${name}</td>
+                        <td class="p-3 text-center bg-blue-950/20 text-blue-400 font-extrabold">${r.pj}</td>
+                        <td class="p-3 text-center bg-purple-950/20 text-purple-400 font-extrabold">${r.libres}</td>
+                        <td class="p-3 text-center border-l border-slate-900 font-bold text-slate-300">${r.M1}</td>
+                        <td class="p-3 text-center font-bold text-slate-300">${r.M2}</td>
+                        <td class="p-3 text-center font-bold text-slate-300">${r.Benitez}</td>
+                        <td class="p-3 text-center border-l border-slate-900 text-slate-500 font-bold">${r.h13}</td>
+                        <td class="p-3 text-center font-bold text-slate-200 bg-emerald-950/10">${r.h14}</td>
+                        <td class="p-3 text-center text-slate-500 font-bold">${r.h15}</td>
+                        <td class="p-3 text-center font-bold text-slate-200 bg-emerald-950/10">${r.h16}</td>
+                        <td class="p-3 text-center text-slate-500 font-bold">${r.h17}</td>
+                        <td class="p-3 text-center border-l border-slate-900 font-bold">${r.t1}</td>
+                        <td class="p-3 text-center font-bold">${r.t2}</td>
+                        <td class="p-3 text-center font-bold">${r.t3}</td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
