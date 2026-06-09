@@ -302,7 +302,7 @@
                             <p class="text-[9px] text-slate-400 font-bold">Personalización de Roster, Estructuras y Canchas.</p>
                         </div>
                     </div>
-                    <button id="btn-restaurar-config" onclick="restaurarPresets()" class="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-2 rounded-lg cursor-pointer active:scale-95">
+                    <button id="btn-restaurar-config" onclick="restaurarPresets()" class="w-full md:w-auto bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-2 rounded-lg cursor-pointer active:scale-95">
                         <i class="fa-solid fa-rotate-left mr-1"></i> Restablecer Valores
                     </button>
                 </div>
@@ -312,6 +312,7 @@
                     <i class="fa-solid fa-circle-info mr-2"></i> Estás en modo de visualización. Los campos se encuentran bloqueados para edición. Solo un Administrador u Operador puede realizar modificaciones.
                 </div>
 
+                <!-- Parámetros Generales de Reglas -->
                 <div class="bg-slate-950/80 border border-slate-900 p-3 sm:p-4 rounded-xl mb-5 grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                         <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-trophy mr-1"></i> Formato de Competencia</label>
@@ -323,8 +324,8 @@
                     <div>
                         <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-clock mr-1"></i> Jornada Especial (3 Horarios)</label>
                         <select id="config-horario-especial" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
-                            <option value="primera">La Fecha 1 se juega en 3 Horarios (13, 15 y 17hs)</option>
-                            <option value="ultima">La última Fecha se juega en 3 Horarios (13, 15 y 17hs)</option>
+                            <option value="primera">La Fecha 1 se juega en 3 Horarios (Especial)</option>
+                            <option value="ultima">La última Fecha se juega en 3 Horarios (Especial)</option>
                         </select>
                     </div>
                     <div>
@@ -364,28 +365,89 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                    <div class="lg:col-span-2">
+                <!-- NAVEGADOR DE SUBPESTAÑAS DE CONFIGURACIÓN (Excelente para pantallas móviles) -->
+                <div class="flex overflow-x-auto no-scrollbar gap-1 bg-slate-950 p-1 rounded-xl border border-slate-900 mb-5">
+                    <button type="button" onclick="switchConfigSubTab('equipos')" id="subtab-equipos" class="flex-1 py-2 text-[10px] font-extrabold uppercase rounded-lg transition-all bg-meta-gold text-slate-950">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> Roster (14)
+                    </button>
+                    <button type="button" onclick="switchConfigSubTab('canchas')" id="subtab-canchas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-map-location-dot mr-1"></i> Canchas
+                    </button>
+                    <button type="button" onclick="switchConfigSubTab('ternas')" id="subtab-ternas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-gavel mr-1"></i> Árbitros
+                    </button>
+                    <button type="button" onclick="switchConfigSubTab('horarios')" id="subtab-horarios" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-clock mr-1"></i> Horarios
+                    </button>
+                </div>
+
+                <!-- PANELES DE SUBPESTAÑAS -->
+                <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-900 min-h-[360px]">
+                    
+                    <!-- Sub-Panel: Equipos -->
+                    <div id="panel-config-equipos" class="config-subpanel block">
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center justify-between">
                             <span id="label-equipos-roster">Clubes Participantes (14)</span>
                         </h3>
-                        <div id="equipos-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[340px] overflow-y-auto pr-1 no-scrollbar">
+                        <div id="equipos-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 no-scrollbar">
+                            <!-- Inyectado por JS de forma táctil e intuitiva -->
+                        </div>
+                    </div>
+
+                    <!-- Sub-Panel: Canchas -->
+                    <div id="panel-config-canchas" class="config-subpanel hidden">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Sedes Fijas</h3>
+                        <div id="canchas-grid" class="space-y-3 max-w-md mx-auto">
                             <!-- Inyectado por JS -->
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Ternas Arbitrales</h3>
-                            <div id="ternas-grid" class="space-y-2">
-                                <!-- Inyectado por JS -->
-                            </div>
+                    <!-- Sub-Panel: Ternas -->
+                    <div id="panel-config-ternas" class="config-subpanel hidden">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Ternas Arbitrales</h3>
+                        <div id="ternas-grid" class="space-y-3 max-w-md mx-auto">
+                            <!-- Inyectado por JS -->
                         </div>
+                    </div>
 
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Canchas Fijas</h3>
-                            <div id="canchas-grid" class="space-y-2">
-                                <!-- Inyectado por JS -->
+                    <!-- Sub-Panel: Horarios -->
+                    <div id="panel-config-horarios" class="config-subpanel hidden">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Editor de Horarios Deportivos</h3>
+                        <p class="text-[9.5px] text-slate-400 mb-4 leading-relaxed">Modifica los tiempos nativos de los partidos. El motor de equidad asignará los horarios configurados de manera equitativa entre todos los clubes para evitar repeticiones consecutivas.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
+                            <!-- Horarios Estándar -->
+                            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                <h4 class="text-[10px] text-meta-emerald font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-sun"></i> Fecha Estándar (2 Horas)</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
+                                        <input type="time" id="time-std-1" value="14:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-emerald outline-none w-28">
+                                    </div>
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Segundo Turno:</label>
+                                        <input type="time" id="time-std-2" value="16:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-emerald outline-none w-28">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Horarios Especiales -->
+                            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                <h4 class="text-[10px] text-meta-gold font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-moon"></i> Fecha Especial (3 Horas)</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
+                                        <input type="time" id="time-spc-1" value="13:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
+                                    </div>
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Segundo Turno:</label>
+                                        <input type="time" id="time-spc-2" value="15:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
+                                    </div>
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Tercer Turno:</label>
+                                        <input type="time" id="time-spc-3" value="17:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -453,7 +515,7 @@
                         <i class="fa-solid fa-play mr-1"></i> Extraer Bola 3D
                     </button>
                     <div class="flex items-center gap-3">
-                        <button id="btn-completar-instante" onclick="simulacionInstantanea()" class="text-slate-400 hover:text-white text-[9px] underline">Completar al Instante</button>
+                        <button id="btn-completar-instante" onclick="simulacionInstantanea()" class="text-slate-400 hover:text-white text-[9px] underline cursor-pointer">Completar al Instante</button>
                     </div>
                 </div>
             </div>
@@ -597,11 +659,11 @@
                                     <th id="aud-th-c1" class="p-2.5 text-center border-l border-slate-900 text-meta-gold">Cancha 1</th>
                                     <th id="aud-th-c2" class="p-2.5 text-center text-meta-gold">Cancha 2</th>
                                     <th id="aud-th-c3" class="p-2.5 text-center text-meta-gold">Cancha 3</th>
-                                    <th class="p-2.5 text-center border-l border-slate-900 text-meta-emerald">13hs</th>
-                                    <th class="p-2.5 text-center text-meta-emerald">14hs</th>
-                                    <th class="p-2.5 text-center text-meta-emerald">15hs</th>
-                                    <th class="p-2.5 text-center text-meta-emerald">16hs</th>
-                                    <th class="p-2.5 text-center text-meta-emerald">17hs</th>
+                                    <th id="aud-th-h1" class="p-2.5 text-center border-l border-slate-900 text-meta-emerald">H1</th>
+                                    <th id="aud-th-h2" class="p-2.5 text-center text-meta-emerald">H2</th>
+                                    <th id="aud-th-h3" class="p-2.5 text-center text-meta-emerald">H3</th>
+                                    <th id="aud-th-h4" class="p-2.5 text-center text-meta-emerald">H4</th>
+                                    <th id="aud-th-h5" class="p-2.5 text-center text-meta-emerald">H5</th>
                                     <th id="aud-th-t1" class="p-2.5 text-center border-l border-slate-900 text-yellow-500">Terna 1</th>
                                     <th id="aud-th-t2" class="p-2.5 text-center text-yellow-500">Terna 2</th>
                                     <th id="aud-th-t3" class="p-2.5 text-center text-yellow-500">Terna 3</th>
@@ -742,6 +804,13 @@
         let hashOperator = localStorage.getItem('metafutbol_hash_operator') || CryptoJS.SHA256("OP2026" + "metafutbol_salt_2026").toString();
         let hashViewer = localStorage.getItem('metafutbol_hash_viewer') || CryptoJS.SHA256("VER2026" + "metafutbol_salt_2026").toString();
 
+        // Variables Editables de Horarios (Novedad Plexcel v4.2)
+        let horarioNormal1 = localStorage.getItem('metafutbol_hn1') || "14:00";
+        let horarioNormal2 = localStorage.getItem('metafutbol_hn2') || "16:00";
+        let horarioEspecial1 = localStorage.getItem('metafutbol_he1') || "13:00";
+        let horarioEspecial2 = localStorage.getItem('metafutbol_he2') || "15:00";
+        let horarioEspecial3 = localStorage.getItem('metafutbol_he3') || "17:00";
+
         function inicializarSeguridadUI() {
             // Mostrar u ocultar la consola de administración de claves según el rol
             const panelSeg = document.getElementById('panel-seguridad-admin');
@@ -784,7 +853,7 @@
                 badge.innerHTML = '<i class="fa-solid fa-user-gear text-blue-400"></i> Operador de Sorteo';
                 badge.className = "text-[8px] bg-slate-900 text-blue-400 border border-blue-500/20 px-2.5 py-1.5 rounded-lg uppercase font-bold flex items-center gap-1.5 font-display";
                 
-                // Permitir sorteo pero bloquear cambios drásticos en config si se desea (o dejar full)
+                // Permitir sorteo pero ocultar de raíz el módulo de claves de seguridad
                 desbloquearFormulariosEdicion(true);
                 btnRestaurar.style.display = 'none'; 
                 btnValidar.style.display = 'inline-block';
@@ -834,7 +903,6 @@
             // Habilitar o deshabilitar inputs de equipos, canchas, formatos, etc.
             const inputs = document.querySelectorAll('#sec-config input, #sec-config select');
             inputs.forEach(el => {
-                // El checkbox de seguridad y los inputs de claves del admin no se deshabilitan por esta fn
                 if (el.id !== 'sec-key-admin' && el.id !== 'sec-key-operator' && el.id !== 'sec-key-viewer' && el.id !== 'auth-print') {
                     if (permitir) {
                         el.removeAttribute('disabled');
@@ -852,17 +920,13 @@
             const btnIcal = document.getElementById('btn-ical-export');
 
             if (currentRole === "ADMIN" || currentRole === "OPERATOR") {
-                // El staff siempre tiene acceso
                 btnP.style.display = 'flex';
                 btnF.style.display = 'flex';
                 toolScale.style.display = 'flex';
                 btnIcal.style.display = 'flex';
             } else {
-                // Espectador Libre: Solo tiene acceso a imprimir y exportar iCal
                 btnP.style.display = 'flex';
                 btnIcal.style.display = 'flex';
-                
-                // El espectador no tiene acceso a diseñar flyers ni escalar letras
                 btnF.style.display = 'none';
                 toolScale.style.display = 'none';
             }
@@ -883,12 +947,10 @@
                 return;
             }
 
-            // Calcular nuevos hashes
             hashAdmin = CryptoJS.SHA256(rawAdmin + "metafutbol_salt_2026").toString();
             hashOperator = CryptoJS.SHA256(rawOperator + "metafutbol_salt_2026").toString();
             hashViewer = CryptoJS.SHA256(rawViewer + "metafutbol_salt_2026").toString();
 
-            // Persistir en LocalStorage
             localStorage.setItem('metafutbol_hash_admin', hashAdmin);
             localStorage.setItem('metafutbol_hash_operator', hashOperator);
             localStorage.setItem('metafutbol_hash_viewer', hashViewer);
@@ -936,10 +998,8 @@
             const passInput = document.getElementById('input-password').value.trim();
             const errorMsg = document.getElementById('login-error');
             
-            // Computar hash de la entrada con la sal de MetaFutbol
             const hashedInput = CryptoJS.SHA256(passInput + "metafutbol_salt_2026").toString();
             
-            // Comprobar con los tres roles
             if (hashedInput === hashAdmin || passInput === "FIFA2026") {
                 currentRole = "ADMIN";
                 ingresarAlSistema("Super Administrador");
@@ -1035,6 +1095,19 @@
                 if (cSorteo) slotsAsignadosSorteados = JSON.parse(cSorteo);
                 if (cContador) contadorSorteados = parseInt(cContador, 10);
 
+                // Cargar horarios editables de LocalStorage
+                horarioNormal1 = localStorage.getItem('metafutbol_hn1') || "14:00";
+                horarioNormal2 = localStorage.getItem('metafutbol_hn2') || "16:00";
+                horarioEspecial1 = localStorage.getItem('metafutbol_he1') || "13:00";
+                horarioEspecial2 = localStorage.getItem('metafutbol_he2') || "15:00";
+                horarioEspecial3 = localStorage.getItem('metafutbol_he3') || "17:00";
+
+                document.getElementById('time-std-1').value = horarioNormal1;
+                document.getElementById('time-std-2').value = horarioNormal2;
+                document.getElementById('time-spc-1').value = horarioEspecial1;
+                document.getElementById('time-spc-2').value = horarioEspecial2;
+                document.getElementById('time-spc-3').value = horarioEspecial3;
+
                 if (fixtureConsolidadoFinal && fixtureConsolidadoFinal.length > 0) {
                     habilitarTabsParaUso();
                     poblarSelectoresFiltro();
@@ -1054,6 +1127,13 @@
                 localStorage.setItem('metafutbol_fixture_v4', JSON.stringify(fixtureConsolidadoFinal));
                 localStorage.setItem('metafutbol_sorteo_v4', JSON.stringify(slotsAsignadosSorteados));
                 localStorage.setItem('metafutbol_contador_v4', contadorSorteados.toString());
+
+                // Guardar horarios
+                localStorage.setItem('metafutbol_hn1', horarioNormal1);
+                localStorage.setItem('metafutbol_hn2', horarioNormal2);
+                localStorage.setItem('metafutbol_he1', horarioEspecial1);
+                localStorage.setItem('metafutbol_he2', horarioEspecial2);
+                localStorage.setItem('metafutbol_he3', horarioEspecial3);
             } catch (e) {
                 console.error("Error guardando LocalStorage", e);
             }
@@ -1068,7 +1148,12 @@
                     formato: formatoTorneoSeleccionado,
                     fixture: fixtureConsolidadoFinal,
                     sorteo: slotsAsignadosSorteados,
-                    contador: contadorSorteados
+                    contador: contadorSorteados,
+                    hn1: horarioNormal1,
+                    hn2: horarioNormal2,
+                    he1: horarioEspecial1,
+                    he2: horarioEspecial2,
+                    he3: horarioEspecial3
                 };
                 const blob = new Blob([JSON.stringify(d, null, 2)], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
@@ -1102,6 +1187,20 @@
                     if (d.fixture) fixtureConsolidadoFinal = d.fixture;
                     if (d.sorteo) slotsAsignadosSorteados = d.sorteo;
                     if (d.contador !== undefined) contadorSorteados = d.contador;
+                    
+                    if (d.hn1) {
+                        horarioNormal1 = d.hn1;
+                        horarioNormal2 = d.hn2;
+                        horarioEspecial1 = d.he1;
+                        horarioEspecial2 = d.he2;
+                        horarioEspecial3 = d.he3;
+
+                        document.getElementById('time-std-1').value = horarioNormal1;
+                        document.getElementById('time-std-2').value = horarioNormal2;
+                        document.getElementById('time-spc-1').value = horarioEspecial1;
+                        document.getElementById('time-spc-2').value = horarioEspecial2;
+                        document.getElementById('time-spc-3').value = horarioEspecial3;
+                    }
 
                     guardarCopiaLocal();
                     renderConfigInputs();
@@ -1135,6 +1234,19 @@
             arrayClubesActuales = [...PRESETS_CLUBES_METAFUTBOL];
             arrayTernasActuales = ["Terna Arbitral T1", "Terna Arbitral T2", "Terna Arbitral T3"];
             arrayCanchasActuales = ["Martija 1", "Martija 2", "Benítez"];
+            
+            horarioNormal1 = "14:00";
+            horarioNormal2 = "16:00";
+            horarioEspecial1 = "13:00";
+            horarioEspecial2 = "15:00";
+            horarioEspecial3 = "17:00";
+
+            document.getElementById('time-std-1').value = horarioNormal1;
+            document.getElementById('time-std-2').value = horarioNormal2;
+            document.getElementById('time-spc-1').value = horarioEspecial1;
+            document.getElementById('time-spc-2').value = horarioEspecial2;
+            document.getElementById('time-spc-3').value = horarioEspecial3;
+
             document.getElementById('config-horario-especial').value = "primera";
             document.getElementById('config-formato').value = "todos";
             formatoTorneoSeleccionado = "todos";
@@ -1145,40 +1257,78 @@
         }
 
         function renderConfigInputs() {
+            // Render Equipos con layouts de gran tamaño para toques móviles intuitivos
             const containerEquipos = document.getElementById('equipos-grid');
             containerEquipos.innerHTML = '';
             arrayClubesActuales.forEach((eq, idx) => {
                 containerEquipos.innerHTML += `
-                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-900">
-                        <span class="text-xs font-bold text-meta-gold/80 w-6 text-center">${idx + 1}</span>
-                        <input type="text" id="inp-eq-${idx}" value="${eq.nombre}" class="bg-transparent text-xs text-slate-200 focus:outline-none w-full font-bold h-10 px-1">
-                        <input type="text" id="inp-abr-${idx}" value="${eq.abreviatura}" maxlength="3" class="bg-slate-900 border border-slate-800 text-slate-400 text-center text-[10px] font-bold rounded p-1 w-12 uppercase h-8 font-display">
-                        <input type="color" id="inp-col1-${idx}" value="${eq.color1}" class="w-7 h-7 rounded cursor-pointer border-0 p-0 block">
-                        <input type="color" id="inp-col2-${idx}" value="${eq.color2}" class="w-7 h-7 rounded cursor-pointer border-0 p-0 block">
+                    <div class="flex flex-col gap-2 bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 shadow-md">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black text-meta-gold font-display bg-slate-950 px-2 py-0.5 rounded-md border border-meta-gold/20">CLUB #${idx + 1}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[8px] text-slate-400 font-extrabold uppercase">Colores:</span>
+                                <input type="color" id="inp-col1-${idx}" value="${eq.color1}" class="w-8 h-8 rounded-full cursor-pointer border-2 border-slate-950 p-0 block shadow-inner bg-transparent">
+                                <input type="color" id="inp-col2-${idx}" value="${eq.color2}" class="w-8 h-8 rounded-full cursor-pointer border-2 border-slate-950 p-0 block shadow-inner bg-transparent">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <div class="col-span-3">
+                                <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre Oficial</label>
+                                <input type="text" id="inp-eq-${idx}" value="${eq.nombre}" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-xl p-2.5 text-xs font-bold text-slate-100 outline-none">
+                            </div>
+                            <div class="col-span-1">
+                                <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Abrev.</label>
+                                <input type="text" id="inp-abr-${idx}" value="${eq.abreviatura}" maxlength="3" class="w-full bg-slate-950 border border-slate-800 text-meta-gold text-center text-xs font-black rounded-xl p-2.5 uppercase font-display outline-none">
+                            </div>
+                        </div>
                     </div>
                 `;
             });
 
+            // Render Ternas Arbitrales
             const containerTernas = document.getElementById('ternas-grid');
             containerTernas.innerHTML = '';
             arrayTernasActuales.forEach((terna, idx) => {
                 containerTernas.innerHTML += `
-                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-900">
-                        <span class="text-xs font-bold text-meta-gold font-display">T${idx+1}</span>
-                        <input type="text" id="inp-ter-${idx}" value="${terna}" class="bg-transparent text-xs text-slate-200 focus:outline-none w-full font-bold h-10 px-1">
+                    <div class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 shadow-md">
+                        <div class="w-9 h-9 bg-yellow-500/10 text-yellow-500 rounded-xl flex items-center justify-center font-black text-xs font-display flex-shrink-0 border border-yellow-500/20">T${idx+1}</div>
+                        <div class="flex-grow">
+                            <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre / Designación</label>
+                            <input type="text" id="inp-ter-${idx}" value="${terna}" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-bold text-slate-200 outline-none">
+                        </div>
                     </div>
                 `;
             });
 
+            // Render Canchas Fijas
             const containerCanchas = document.getElementById('canchas-grid');
             containerCanchas.innerHTML = '';
             arrayCanchasActuales.forEach((cancha, idx) => {
                 containerCanchas.innerHTML += `
-                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-900">
-                        <span class="text-xs font-bold text-meta-emerald">🏟️</span>
-                        <input type="text" id="inp-can-${idx}" value="${cancha}" class="bg-transparent text-xs text-slate-200 focus:outline-none w-full font-bold h-10 px-1">
+                    <div class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 shadow-md">
+                        <div class="w-9 h-9 bg-meta-emerald/10 text-meta-emerald rounded-xl flex items-center justify-center text-sm flex-shrink-0 border border-meta-emerald/20">🏟️</div>
+                        <div class="flex-grow">
+                            <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre del Estadio / Predio</label>
+                            <input type="text" id="inp-can-${idx}" value="${cancha}" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-bold text-slate-200 outline-none">
+                        </div>
                     </div>
                 `;
+            });
+        }
+
+        // Switch para el sub-panel de configuraciones táctiles móviles
+        function switchConfigSubTab(subId) {
+            document.querySelectorAll('.config-subpanel').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`panel-config-${subId}`).classList.remove('hidden');
+
+            const tabIds = ['equipos', 'canchas', 'ternas', 'horarios'];
+            tabIds.forEach(id => {
+                const btn = document.getElementById(`subtab-${id}`);
+                if (id === subId) {
+                    btn.className = "flex-1 py-2 text-[10px] font-extrabold uppercase rounded-lg transition-all bg-meta-gold text-slate-950 shadow-md";
+                } else {
+                    btn.className = "flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white";
+                }
             });
         }
 
@@ -1286,6 +1436,13 @@
                 arrayCanchasActuales[i] = document.getElementById(`inp-can-${i}`).value.trim() || `Cancha ${i+1}`;
             }
 
+            // Resguardar Horarios Editados en Variables
+            horarioNormal1 = document.getElementById('time-std-1').value;
+            horarioNormal2 = document.getElementById('time-std-2').value;
+            horarioEspecial1 = document.getElementById('time-spc-1').value;
+            horarioEspecial2 = document.getElementById('time-spc-2').value;
+            horarioEspecial3 = document.getElementById('time-spc-3').value;
+
             bolsaDeSorteo = [...arrayClubesActuales];
             bolsaDeSorteo.sort(() => Math.random() - 0.5);
 
@@ -1368,7 +1525,6 @@
                 });
                 const mesh = new THREE.Mesh(geometry, material);
 
-                // Posición aleatoria dentro de la esfera
                 const r = Math.random() * 2.2;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos((Math.random() * 2) - 1);
@@ -1377,7 +1533,6 @@
                 mesh.position.y = r * Math.sin(phi) * Math.sin(theta);
                 mesh.position.z = r * Math.cos(phi);
 
-                // Velocidad
                 mesh.userData = {
                     velocity: new THREE.Vector3(
                         (Math.random() - 0.5) * 0.12,
@@ -1396,7 +1551,6 @@
         }
 
         function loopThreeSorteo() {
-            // Rotación sutil de la jaula
             if (cageMesh3D) {
                 cageMesh3D.rotation.y += 0.003;
                 cageMesh3D.rotation.x += 0.001;
@@ -1404,33 +1558,27 @@
 
             const limitRadius = 3.2;
 
-            // Actualizar física clásica de cada bolilla
             balls3D.forEach((ball, idx) => {
                 const pos = ball.position;
                 const vel = ball.userData.velocity;
 
-                // Dinámica centrífuga turbulenta para simular giro
                 vel.x += (Math.random() - 0.5) * 0.005;
                 vel.y += (Math.random() - 0.5) * 0.005;
                 vel.z += (Math.random() - 0.5) * 0.005;
 
-                // Suave atracción hacia abajo (gravedad sutil)
                 vel.y -= 0.0008;
 
                 pos.add(vel);
 
-                // Colisión con la jaula del bolillero
                 const distFromCenter = pos.length();
                 if (distFromCenter + ball.userData.radius > limitRadius) {
                     const normal = pos.clone().normalize();
                     pos.copy(normal.clone().multiplyScalar(limitRadius - ball.userData.radius));
 
-                    // Reflejar vector de velocidad
                     vel.reflect(normal);
-                    vel.multiplyScalar(0.85); // Pérdida de energía por impacto
+                    vel.multiplyScalar(0.85); 
                 }
 
-                // Colisiones entre bolillas
                 for (let j = idx + 1; j < balls3D.length; j++) {
                     const otherBall = balls3D[j];
                     const diff = otherBall.position.clone().sub(ball.position);
@@ -1441,11 +1589,9 @@
                         const overlap = minDist - d;
                         const normal = diff.clone().normalize();
 
-                        // Empujar para resolver interpenetración
                         ball.position.sub(normal.clone().multiplyScalar(overlap * 0.5));
                         otherBall.position.add(normal.clone().multiplyScalar(overlap * 0.5));
 
-                        // Transferencia elástica de momentum
                         const relativeVelocity = otherBall.userData.velocity.clone().sub(ball.userData.velocity);
                         const velAlongNormal = relativeVelocity.dot(normal);
 
@@ -1460,7 +1606,6 @@
                 }
             });
 
-            // Sonido aleatorio de rebote
             if (Math.random() < 0.04 && balls3D.length > 0) {
                 sintetizarEfectoSonido(Math.random() * 150 + 220, 0.03, 'sine', 0.005);
             }
@@ -1549,7 +1694,6 @@
             const btn = document.getElementById('btn-sacar-bola');
             btn.disabled = true;
 
-            // Remover bola física en Three.js
             if (balls3D.length > 0) {
                 const removedBall = balls3D.pop();
                 scene3D.remove(removedBall);
@@ -1576,7 +1720,7 @@
 
                 screen.innerHTML = `
                     <div class="flex items-center gap-3 animate-bounce justify-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-lg" style="background-color: ${clubSeleccionado.color1}; border-color: ${clubSeleccionado.color2}">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-lg flex-shrink-0" style="background-color: ${clubSeleccionado.color1}; border-color: ${clubSeleccionado.color2}">
                             <span class="text-white font-black text-[10px] font-display">${clubSeleccionado.abreviatura}</span>
                         </div>
                         <div class="text-left">
@@ -1593,7 +1737,7 @@
 
                 const textSlot = document.getElementById(`text-slot-sorteado-${targetSlotIdx}`);
                 textSlot.className = "text-[9px] font-black text-slate-100 uppercase truncate";
-                textSlot.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full mr-1" style="background-color:${clubSeleccionado.color1}"></span>${clubSeleccionado.nombre}`;
+                textSlot.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full mr-1 animate-pulse" style="background-color:${clubSeleccionado.color1}"></span>${clubSeleccionado.nombre}`;
 
                 contadorSorteados++;
                 document.getElementById('lbl-bombo-restante').innerHTML = `Quedan ${14 - contadorSorteados} Bolillas`;
@@ -1642,7 +1786,6 @@
                 setTimeout(() => sintetizarEfectoSonido(554, 0.15, 'sine', 0.1), 80);
                 setTimeout(() => sintetizarEfectoSonido(659, 0.35, 'triangle', 0.08), 160);
                 
-                // Efecto de explosión de confeti dorado
                 confetti({
                     particleCount: 80,
                     spread: 60,
@@ -1907,15 +2050,16 @@
                 let esFechaEspecial = (configEspecial === "primera" && numeroFecha === 1) || 
                                       (configEspecial === "ultima" && numeroFecha === maxFechas);
 
+                // Utilizar horarios editados de forma dinámica
                 if (esFechaEspecial) {
                     slots = [
-                        { cancha: arrayCanchasActuales[0], hora: "13:00", terna: arrayTernasActuales[0] },
-                        { cancha: arrayCanchasActuales[0], hora: "15:00", terna: arrayTernasActuales[0] },
-                        { cancha: arrayCanchasActuales[1], hora: "13:00", terna: arrayTernasActuales[1] },
-                        { cancha: arrayCanchasActuales[1], hora: "15:00", terna: arrayTernasActuales[1] },
-                        { cancha: arrayCanchasActuales[2], hora: "13:00", terna: arrayTernasActuales[2] },
-                        { cancha: arrayCanchasActuales[2], hora: "15:00", terna: arrayTernasActuales[2] },
-                        { cancha: arrayCanchasActuales[2], hora: "17:00", terna: arrayTernasActuales[2] }
+                        { cancha: arrayCanchasActuales[0], hora: horarioEspecial1, terna: arrayTernasActuales[0] },
+                        { cancha: arrayCanchasActuales[0], hora: horarioEspecial2, terna: arrayTernasActuales[0] },
+                        { cancha: arrayCanchasActuales[1], hora: horarioEspecial1, terna: arrayTernasActuales[1] },
+                        { cancha: arrayCanchasActuales[1], hora: horarioEspecial2, terna: arrayTernasActuales[1] },
+                        { cancha: arrayCanchasActuales[2], hora: horarioEspecial1, terna: arrayTernasActuales[2] },
+                        { cancha: arrayCanchasActuales[2], hora: horarioEspecial2, terna: arrayTernasActuales[2] },
+                        { cancha: arrayCanchasActuales[2], hora: horarioEspecial3, terna: arrayTernasActuales[2] }
                     ];
                     if (formatoTorneoSeleccionado === "zonas") {
                         slots.pop(); 
@@ -1926,12 +2070,12 @@
                     let ternaBen = arrayTernasActuales[(rIdx + 1) % 3];
 
                     slots = [
-                        { cancha: arrayCanchasActuales[0], hora: "14:00", terna: ternaM1 },
-                        { cancha: arrayCanchasActuales[0], hora: "16:00", terna: ternaM1 },
-                        { cancha: arrayCanchasActuales[1], hora: "14:00", terna: ternaM2 },
-                        { cancha: arrayCanchasActuales[1], hora: "16:00", terna: ternaM2 },
-                        { cancha: arrayCanchasActuales[2], hora: "14:00", terna: ternaBen },
-                        { cancha: arrayCanchasActuales[2], hora: "16:00", terna: ternaBen }
+                        { cancha: arrayCanchasActuales[0], hora: horarioNormal1, terna: ternaM1 },
+                        { cancha: arrayCanchasActuales[0], hora: horarioNormal2, terna: ternaM1 },
+                        { cancha: arrayCanchasActuales[1], hora: horarioNormal1, terna: ternaM2 },
+                        { cancha: arrayCanchasActuales[1], hora: horarioNormal2, terna: ternaM2 },
+                        { cancha: arrayCanchasActuales[2], hora: horarioNormal1, terna: ternaBen },
+                        { cancha: arrayCanchasActuales[2], hora: horarioNormal2, terna: ternaBen }
                     ];
                 }
 
@@ -1954,11 +2098,20 @@
 
         function evaluarFuncionEntropia(estado) {
             let penalizacion = 0;
-            let tracker = Array.from({length: 14}, () => ({
-                canchas: {},
-                horarios: { "13:00": 0, "14:00": 0, "15:00": 0, "16:00": 0, "17:00": 0 },
-                ternas: {}
-            }));
+            let tracker = Array.from({length: 14}, () => {
+                let hMap = {};
+                hMap[horarioEspecial1] = 0;
+                hMap[horarioNormal1] = 0;
+                hMap[horarioEspecial2] = 0;
+                hMap[horarioNormal2] = 0;
+                hMap[horarioEspecial3] = 0;
+
+                return {
+                    canchas: {},
+                    horarios: hMap,
+                    ternas: {}
+                };
+            });
 
             arrayCanchasActuales.forEach(c => {
                 tracker.forEach(t => t.canchas[c] = 0);
@@ -2010,8 +2163,8 @@
                         if (val > 6) penalizacion += 30;
                     }
                 });
-                let h14 = tr.horarios["14:00"];
-                let h16 = tr.horarios["16:00"];
+                let h14 = tr.horarios[horarioNormal1];
+                let h16 = tr.horarios[horarioNormal2];
                 penalizacion += Math.abs(h14 - targetHora14Ideal) * 20;
                 penalizacion += Math.abs(h16 - targetHora16Ideal) * 20;
             });
@@ -2120,6 +2273,13 @@
             document.getElementById('aud-th-t1').innerText = arrayTernasActuales[0].split(' ')[2] || "Terna 1";
             document.getElementById('aud-th-t2').innerText = arrayTernasActuales[1].split(' ')[2] || "Terna 2";
             document.getElementById('aud-th-t3').innerText = arrayTernasActuales[2].split(' ')[2] || "Terna 3";
+
+            // Modificar cabecera de auditoria de horas dinámicas
+            document.getElementById('aud-th-h1').innerText = horarioEspecial1 + "hs";
+            document.getElementById('aud-th-h2').innerText = horarioNormal1 + "hs";
+            document.getElementById('aud-th-h3').innerText = horarioEspecial2 + "hs";
+            document.getElementById('aud-th-h4').innerText = horarioNormal2 + "hs";
+            document.getElementById('aud-th-h5').innerText = horarioEspecial3 + "hs";
 
             document.getElementById('print-lbl-canchas').innerText = `SEDES: ${arrayCanchasActuales.join(' • ')}`;
             document.getElementById('print-lbl-ternas').innerText = `ÁRBITROS: ${arrayTernasActuales.join(' • ')}`;
@@ -2588,11 +2748,11 @@
                         if (p.cancha === arrayCanchasActuales[1]) aud.M2++;
                         if (p.cancha === arrayCanchasActuales[2]) aud.Benitez++;
 
-                        if (p.hora === "13:00") aud.h13++;
-                        if (p.hora === "14:00") aud.h14++;
-                        if (p.hora === "15:00") aud.h15++;
-                        if (p.hora === "16:00") aud.h16++;
-                        if (p.hora === "17:00") aud.h17++;
+                        if (p.hora === horarioEspecial1) aud.h13++;
+                        if (p.hora === horarioNormal1) aud.h14++;
+                        if (p.hora === horarioEspecial2) aud.h15++;
+                        if (p.hora === horarioNormal2) aud.h16++;
+                        if (p.hora === horarioEspecial3) aud.h17++;
 
                         if (p.terna === arrayTernasActuales[0]) aud.t1++;
                         if (p.terna === arrayTernasActuales[1]) aud.t2++;
