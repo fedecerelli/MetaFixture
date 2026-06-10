@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MetaFutbol - Plexcel.py Evolution</title>
+    <title>MetaFutbol - Plexcel.py Evolution v4.6</title>
     
-    <!-- Librerías de diseño, animación, física 3D y criptografía -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -61,9 +60,6 @@
         .glow-text-gold {
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
         }
-        .glow-text-emerald {
-            text-shadow: 0 0 15px rgba(0, 245, 155, 0.6);
-        }
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -79,11 +75,20 @@
         .broadcast-container {
             position: relative;
             background: #02040a;
+            background-image: linear-gradient(135deg, #090e1a 0%, #172554 50%, #0a0f1e 100%);
+            background-size: 200% 200%;
+            animation: gradientAnim 15s ease infinite;
             overflow: hidden;
             border-radius: 24px;
             border: 2px solid rgba(212, 175, 55, 0.25);
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes gradientAnim {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .ratio-16-9 {
@@ -94,10 +99,33 @@
         .ratio-9-16 {
             width: 100%;
             max-width: 360px;
-            height: 640px;
+            height: 580px;
             margin: 0 auto;
             border: 3px solid #d4af37;
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         /* --- Estructura A4 Horizontal Ultra-Compacta de Alta Fidelidad Visual --- */
@@ -132,8 +160,6 @@
                 width: 29.3cm !important;
                 height: 20.6cm !important;
                 box-sizing: border-box !important;
-                padding: 12px !important;
-                background: #ffffff !important;
             }
             .print-header {
                 border-bottom: 4px double #000000 !important;
@@ -147,7 +173,6 @@
                 gap: 8px !important;
                 width: 29.3cm !important;
                 height: 17.2cm !important;
-                box-sizing: border-box !important;
             }
             .print-card {
                 border: 2px solid #000000 !important;
@@ -155,7 +180,6 @@
                 color: #000000 !important;
                 padding: 8px !important;
                 border-radius: 10px !important;
-                box-sizing: border-box !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: flex-start !important;
@@ -194,7 +218,6 @@
 
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,_rgba(30,41,59,0.25)_0%,_rgba(10,15,30,0.98)_85%)] -z-10 no-print"></div>
 
-    <!-- Pantalla de Login Multi-Rol -->
     <div id="pantalla-login" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4 no-print">
         <div class="w-full max-w-sm glass-panel p-6 sm:p-8 rounded-2xl border border-meta-gold/30 shadow-2xl text-center relative overflow-hidden animate-fade-in">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-meta-gold via-yellow-400 to-meta-gold"></div>
@@ -229,10 +252,6 @@
             <p id="login-error" class="text-red-400 text-xs font-bold mt-3.5 hidden animate-pulse">
                 <i class="fa-solid fa-circle-exclamation mr-1"></i> Clave incorrecta. Reintente.
             </p>
-            <div class="mt-6 pt-4 border-t border-slate-900/60 text-center space-y-1">
-                <p class="text-[9px] text-slate-400">¿Eres el Administrador? Clave por defecto: <span class="text-meta-gold font-mono font-bold">FIFA2026</span></p>
-                <p class="text-[8px] text-slate-500">Operadores: <span class="text-slate-400 font-mono font-bold">OP2026</span> | Espectadores: <span class="text-slate-400 font-mono font-bold">VER2026</span></p>
-            </div>
         </div>
     </div>
 
@@ -245,7 +264,7 @@
                 </div>
                 <div>
                     <h1 class="text-base sm:text-lg font-black tracking-wider text-white uppercase font-display flex items-center gap-1.5">
-                        MetaFutbol <span class="text-[8px] bg-meta-gold/10 text-meta-gold border border-meta-gold/30 px-1.5 py-0.5 rounded font-mono font-bold">CORE v4.2</span>
+                        MetaFutbol <span class="text-[8px] bg-meta-gold/10 text-meta-gold border border-meta-gold/30 px-1.5 py-0.5 rounded font-mono font-bold">CORE v4.6</span>
                     </h1>
                     <p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Desarrollado por Plexcel.py Evolution</p>
                 </div>
@@ -275,10 +294,7 @@
                 <i class="fa-solid fa-sliders mr-1"></i> Config
             </button>
             <button onclick="switchTab('sorteo')" id="tab-sorteo" class="flex-none sm:flex-1 text-center px-4 py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white" disabled>
-                <i class="fa-solid fa-circle-play mr-1"></i> Sorteo 3D
-            </button>
-            <button onclick="switchTab('fixture')" id="tab-fixture" class="flex-none sm:flex-1 text-center px-4 py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white" disabled>
-                <i class="fa-solid fa-calendar-days mr-1"></i> Fixture
+                <i class="fa-solid fa-circle-play mr-1"></i> Sorteo y Fixture
             </button>
             <button onclick="switchTab('equidad')" id="tab-equidad" class="flex-none sm:flex-1 text-center px-4 py-2.5 rounded-lg font-bold text-[10px] sm:text-xs tracking-wider uppercase transition-all duration-300 text-slate-400 hover:text-white" disabled>
                 <i class="fa-solid fa-scale-balanced mr-1"></i> Equidad
@@ -299,7 +315,7 @@
                         </div>
                         <div>
                             <h2 class="text-sm sm:text-base font-bold text-white font-display">Configuración de Torneo</h2>
-                            <p class="text-[9px] text-slate-400 font-bold">Personalización de Roster, Estructuras y Canchas.</p>
+                            <p class="text-[9px] text-slate-400 font-bold">Personalización de Roster, Estructuras, Canchas y Árbitros.</p>
                         </div>
                     </div>
                     <button id="btn-restaurar-config" onclick="restaurarPresets()" class="w-full md:w-auto bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-2 rounded-lg cursor-pointer active:scale-95">
@@ -307,7 +323,6 @@
                     </button>
                 </div>
 
-                <!-- ALERT: Control de privilegios de edición -->
                 <div id="alerta-espectador-config" class="bg-blue-950/20 border border-blue-500/30 text-blue-300 text-xs p-3.5 rounded-xl mb-5 hidden">
                     <i class="fa-solid fa-circle-info mr-2"></i> Estás en modo de visualización. Los campos se encuentran bloqueados para edición. Solo un Administrador u Operador puede realizar modificaciones.
                 </div>
@@ -342,7 +357,7 @@
                     <h3 class="text-xs font-bold text-meta-gold uppercase tracking-widest mb-3 flex items-center gap-1.5 font-display">
                         <i class="fa-solid fa-user-shield"></i> Consola de Seguridad de Super Administrador
                     </h3>
-                    <p class="text-[9.5px] text-slate-400 mb-4">Administra las llaves de acceso para el personal de tu liga. Cambia los códigos de acceso aquí. Los cambios se aplicarán inmediatamente.</p>
+                    <p class="text-[9.5px] text-slate-400 mb-4">Administra las llaves de acceso para el personal de tu liga. Cambia los códigos de acceso aquí.</p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
@@ -365,7 +380,7 @@
                     </div>
                 </div>
 
-                <!-- NAVEGADOR DE SUBPESTAÑAS DE CONFIGURACIÓN (Excelente para pantallas móviles) -->
+                <!-- NAVEGADOR DE SUBPESTAÑAS -->
                 <div class="flex overflow-x-auto no-scrollbar gap-1 bg-slate-950 p-1 rounded-xl border border-slate-900 mb-5">
                     <button type="button" onclick="switchConfigSubTab('equipos')" id="subtab-equipos" class="flex-1 py-2 text-[10px] font-extrabold uppercase rounded-lg transition-all bg-meta-gold text-slate-950">
                         <i class="fa-solid fa-shield-halved mr-1"></i> Roster (14)
@@ -381,44 +396,34 @@
                     </button>
                 </div>
 
-                <!-- PANELES DE SUBPESTAÑAS -->
                 <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-900 min-h-[360px]">
-                    
                     <!-- Sub-Panel: Equipos -->
                     <div id="panel-config-equipos" class="config-subpanel block">
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center justify-between">
                             <span id="label-equipos-roster">Clubes Participantes (14)</span>
                         </h3>
-                        <div id="equipos-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 no-scrollbar">
-                            <!-- Inyectado por JS de forma táctil e intuitiva -->
-                        </div>
+                        <div id="equipos-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 no-scrollbar"></div>
                     </div>
 
                     <!-- Sub-Panel: Canchas -->
                     <div id="panel-config-canchas" class="config-subpanel hidden">
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Sedes Fijas</h3>
-                        <div id="canchas-grid" class="space-y-3 max-w-md mx-auto">
-                            <!-- Inyectado por JS -->
-                        </div>
+                        <div id="canchas-grid" class="space-y-3 max-w-md mx-auto"></div>
                     </div>
 
                     <!-- Sub-Panel: Ternas -->
                     <div id="panel-config-ternas" class="config-subpanel hidden">
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Ternas Arbitrales</h3>
-                        <div id="ternas-grid" class="space-y-3 max-w-md mx-auto">
-                            <!-- Inyectado por JS -->
-                        </div>
+                        <div id="ternas-grid" class="space-y-3 max-w-md mx-auto"></div>
                     </div>
 
                     <!-- Sub-Panel: Horarios -->
                     <div id="panel-config-horarios" class="config-subpanel hidden">
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Editor de Horarios Deportivos</h3>
-                        <p class="text-[9.5px] text-slate-400 mb-4 leading-relaxed">Modifica los tiempos nativos de los partidos. El motor de equidad asignará los horarios configurados de manera equitativa entre todos los clubes para evitar repeticiones consecutivas.</p>
-                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
                             <!-- Horarios Estándar -->
                             <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                <h4 class="text-[10px] text-meta-emerald font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-sun"></i> Fecha Estándar (2 Horas)</h4>
+                                <h4 class="text-[10px] text-meta-emerald font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-sun"></i> Fecha Estándar</h4>
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between gap-3">
                                         <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
@@ -433,7 +438,7 @@
 
                             <!-- Horarios Especiales -->
                             <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                <h4 class="text-[10px] text-meta-gold font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-moon"></i> Fecha Especial (3 Horas)</h4>
+                                <h4 class="text-[10px] text-meta-gold font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-moon"></i> Fecha Especial</h4>
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between gap-3">
                                         <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
@@ -454,154 +459,147 @@
                 </div>
 
                 <div class="mt-6 pt-5 border-t border-slate-900 flex justify-end">
-                    <button id="btn-validar-config" onclick="salvarConfigYIrSorteo()" class="w-full sm:w-auto bg-gradient-to-r from-meta-gold to-yellow-500 hover:from-yellow-500 hover:to-meta-gold text-slate-950 font-black px-8 py-3 rounded-xl shadow-lg transition-all uppercase tracking-wider text-xs cursor-pointer active:scale-95 flex items-center justify-center gap-1.5 font-display">
-                        Validar y Cargar Bolillero <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <button id="btn-validar-config" onclick="preCalcularEquidadYIrSorteo()" class="w-full sm:w-auto bg-gradient-to-r from-meta-gold to-yellow-500 hover:from-yellow-500 hover:to-meta-gold text-slate-950 font-black px-8 py-3 rounded-xl shadow-lg transition-all uppercase tracking-wider text-xs cursor-pointer active:scale-95 flex items-center justify-center gap-1.5 font-display">
+                        Validar y Pre-calcular Fixture <i class="fa-solid fa-circle-nodes text-[12px]"></i>
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- PANTALLA 2: SORTEO 3D CINEMÁTICO -->
+        <!-- PANTALLA 2: SORTEO Y FIXTURE EN VIVO (HORIZONTAL O VERTICAL AUTOMÁTICO) -->
         <section id="sec-sorteo" class="tab-content hidden no-print">
-            <div class="bg-slate-950/80 border border-slate-900 p-2 rounded-xl mb-4 flex flex-col md:flex-row justify-between items-center gap-2">
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-meta-gold animate-pulse"></span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 font-display">MetaFutbol 3D Broadcast Suite</span>
-                </div>
-                <div class="flex flex-wrap justify-center gap-1.5 w-full md:w-auto">
-                    <button onclick="cambiarRatioTransmision('16-9')" id="btn-ratio-16" class="flex-1 md:flex-none bg-meta-active border border-meta-gold/30 text-white text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer">
-                        <i class="fa-solid fa-tv mr-1"></i> Vista TV (16:9)
-                    </button>
-                    <button onclick="cambiarRatioTransmision('9-16')" id="btn-ratio-9" class="flex-1 md:flex-none bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer">
-                        <i class="fa-solid fa-mobile-screen-button mr-1"></i> Grabación (9:16)
-                    </button>
-                    <button onclick="toggleFondoSonido()" id="btn-audio-himno" class="flex-1 md:flex-none bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer">
-                        <i class="fa-solid fa-music mr-1"></i> Himno: OFF
-                    </button>
-                </div>
-            </div>
-
-            <!-- Viewport 3D de Transmisión -->
-            <div id="broadcast-viewport" class="broadcast-container ratio-16-9 p-4 flex flex-col justify-between">
-                <div class="flex justify-between items-start z-10">
-                    <span class="bg-meta-gold text-slate-950 text-[9px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider animate-pulse flex items-center gap-1 font-display">
-                        • EXCLUSIVO
-                    </span>
-                    <div class="bg-slate-950/90 backdrop-blur-md text-[8.5px] text-meta-gold border border-meta-gold/30 px-3 py-1 rounded-full font-bold uppercase tracking-widest font-display">
-                        SORTEO OFICIAL DE CLUBES
-                    </div>
-                </div>
-
-                <div id="central-broadcast-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center flex-grow my-2 overflow-hidden">
-                    
-                    <!-- Contenedor del Renderizador Three.js 3D -->
-                    <div class="lg:col-span-1 flex flex-col items-center justify-center h-full relative min-h-[220px]">
-                        <div id="three-canvas-container" class="w-48 h-48 rounded-full border-4 border-slate-800 bg-slate-950/60 shadow-2xl relative overflow-hidden flex items-center justify-center">
-                            <!-- El Canvas 3D de Three.js se adjuntará aquí dinámicamente -->
-                        </div>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest text-center mt-2" id="lbl-bombo-restante">Quedan 14 Bolillas</p>
-                    </div>
-
-                    <!-- Panel de Transmisión -->
-                    <div class="lg:col-span-2 bg-slate-950/50 border border-slate-900 rounded-xl p-4 h-full flex flex-col justify-center relative overflow-hidden min-h-[160px]">
-                        <div id="pantalla-revelador-tv" class="flex-grow flex flex-col items-center justify-center text-center p-2">
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest font-display">Esperando extracción oficial...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="z-10 flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-900/40">
-                    <button id="btn-sacar-bola" onclick="extraerBolilla3D()" class="w-full sm:w-auto bg-gradient-to-r from-meta-gold to-yellow-500 hover:from-yellow-500 hover:to-meta-gold text-slate-950 font-black px-6 py-2.5 rounded-xl shadow-lg uppercase tracking-wider text-xs cursor-pointer font-display">
-                        <i class="fa-solid fa-play mr-1"></i> Extraer Bola 3D
-                    </button>
-                    <div class="flex items-center gap-3">
-                        <button id="btn-completar-instante" onclick="simulacionInstantanea()" class="text-slate-400 hover:text-white text-[9px] underline cursor-pointer">Completar al Instante</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Grilla de distribución -->
-            <div class="mt-6">
-                <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Grilla de Distribución de Equipos</h3>
-                <div id="posiciones-sorteo-map" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-                    <!-- Inyectado por JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- PANTALLA 3: FIXTURE -->
-        <section id="sec-fixture" class="tab-content hidden print-container">
-            <div class="no-print glass-panel rounded-xl p-3 sm:p-4 mb-5 border border-slate-900 flex flex-col lg:flex-row items-center justify-between gap-4 shadow-xl">
-                <div class="text-center lg:text-left">
-                    <h2 class="text-sm font-bold text-white flex items-center justify-center lg:justify-start gap-1.5 font-display">
-                        <i class="fa-solid fa-calendar text-meta-gold"></i> Agenda de Partidos
-                    </h2>
-                    <p class="text-[9px] text-slate-400 mt-0.5 font-display">Controla las fechas del torneo, exporta calendarios y genera flyers.</p>
-                </div>
+            
+            <!-- Contenedor adaptativo de transmisión e interfaz unificada -->
+            <div id="live-unified-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full lg:w-auto justify-end">
-                    <div id="print-resizer-tool" class="flex items-center justify-between gap-1.5 bg-slate-900 border border-slate-800 px-2.5 py-2 rounded-lg text-xs">
-                        <span class="text-[8px] text-slate-400 uppercase font-bold">Escala Letra:</span>
-                        <input type="range" id="print-font-scale" min="6.5" max="11" value="7.5" step="0.5" onchange="ajustarLetraImpresion(this.value)" class="w-16 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer">
-                        <span id="print-scale-val" class="font-mono text-[9px] text-meta-gold font-bold">7.5px</span>
+                <!-- Columna Izquierda: Bolillero y Controles de Extracción (Fijo sticky en PC) -->
+                <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-4">
+                    <div class="bg-slate-950/80 border border-slate-900 p-3 rounded-xl flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5">
+                            <span id="badge-live-status" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-slate-200 font-display">Sorteo en vivo</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleFondoSonido()" id="btn-audio-himno" class="bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                                <i class="fa-solid fa-music"></i> Himno: OFF
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-1 bg-slate-950 px-2 py-1.5 rounded-lg border border-slate-900 text-xs">
-                        <span class="text-slate-400"><i class="fa-solid fa-list-ol text-meta-gold"></i></span>
-                        <select id="sel-fecha-filter" onchange="actualizarFixtureView()" class="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer w-full text-xs">
-                            <!-- Inyectado por JS -->
-                        </select>
+                    <!-- Viewport de Transmisión Cinematográfica Realista de Fútbol -->
+                    <div id="broadcast-viewport" class="broadcast-container ratio-16-9 p-4 flex flex-col justify-between">
+                        <!-- Video Cinemático Realista de Stock de Fútbol (Malabares en Estadio Nocturno) -->
+                        <video id="draw-video" class="absolute inset-0 w-full h-full object-cover z-0 opacity-30 transition-all duration-700 brightness-75" loop playsinline muted autoplay>
+                            <source src="https://assets.mixkit.co/videos/43490/43490-720.mp4" type="video/mp4">
+                        </video>
+
+                        <!-- Capa de Gradientes de TV -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-slate-950/50 pointer-events-none z-10"></div>
+                        
+                        <div class="flex justify-between items-start z-20">
+                            <span class="bg-red-600 text-white text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-wider animate-pulse flex items-center gap-1 font-display shadow">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full"></span> DIRECTO
+                            </span>
+                            <div class="bg-slate-950/90 backdrop-blur-md text-[8px] text-meta-gold border border-meta-gold/30 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-widest font-display">
+                                BOLILLERO METAFUTBOL
+                            </div>
+                        </div>
+
+                        <!-- Grilla de Emisión de Video -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center flex-grow my-2 z-20">
+                            <!-- Canvas 3D de Three.js -->
+                            <div class="flex flex-col items-center justify-center">
+                                <div id="three-canvas-container" class="w-36 h-36 rounded-full border-4 border-meta-gold/40 bg-slate-950/60 backdrop-blur shadow-xl relative overflow-hidden flex items-center justify-center"></div>
+                                <p class="text-[9px] text-meta-gold font-bold uppercase tracking-widest mt-1 bg-slate-950/80 px-2.5 py-0.5 rounded-full border border-meta-gold/20" id="lbl-bombo-restante">Quedan 14 Bolillas</p>
+                            </div>
+
+                            <!-- Pantalla de Resultados TV -->
+                            <div class="bg-slate-950/70 backdrop-blur border border-slate-800 rounded-xl p-3 h-32 flex flex-col justify-center relative overflow-hidden">
+                                <div id="pantalla-revelador-tv" class="text-center">
+                                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-wider animate-pulse">Esperando extracción...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marquesina de Noticias de TV -->
+                        <div id="marquee-sports-ticker" class="absolute bottom-0 left-0 w-full bg-slate-950/90 border-t border-meta-gold/25 py-1 px-4 overflow-hidden z-20 flex items-center gap-2">
+                            <span class="bg-meta-gold text-slate-950 text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0">EN VIVO</span>
+                            <div class="text-[8px] text-slate-300 font-bold uppercase tracking-widest whitespace-nowrap overflow-hidden relative w-full">
+                                <div class="inline-block animate-marquee">
+                                    SORTEO OFICIAL DE LA COPA METAFUTBOL 2026 • TRANSMISIÓN DE ALTA FIDELIDAD EN TIEMPO REAL • RECOCIDO SIMULADO COMPLETADO CON ÉXITO • 
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-1 bg-slate-950 px-2 py-1.5 rounded-lg border border-slate-900 text-xs">
-                        <span class="text-slate-400"><i class="fa-solid fa-shield-halved text-meta-gold"></i></span>
-                        <select id="sel-club-filter" onchange="actualizarFixtureView()" class="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer w-full text-xs">
-                            <!-- Inyectado por JS -->
-                        </select>
+                    <!-- Botonera de Sorteo en Vivo -->
+                    <div class="bg-slate-950/80 border border-slate-900 p-4 rounded-xl space-y-3">
+                        <button id="btn-sacar-bola" onclick="extraerBolilla3D()" class="w-full bg-gradient-to-r from-meta-gold to-yellow-500 hover:from-yellow-500 hover:to-meta-gold text-slate-950 font-black py-3 rounded-xl shadow-lg uppercase tracking-wider text-xs cursor-pointer font-display transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-circle-play text-sm"></i> Extraer Bola 3D
+                        </button>
+                        <div class="flex items-center justify-between text-[10px]">
+                            <button id="btn-completar-instante" onclick="simulacionInstantanea()" class="text-slate-400 hover:text-white underline cursor-pointer">Completar Sorteo al Instante</button>
+                            <span id="progreso-sorteo-texto" class="text-meta-gold font-bold">Progreso: 0 / 14 Sorteados</span>
+                        </div>
                     </div>
 
-                    <button onclick="generarArchivoICS()" id="btn-ical-export" class="bg-slate-950 hover:bg-slate-900 text-[10px] text-meta-emerald font-bold px-3 py-2.5 rounded-lg border border-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
-                        <i class="fa-solid fa-calendar-plus"></i> Guardar Calendario (.ics)
-                    </button>
+                    <!-- Grilla Resumen de Posiciones Sorteados -->
+                    <div class="bg-slate-950/40 p-3 rounded-xl border border-slate-900">
+                        <h4 class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Posicionamiento en vivo</h4>
+                        <div id="posiciones-sorteo-map" class="grid grid-cols-4 sm:grid-cols-7 gap-1.5"></div>
+                    </div>
+                </div>
 
-                    <button onclick="abrirCreadorFlyers()" id="btn-flyer-open" class="bg-slate-950 hover:bg-slate-900 text-[10px] text-meta-gold font-bold px-3 py-2.5 rounded-lg border border-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
-                        <i class="fa-solid fa-image"></i> Diseñar Flyer
-                    </button>
+                <!-- Columna Derecha: El Fixture que se va poblando de forma progresiva -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="glass-panel rounded-xl p-3 sm:p-4 border border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
+                        <div>
+                            <h2 class="text-sm font-bold text-white flex items-center gap-1.5 font-display">
+                                <i class="fa-solid fa-calendar text-meta-gold"></i> Agenda Oficial del Torneo
+                            </h2>
+                            <p class="text-[9px] text-slate-400 mt-0.5 font-display">Los partidos se completarán de forma interactiva a medida que extraigas las bolas.</p>
+                        </div>
+                        
+                        <!-- Acciones del Fixture (Se activan al finalizar el sorteo) -->
+                        <div id="fixture-actions-panel" class="flex flex-wrap gap-1.5 w-full sm:w-auto justify-end opacity-40 pointer-events-none transition-all duration-500">
+                            <button id="btn-ical-export" onclick="generarArchivoICS()" class="bg-slate-950 hover:bg-slate-900 text-[9px] text-meta-emerald font-bold px-2.5 py-2 rounded-lg border border-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-calendar-plus"></i> Guardar Calendario (.ics)
+                            </button>
+                            <button id="btn-flyer-open" onclick="abrirCreadorFlyers()" class="bg-slate-950 hover:bg-slate-900 text-[9px] text-meta-gold font-bold px-2.5 py-2 rounded-lg border border-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-image"></i> Flyer
+                            </button>
+                            <button id="btn-print-a4" onclick="solicitarImpresion()" class="bg-gradient-to-r from-meta-gold to-yellow-500 text-slate-950 text-[9px] font-black px-3 py-2 rounded-lg shadow transition-all cursor-pointer flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-print"></i> Imprimir A4
+                            </button>
+                        </div>
+                    </div>
 
-                    <button onclick="solicitarImpresion()" id="btn-print-a4" class="bg-gradient-to-r from-meta-gold to-yellow-500 text-slate-950 text-[10px] font-black px-4 py-2.5 rounded-lg shadow-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
-                        <i class="fa-solid fa-print"></i> Imprimir A4
-                    </button>
+                    <!-- Filtros de Fixture (Visibles siempre) -->
+                    <div class="grid grid-cols-2 gap-2 bg-slate-950/75 p-2 rounded-xl border border-slate-900">
+                        <div class="flex items-center gap-1 bg-slate-900 px-2 py-1.5 rounded-lg text-xs">
+                            <span class="text-slate-400 text-[10px]"><i class="fa-solid fa-list-ol text-meta-gold"></i></span>
+                            <select id="sel-fecha-filter" onchange="actualizarFixtureView()" class="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer w-full text-[10px]">
+                                <!-- Inyectado dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1 bg-slate-900 px-2 py-1.5 rounded-lg text-xs">
+                            <span class="text-slate-400 text-[10px]"><i class="fa-solid fa-shield-halved text-meta-gold"></i></span>
+                            <select id="sel-club-filter" onchange="actualizarFixtureView()" class="bg-transparent text-slate-200 font-bold focus:outline-none cursor-pointer w-full text-[10px]">
+                                <!-- Inyectado dinámicamente -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor de Fechas en Tiempo Real -->
+                    <div id="fixture-grid-viewer" class="space-y-4"></div>
                 </div>
             </div>
 
-            <!-- Cabecera de Documento para Impresión Horizontal Premium -->
-            <div class="hidden print-only mb-3 text-center border-b-4 border-slate-950 pb-2 print-header">
-                <div class="flex justify-between items-center px-1">
-                    <div class="text-left">
-                        <h1 class="text-lg font-black tracking-wide text-slate-950">CALENDARIO OFICIAL DE COMPETENCIA</h1>
-                        <p class="text-[8px] text-slate-700 font-extrabold uppercase tracking-widest mt-0.5">SISTEMA METAFUTBOL • DESARROLLADO POR PLEXCEL.PY EVOLUTION</p>
-                    </div>
-                    <div class="text-right text-[8.5px] font-bold text-slate-950">
-                        <div id="print-lbl-formato">Todos contra Todos (15 Fechas)</div>
-                        <div id="print-lbl-ternas" class="mt-0.5">Ternas: ...</div>
-                    </div>
-                </div>
-                <div class="bg-slate-100 border border-slate-950 rounded p-1.5 mt-2 grid grid-cols-1 text-center">
-                    <div id="print-lbl-canchas" class="text-[8px] text-slate-950 font-black tracking-wider">Sedes Oficiales: ...</div>
-                </div>
-            </div>
-
-            <div id="fixture-grid-viewer" class="space-y-4 no-print">
-                <!-- Inyectado por JS -->
-            </div>
-
-            <!-- Contenedor Estricto de Impresión A4 Horizontal en una carilla -->
-            <div id="print-grid-a4" class="hidden print-grid-layout print-only">
-                <!-- Inyectado por JS -->
-            </div>
+            <!-- Contenedor Invisible para la Impresión en Formato A4 -->
+            <div id="print-grid-a4" class="hidden print-grid-layout print-only"></div>
         </section>
 
-        <!-- PANTALLA 4: EQUIDAD -->
+        <!-- PANTALLA 3: EQUIDAD -->
         <section id="sec-equidad" class="tab-content hidden no-print">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div class="lg:col-span-1 bg-slate-950/80 border border-slate-900 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
@@ -634,8 +632,8 @@
                     </div>
 
                     <div class="mt-6 pt-4 border-t border-slate-900/60 text-slate-400 text-[10px] leading-relaxed">
-                        <p class="font-semibold text-slate-200 mb-1"><i class="fa-solid fa-circle-nodes text-meta-gold mr-1"></i> Recocido Simulado:</p>
-                        <p>El motor computacional resuelve los emparejamientos y equilibra la asignación de canchas y ternas arbitrales. Al enfriar gradualmente la matriz combinatoria, asegura que todos los equipos jueguen de forma balanceada sin desvíos y garantiza un torneo de máxima equidad deportiva.</p>
+                        <p class="font-semibold text-slate-200 mb-1"><i class="fa-solid fa-circle-nodes text-meta-gold mr-1"></i> Balance Algorítmico Avanzado:</p>
+                        <p>El motor computacional ahora aplica un estricto castigo por desviación en el reparto de sedes y árbitros. El coeficiente de recocido asegura que ningún equipo experimente diferencias significativas en cantidad de localías o arbitrajes asignados en todo el fixture.</p>
                     </div>
                 </div>
 
@@ -644,10 +642,6 @@
                         <span>Balance de Canchas, Horarios y Árbitros</span>
                         <span class="text-[8px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded font-mono font-bold">100% Auditado</span>
                     </h3>
-
-                    <p class="block lg:hidden text-[9px] text-meta-gold/80 mb-2 font-semibold animate-pulse text-center">
-                        <i class="fa-solid fa-left-right mr-1"></i> Deslice la tabla horizontalmente para ver la auditoría
-                    </p>
 
                     <div class="overflow-x-auto rounded-xl border border-slate-900/80 no-scrollbar">
                         <table class="w-full text-left text-[10px] border-collapse min-w-[800px]">
@@ -669,9 +663,7 @@
                                     <th id="aud-th-t3" class="p-2.5 text-center text-yellow-500">Terna 3</th>
                                 </tr>
                             </thead>
-                            <tbody id="equidad-tabla-cuerpo" class="divide-y divide-slate-900 bg-slate-900/10 text-slate-300 font-medium">
-                                <!-- Inyectado por JS -->
-                            </tbody>
+                            <tbody id="equidad-tabla-cuerpo" class="divide-y divide-slate-900 bg-slate-900/10 text-slate-300 font-medium"></tbody>
                         </table>
                     </div>
                 </div>
@@ -699,28 +691,20 @@
                 </div>
                 <div id="story-ctrl-club-div">
                     <label class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Seleccionar Club</label>
-                    <select id="story-club-select" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold">
-                        <!-- Inyectado por JS -->
-                    </select>
+                    <select id="story-club-select" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold"></select>
                 </div>
                 <div id="story-ctrl-fecha-div" class="hidden">
                     <label class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Seleccionar Jornada</label>
-                    <select id="story-fecha-select" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold">
-                        <!-- Inyectado por JS -->
-                    </select>
+                    <select id="story-fecha-select" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold"></select>
                 </div>
                 <div id="story-ctrl-rango-div" class="hidden grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Desde Fecha</label>
-                        <select id="story-rango-desde" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold">
-                            <!-- Inyectado por JS -->
-                        </select>
+                        <select id="story-rango-desde" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold"></select>
                     </div>
                     <div>
                         <label class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Hasta Fecha</label>
-                        <select id="story-rango-hasta" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold">
-                            <!-- Inyectado por JS -->
-                        </select>
+                        <select id="story-rango-hasta" onchange="actualizarStoryPrevisualizacion()" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none font-bold"></select>
                     </div>
                 </div>
             </div>
@@ -742,7 +726,7 @@
         <div class="w-full max-w-sm text-center">
             <div class="w-12 h-12 border-4 border-meta-gold/20 border-t-meta-gold rounded-full animate-spin mx-auto mb-4"></div>
             <h3 class="text-base font-black text-white font-display uppercase tracking-widest mb-1.5 animate-pulse">Optimizando MetaFutbol</h3>
-            <p class="text-[10px] text-slate-400 max-w-xs mx-auto mb-5 font-display">El motor de Recocido Simulado (Simulated Annealing) está resolviendo 30,000 matrices combinatorias para balancear canchas y árbitros.</p>
+            <p class="text-[10px] text-slate-400 max-w-xs mx-auto mb-5 font-display">El motor de Recocido Simulado de Alta Fidelidad está resolviendo 30,000 matrices combinatorias para balancear canchas y ternas arbitrales de manera ultra equitativa.</p>
             <div class="w-full bg-slate-900 rounded-full h-2 mb-2 overflow-hidden border border-slate-800">
                 <div id="cargando-barra-progreso" class="bg-gradient-to-r from-meta-gold to-yellow-400 h-2 w-0 rounded-full transition-all duration-300"></div>
             </div>
@@ -758,19 +742,23 @@
         <div class="relative w-full max-w-md text-center overflow-hidden flex flex-col items-center justify-center h-[460px]">
             <div class="absolute w-64 h-64 rounded-full bg-meta-gold/15 blur-3xl" id="reveal-light-flash"></div>
             
-            <div class="relative w-56 h-56 flex items-center justify-center animate-pulse" id="container-bolilla-reveal">
+            <div class="relative w-56 h-56 flex items-center justify-center" id="container-bolilla-reveal">
                 <!-- Mitad Izquierda -->
-                <div class="absolute w-28 h-56 overflow-hidden left-0 transition-transform duration-1000 ease-out origin-right" id="ball-left-half">
-                    <div class="w-56 h-56 rounded-full border-4 border-yellow-600/60 bg-gradient-to-r from-yellow-50 via-meta-gold to-yellow-700 shadow-2xl absolute left-0"></div>
+                <div class="absolute w-28 h-56 overflow-hidden left-0 transition-transform duration-1000 ease-out origin-right z-20" id="ball-left-half">
+                    <div class="w-56 h-56 rounded-full border-4 border-yellow-600/60 bg-gradient-to-r from-yellow-50 via-meta-gold to-yellow-700 shadow-2xl absolute left-0">
+                        <div class="absolute inset-2 border border-white/20 rounded-full"></div>
+                    </div>
                 </div>
                 <!-- Mitad Derecha -->
-                <div class="absolute w-28 h-56 overflow-hidden right-0 transition-transform duration-1000 ease-out origin-left" id="ball-right-half">
-                    <div class="w-56 h-56 rounded-full border-4 border-yellow-600/60 bg-gradient-to-l from-yellow-50 via-meta-gold to-yellow-700 shadow-2xl absolute right-0"></div>
+                <div class="absolute w-28 h-56 overflow-hidden right-0 transition-transform duration-1000 ease-out origin-left z-20" id="ball-right-half">
+                    <div class="w-56 h-56 rounded-full border-4 border-yellow-600/60 bg-gradient-to-l from-yellow-50 via-meta-gold to-yellow-700 shadow-2xl absolute right-0">
+                        <div class="absolute inset-2 border border-white/20 rounded-full"></div>
+                    </div>
                 </div>
                 <!-- Papel Oficial -->
-                <div class="absolute w-44 h-24 bg-gradient-to-br from-yellow-50 via-amber-100 to-yellow-50 text-slate-900 border-2 border-yellow-300 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-2xl scale-0 opacity-0 transition-all duration-1000" id="ball-paper-inner">
+                <div class="absolute w-44 h-24 bg-gradient-to-br from-yellow-50 via-amber-100 to-yellow-50 text-slate-900 border-2 border-yellow-300 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-2xl scale-0 opacity-0 transition-all duration-1000 z-30" id="ball-paper-inner">
                     <span class="text-[8px] font-black tracking-widest text-meta-gold uppercase mb-1">Bolilla Oficial</span>
-                    <h4 class="text-sm font-black text-slate-950 font-display uppercase tracking-wider text-center line-clamp-1" id="ball-paper-text-name">CLUB REVELADO</h4>
+                    <h4 class="text-xs font-black text-slate-950 font-display uppercase tracking-wider text-center line-clamp-1" id="ball-paper-text-name">CLUB REVELADO</h4>
                     <span class="text-[8px] bg-slate-950 text-white font-black px-2 py-0.5 rounded-lg mt-1 font-mono" id="ball-paper-text-abbr">ABR</span>
                 </div>
             </div>
@@ -795,16 +783,12 @@
     </footer>
 
     <script>
-        // --- STREAMING_CHUNK: Inicializando controles de seguridad ---
-        // --- SISTEMA DE ROLES Y PERMISOS DE SEGURIDAD ---
-        let currentRole = "VIEWER"; // Roles posibles: "ADMIN", "OPERATOR", "VIEWER"
+        let currentRole = "VIEWER"; 
 
-        // Claves por defecto guardadas en localStorage para que el admin pueda cambiarlas
         let hashAdmin = localStorage.getItem('metafutbol_hash_admin') || CryptoJS.SHA256("FIFA2026" + "metafutbol_salt_2026").toString();
         let hashOperator = localStorage.getItem('metafutbol_hash_operator') || CryptoJS.SHA256("OP2026" + "metafutbol_salt_2026").toString();
         let hashViewer = localStorage.getItem('metafutbol_hash_viewer') || CryptoJS.SHA256("VER2026" + "metafutbol_salt_2026").toString();
 
-        // Variables Editables de Horarios (Novedad Plexcel v4.2)
         let horarioNormal1 = localStorage.getItem('metafutbol_hn1') || "14:00";
         let horarioNormal2 = localStorage.getItem('metafutbol_hn2') || "16:00";
         let horarioEspecial1 = localStorage.getItem('metafutbol_he1') || "13:00";
@@ -812,29 +796,23 @@
         let horarioEspecial3 = localStorage.getItem('metafutbol_he3') || "17:00";
 
         function inicializarSeguridadUI() {
-            // Mostrar u ocultar la consola de administración de claves según el rol
             const panelSeg = document.getElementById('panel-seguridad-admin');
             const alertEspectador = document.getElementById('alerta-espectador-config');
             const badge = document.getElementById('badge-permisos');
             const btnRestaurar = document.getElementById('btn-restaurar-config');
             const btnValidar = document.getElementById('btn-validar-config');
 
-            // Cargar claves planas visibles en los inputs del panel de seguridad (para el Admin)
             document.getElementById('sec-key-admin').value = localStorage.getItem('metafutbol_raw_admin') || "FIFA2026";
             document.getElementById('sec-key-operator').value = localStorage.getItem('metafutbol_raw_operator') || "OP2026";
             document.getElementById('sec-key-viewer').value = localStorage.getItem('metafutbol_raw_viewer') || "VER2026";
 
             const tabConfig = document.getElementById('tab-config');
-            const tabEquidad = document.getElementById('tab-equidad');
 
             if (currentRole === "ADMIN") {
-                panelSeg.style.display = 'block';
                 panelSeg.classList.remove('hidden');
-                alertEspectador.style.display = 'none';
+                alertEspectador.classList.add('hidden');
                 badge.innerHTML = '<i class="fa-solid fa-user-shield text-meta-gold"></i> Super Administrador';
-                badge.className = "text-[8px] bg-slate-900 text-meta-gold border border-meta-gold/30 px-2.5 py-1.5 rounded-lg uppercase font-bold flex items-center gap-1.5 font-display";
                 
-                // Permitir edición completa de inputs
                 desbloquearFormulariosEdicion(true);
                 btnRestaurar.style.display = 'inline-block';
                 btnValidar.style.display = 'inline-block';
@@ -844,16 +822,12 @@
                 document.getElementById('btn-import-cloud').style.display = 'inline-block';
 
                 tabConfig.classList.remove('hidden');
-                tabEquidad.classList.remove('hidden');
                 switchTab('config');
             } else if (currentRole === "OPERATOR") {
-                panelSeg.style.display = 'none';
-                panelSeg.classList.add('hidden'); // Ocultar por completo del DOM
-                alertEspectador.style.display = 'none';
-                badge.innerHTML = '<i class="fa-solid fa-user-gear text-blue-400"></i> Operador de Sorteo';
-                badge.className = "text-[8px] bg-slate-900 text-blue-400 border border-blue-500/20 px-2.5 py-1.5 rounded-lg uppercase font-bold flex items-center gap-1.5 font-display";
+                panelSeg.classList.add('hidden');
+                alertEspectador.classList.add('hidden');
+                badge.innerHTML = '<i class="fa-solid fa-user-gear text-blue-400"></i> Operador';
                 
-                // Permitir sorteo pero ocultar de raíz el módulo de claves de seguridad
                 desbloquearFormulariosEdicion(true);
                 btnRestaurar.style.display = 'none'; 
                 btnValidar.style.display = 'inline-block';
@@ -863,17 +837,12 @@
                 document.getElementById('btn-import-cloud').style.display = 'none';
 
                 tabConfig.classList.remove('hidden');
-                tabEquidad.classList.remove('hidden');
                 switchTab('config');
             } else {
-                // VIEWER (Solo lectura)
-                panelSeg.style.display = 'none';
-                panelSeg.classList.add('hidden'); // Ocultar por completo del DOM
-                alertEspectador.style.display = 'block';
+                panelSeg.classList.add('hidden');
+                alertEspectador.classList.remove('hidden');
                 badge.innerHTML = '<i class="fa-solid fa-eye text-slate-400"></i> Espectador';
-                badge.className = "text-[8px] bg-slate-900 text-slate-400 border border-slate-850 px-2.5 py-1.5 rounded-lg uppercase font-bold flex items-center gap-1.5 font-display";
                 
-                // Bloquear inputs
                 desbloquearFormulariosEdicion(false);
                 btnRestaurar.style.display = 'none';
                 btnValidar.style.display = 'none';
@@ -882,33 +851,20 @@
                 document.getElementById('btn-export-cloud').style.display = 'none';
                 document.getElementById('btn-import-cloud').style.display = 'none';
 
-                // Habilitar pestañas permitidas y ocultar las restringidas
                 document.getElementById('tab-sorteo').removeAttribute('disabled');
-                document.getElementById('tab-fixture').removeAttribute('disabled');
                 tabConfig.classList.add('hidden');
-                tabEquidad.classList.add('hidden');
 
-                // Enrutar al fixture si ya existe, de lo contrario al sorteo interactivo
-                if (fixtureConsolidadoFinal && fixtureConsolidadoFinal.length > 0) {
-                    switchTab('fixture');
-                } else {
-                    switchTab('sorteo');
-                }
+                switchTab('sorteo');
             }
-
             actualizarTogglesAcceso();
         }
 
         function desbloquearFormulariosEdicion(permitir) {
-            // Habilitar o deshabilitar inputs de equipos, canchas, formatos, etc.
             const inputs = document.querySelectorAll('#sec-config input, #sec-config select');
             inputs.forEach(el => {
                 if (el.id !== 'sec-key-admin' && el.id !== 'sec-key-operator' && el.id !== 'sec-key-viewer' && el.id !== 'auth-print') {
-                    if (permitir) {
-                        el.removeAttribute('disabled');
-                    } else {
-                        el.setAttribute('disabled', 'true');
-                    }
+                    if (permitir) el.removeAttribute('disabled');
+                    else el.setAttribute('disabled', 'true');
                 }
             });
         }
@@ -920,15 +876,15 @@
             const btnIcal = document.getElementById('btn-ical-export');
 
             if (currentRole === "ADMIN" || currentRole === "OPERATOR") {
-                btnP.style.display = 'flex';
-                btnF.style.display = 'flex';
-                toolScale.style.display = 'flex';
-                btnIcal.style.display = 'flex';
+                if (btnP) btnP.classList.remove('hidden');
+                if (btnIcal) btnIcal.classList.remove('hidden');
+                if (btnF) btnF.classList.remove('hidden');
+                if (toolScale) toolScale.classList.remove('hidden');
             } else {
-                btnP.style.display = 'flex';
-                btnIcal.style.display = 'flex';
-                btnF.style.display = 'none';
-                toolScale.style.display = 'none';
+                if (btnP) btnP.classList.remove('hidden');
+                if (btnIcal) btnIcal.classList.remove('hidden');
+                if (btnF) btnF.classList.add('hidden');
+                if (toolScale) toolScale.classList.add('hidden');
             }
         }
 
@@ -963,7 +919,6 @@
             mostrarToast("✓ Claves de acceso actualizadas con éxito.");
         }
 
-
         // --- SISTEMA DE NOTIFICACIONES TOAST ---
         function mostrarToast(mensaje, tipo = "success") {
             const container = document.getElementById('toast-container');
@@ -997,7 +952,6 @@
         function validarAcceso() {
             const passInput = document.getElementById('input-password').value.trim();
             const errorMsg = document.getElementById('login-error');
-            
             const hashedInput = CryptoJS.SHA256(passInput + "metafutbol_salt_2026").toString();
             
             if (hashedInput === hashAdmin || passInput === "FIFA2026") {
@@ -1023,21 +977,18 @@
         function ingresarAlSistema(nombrePerfil) {
             sintetizarEfectoSonido(440, 0.1, 'sine');
             setTimeout(() => sintetizarEfectoSonido(880, 0.2, 'triangle'), 80);
-            
-            document.getElementById('pantalla-login').style.display = 'none';
+            document.getElementById('pantalla-login').classList.add('hidden');
             inicializarAudioEngine();
             inicializarSeguridadUI();
-            
-            mostrarToast(`Acceso concedido como ${nombrePerfil}.`);
+            mostrarToast(`Acceso como ${nombrePerfil}.`);
         }
 
         function bloquearSistema() {
             document.getElementById('input-password').value = "";
-            document.getElementById('pantalla-login').style.display = 'flex';
-            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('pantalla-login').classList.remove('hidden');
         }
 
-        // --- PRESETS DE EQUIPOS Y VARIABLES DE ENTORNO ---
+        // --- CONFIGURACIÓN DE ROSTER Y VARIABLES GLOBALES ---
         const PRESETS_CLUBES_METAFUTBOL = [
             { nombre: "Boca Juniors", abreviatura: "BOC", color1: "#003893", color2: "#fabc05" },
             { nombre: "River Plate", abreviatura: "CAR", color1: "#e51d2e", color2: "#ffffff" },
@@ -1063,6 +1014,8 @@
         let bolsaDeSorteo = [];
         let slotsAsignadosSorteados = Array(14).fill(null);
         let contadorSorteados = 0;
+        
+        let abstractFixtureBase = [];
         let fixtureConsolidadoFinal = [];
 
         window.onload = function() {
@@ -1070,7 +1023,28 @@
             renderConfigInputs();
             inicializarThreeSorteo();
             inicializarSeguridadUI();
+            
+            window.addEventListener('resize', autoDetectScreenFormat);
+            autoDetectScreenFormat();
         };
+
+        function autoDetectScreenFormat() {
+            const isMobile = window.innerWidth < 1024;
+            cambiarRatioTransmision(isMobile ? '9-16' : '16-9');
+        }
+
+        function cambiarRatioTransmision(modo) {
+            const viewport = document.getElementById('broadcast-viewport');
+            const liveGrid = document.getElementById('live-unified-grid');
+
+            if (modo === '16-9') {
+                if (viewport) viewport.className = "broadcast-container ratio-16-9 p-4 flex flex-col justify-between";
+                if (liveGrid) liveGrid.className = "grid grid-cols-1 lg:grid-cols-12 gap-6 items-start";
+            } else {
+                if (viewport) viewport.className = "broadcast-container ratio-9-16 p-4 flex flex-col justify-between";
+                if (liveGrid) liveGrid.className = "grid grid-cols-1 gap-6 items-start";
+            }
+        }
 
         // --- SISTEMA DE PERSISTENCIA ---
         function recuperarCopiaLocal() {
@@ -1082,6 +1056,7 @@
                 const cFixture = localStorage.getItem('metafutbol_fixture_v4');
                 const cSorteo = localStorage.getItem('metafutbol_sorteo_v4');
                 const cContador = localStorage.getItem('metafutbol_contador_v4');
+                const cAbstract = localStorage.getItem('metafutbol_abstract_v4');
 
                 if (cClubes) arrayClubesActuales = JSON.parse(cClubes);
                 if (cTernas) arrayTernasActuales = JSON.parse(cTernas);
@@ -1094,8 +1069,8 @@
                 if (cFixture) fixtureConsolidadoFinal = JSON.parse(cFixture);
                 if (cSorteo) slotsAsignadosSorteados = JSON.parse(cSorteo);
                 if (cContador) contadorSorteados = parseInt(cContador, 10);
+                if (cAbstract) abstractFixtureBase = JSON.parse(cAbstract);
 
-                // Cargar horarios editables de LocalStorage
                 horarioNormal1 = localStorage.getItem('metafutbol_hn1') || "14:00";
                 horarioNormal2 = localStorage.getItem('metafutbol_hn2') || "16:00";
                 horarioEspecial1 = localStorage.getItem('metafutbol_he1') || "13:00";
@@ -1108,9 +1083,10 @@
                 document.getElementById('time-spc-2').value = horarioEspecial2;
                 document.getElementById('time-spc-3').value = horarioEspecial3;
 
-                if (fixtureConsolidadoFinal && fixtureConsolidadoFinal.length > 0) {
+                if (abstractFixtureBase && abstractFixtureBase.length > 0) {
                     habilitarTabsParaUso();
                     poblarSelectoresFiltro();
+                    prepararEstructuraSorteo3D(false); 
                     actualizarFixtureView();
                 }
             } catch (e) {
@@ -1127,8 +1103,8 @@
                 localStorage.setItem('metafutbol_fixture_v4', JSON.stringify(fixtureConsolidadoFinal));
                 localStorage.setItem('metafutbol_sorteo_v4', JSON.stringify(slotsAsignadosSorteados));
                 localStorage.setItem('metafutbol_contador_v4', contadorSorteados.toString());
+                localStorage.setItem('metafutbol_abstract_v4', JSON.stringify(abstractFixtureBase));
 
-                // Guardar horarios
                 localStorage.setItem('metafutbol_hn1', horarioNormal1);
                 localStorage.setItem('metafutbol_hn2', horarioNormal2);
                 localStorage.setItem('metafutbol_he1', horarioEspecial1);
@@ -1149,6 +1125,7 @@
                     fixture: fixtureConsolidadoFinal,
                     sorteo: slotsAsignadosSorteados,
                     contador: contadorSorteados,
+                    abstract: abstractFixtureBase,
                     hn1: horarioNormal1,
                     hn2: horarioNormal2,
                     he1: horarioEspecial1,
@@ -1187,6 +1164,7 @@
                     if (d.fixture) fixtureConsolidadoFinal = d.fixture;
                     if (d.sorteo) slotsAsignadosSorteados = d.sorteo;
                     if (d.contador !== undefined) contadorSorteados = d.contador;
+                    if (d.abstract) abstractFixtureBase = d.abstract;
                     
                     if (d.hn1) {
                         horarioNormal1 = d.hn1;
@@ -1205,12 +1183,13 @@
                     guardarCopiaLocal();
                     renderConfigInputs();
                     
-                    if (fixtureConsolidadoFinal && fixtureConsolidadoFinal.length > 0) {
+                    if (abstractFixtureBase && abstractFixtureBase.length > 0) {
                         habilitarTabsParaUso();
                         poblarSelectoresFiltro();
+                        prepararEstructuraSorteo3D(false);
                         actualizarFixtureView();
                         renderizarTablaAuditoriaCompleta();
-                        switchTab('fixture');
+                        switchTab('sorteo');
                     }
                     mostrarToast("Torneo restaurado exitosamente.");
                 } catch (err) {
@@ -1257,7 +1236,6 @@
         }
 
         function renderConfigInputs() {
-            // Render Equipos con layouts de gran tamaño para toques móviles intuitivos
             const containerEquipos = document.getElementById('equipos-grid');
             containerEquipos.innerHTML = '';
             arrayClubesActuales.forEach((eq, idx) => {
@@ -1285,7 +1263,6 @@
                 `;
             });
 
-            // Render Ternas Arbitrales
             const containerTernas = document.getElementById('ternas-grid');
             containerTernas.innerHTML = '';
             arrayTernasActuales.forEach((terna, idx) => {
@@ -1300,7 +1277,6 @@
                 `;
             });
 
-            // Render Canchas Fijas
             const containerCanchas = document.getElementById('canchas-grid');
             containerCanchas.innerHTML = '';
             arrayCanchasActuales.forEach((cancha, idx) => {
@@ -1308,7 +1284,7 @@
                     <div class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 shadow-md">
                         <div class="w-9 h-9 bg-meta-emerald/10 text-meta-emerald rounded-xl flex items-center justify-center text-sm flex-shrink-0 border border-meta-emerald/20">🏟️</div>
                         <div class="flex-grow">
-                            <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre del Estadio / Predio</label>
+                            <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre del Estadio</label>
                             <input type="text" id="inp-can-${idx}" value="${cancha}" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-bold text-slate-200 outline-none">
                         </div>
                     </div>
@@ -1316,7 +1292,6 @@
             });
         }
 
-        // Switch para el sub-panel de configuraciones táctiles móviles
         function switchConfigSubTab(subId) {
             document.querySelectorAll('.config-subpanel').forEach(el => el.classList.add('hidden'));
             document.getElementById(`panel-config-${subId}`).classList.remove('hidden');
@@ -1419,7 +1394,52 @@
             lfo.start();
         }
 
-        function salvarConfigYIrSorteo() {
+        function playDrawTensionSound(duration) {
+            inicializarAudioEngine();
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + duration);
+                
+                gainNode.gain.setValueAtTime(0.005, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 0.2);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playRevealClimaxSound() {
+            sintetizarEfectoSonido(523.25, 0.45, 'sine', 0.15); 
+            setTimeout(() => sintetizarEfectoSonido(659.25, 0.45, 'sine', 0.15), 100); 
+            setTimeout(() => sintetizarEfectoSonido(783.99, 0.6, 'triangle', 0.12), 200); 
+            setTimeout(() => sintetizarEfectoSonido(1046.50, 0.9, 'sine', 0.15), 300); 
+        }
+
+        function vociferarClub(nombre) {
+            try {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(`¡Club extraído! ¡${nombre}!`);
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 1.05;
+                    utterance.pitch = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }
+            } catch(e) {
+                console.log("TTS Error:", e);
+            }
+        }
+
+        // --- PRE-CÁLCULO Y OPTIMIZACIÓN DE EQUIDAD ---
+        function preCalcularEquidadYIrSorteo() {
             formatoTorneoSeleccionado = document.getElementById('config-formato').value;
             for(let i=0; i<14; i++) {
                 arrayClubesActuales[i] = {
@@ -1436,20 +1456,13 @@
                 arrayCanchasActuales[i] = document.getElementById(`inp-can-${i}`).value.trim() || `Cancha ${i+1}`;
             }
 
-            // Resguardar Horarios Editados en Variables
             horarioNormal1 = document.getElementById('time-std-1').value;
             horarioNormal2 = document.getElementById('time-std-2').value;
             horarioEspecial1 = document.getElementById('time-spc-1').value;
             horarioEspecial2 = document.getElementById('time-spc-2').value;
             horarioEspecial3 = document.getElementById('time-spc-3').value;
 
-            bolsaDeSorteo = [...arrayClubesActuales];
-            bolsaDeSorteo.sort(() => Math.random() - 0.5);
-
-            document.getElementById('tab-sorteo').removeAttribute('disabled');
-            switchTab('sorteo');
-            prepararEstructuraSorteo3D();
-            guardarCopiaLocal();
+            ejecutarMotorTermicoAnnealing();
         }
 
         function switchTab(tabId) {
@@ -1465,7 +1478,7 @@
             btnActivo.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
 
-        // --- BOLILLERO INTERACTIVO EN 3D REAL (THREE.JS) ---
+        // --- RENDERIZADOR THREE.JS 3D ---
         let scene3D, camera3D, renderer3D;
         let balls3D = [];
         let cageMesh3D;
@@ -1473,6 +1486,7 @@
 
         function inicializarThreeSorteo() {
             const container = document.getElementById('three-canvas-container');
+            if(!container) return;
             container.innerHTML = ''; 
 
             const width = container.clientWidth;
@@ -1487,19 +1501,13 @@
             renderer3D.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer3D.domElement);
 
-            // Luces cinematográficas
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene3D.add(ambientLight);
 
             const spotLight = new THREE.SpotLight(0xd4af37, 2.5);
             spotLight.position.set(5, 10, 5);
             scene3D.add(spotLight);
 
-            const pointLight = new THREE.PointLight(0x00f59b, 1.5, 50);
-            pointLight.position.set(-5, -5, 3);
-            scene3D.add(pointLight);
-
-            // Cage de Bolillero Geodésico
             const cageGeo = new THREE.SphereGeometry(3.6, 12, 12);
             const cageMat = new THREE.MeshBasicMaterial({
                 color: 0xd4af37,
@@ -1510,22 +1518,20 @@
             cageMesh3D = new THREE.Mesh(cageGeo, cageMat);
             scene3D.add(cageMesh3D);
 
-            // Crear 14 bolillas físicas con propiedades metálicas reflectantes
             balls3D = [];
-            const numBolas = 14;
-            const ballRadius = 0.4;
+            const numBolas = Math.max(1, 14 - contadorSorteados);
+            const ballRadius = 0.45;
 
             for (let i = 0; i < numBolas; i++) {
                 const geometry = new THREE.SphereGeometry(ballRadius, 16, 16);
                 const material = new THREE.MeshStandardMaterial({
                     color: i % 2 === 0 ? 0xd4af37 : 0x00f59b,
-                    metalness: 0.9,
-                    roughness: 0.1,
-                    emissive: i % 2 === 0 ? 0x221100 : 0x002211
+                    metalness: 0.85,
+                    roughness: 0.15,
                 });
                 const mesh = new THREE.Mesh(geometry, material);
 
-                const r = Math.random() * 2.2;
+                const r = Math.random() * 2.1;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos((Math.random() * 2) - 1);
 
@@ -1535,9 +1541,9 @@
 
                 mesh.userData = {
                     velocity: new THREE.Vector3(
-                        (Math.random() - 0.5) * 0.12,
-                        (Math.random() - 0.5) * 0.12,
-                        (Math.random() - 0.5) * 0.12
+                        (Math.random() - 0.5) * 0.1,
+                        (Math.random() - 0.5) * 0.1,
+                        (Math.random() - 0.5) * 0.1
                     ),
                     radius: ballRadius
                 };
@@ -1556,17 +1562,16 @@
                 cageMesh3D.rotation.x += 0.001;
             }
 
-            const limitRadius = 3.2;
+            const limitRadius = 3.1;
 
             balls3D.forEach((ball, idx) => {
                 const pos = ball.position;
                 const vel = ball.userData.velocity;
 
-                vel.x += (Math.random() - 0.5) * 0.005;
-                vel.y += (Math.random() - 0.5) * 0.005;
-                vel.z += (Math.random() - 0.5) * 0.005;
-
-                vel.y -= 0.0008;
+                vel.x += (Math.random() - 0.5) * 0.004;
+                vel.y += (Math.random() - 0.5) * 0.004;
+                vel.z += (Math.random() - 0.5) * 0.004;
+                vel.y -= 0.0005;
 
                 pos.add(vel);
 
@@ -1574,7 +1579,6 @@
                 if (distFromCenter + ball.userData.radius > limitRadius) {
                     const normal = pos.clone().normalize();
                     pos.copy(normal.clone().multiplyScalar(limitRadius - ball.userData.radius));
-
                     vel.reflect(normal);
                     vel.multiplyScalar(0.85); 
                 }
@@ -1598,7 +1602,6 @@
                         if (velAlongNormal < 0) {
                             const impulseScalar = -(1.8) * velAlongNormal / 2;
                             const impulse = normal.clone().multiplyScalar(impulseScalar);
-
                             ball.userData.velocity.sub(impulse);
                             otherBall.userData.velocity.add(impulse);
                         }
@@ -1606,100 +1609,121 @@
                 }
             });
 
-            if (Math.random() < 0.04 && balls3D.length > 0) {
-                sintetizarEfectoSonido(Math.random() * 150 + 220, 0.03, 'sine', 0.005);
+            if (Math.random() < 0.03 && balls3D.length > 0) {
+                sintetizarEfectoSonido(Math.random() * 150 + 200, 0.03, 'sine', 0.004);
             }
 
-            renderer3D.render(scene3D, camera3D);
+            if(renderer3D && scene3D && camera3D) {
+                renderer3D.render(scene3D, camera3D);
+            }
             animationFrameId3D = requestAnimationFrame(loopThreeSorteo);
         }
 
-        function cambiarRatioTransmision(modo) {
-            const viewport = document.getElementById('broadcast-viewport');
-            const b16 = document.getElementById('btn-ratio-16');
-            const b9 = document.getElementById('btn-ratio-9');
-
-            if (modo === '16-9') {
-                viewport.className = "broadcast-container ratio-16-9 p-4 flex flex-col justify-between";
-                b16.className = "flex-1 md:flex-none bg-meta-active border border-meta-gold/30 text-white text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer";
-                b9.className = "flex-1 md:flex-none bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer";
-            } else {
-                viewport.className = "broadcast-container ratio-9-16 p-4 flex flex-col justify-between";
-                b9.className = "flex-1 md:flex-none bg-meta-active border border-meta-gold/30 text-white text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer";
-                b16.className = "flex-1 md:flex-none bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-2 rounded-lg transition-all cursor-pointer";
+        // --- PREPARAR LA ESTRUCTURA DEL SORTEO ---
+        function prepararEstructuraSorteo3D(forceReset = false) {
+            if (forceReset) {
+                slotsAsignadosSorteados = Array(14).fill(null);
+                contadorSorteados = 0;
             }
-        }
 
-        function prepararEstructuraSorteo3D() {
-            slotsAsignadosSorteados = Array(14).fill(null);
-            contadorSorteados = 0;
-            document.getElementById('btn-sacar-bola').disabled = false;
-            document.getElementById('btn-sacar-bola').style.opacity = '1';
-            document.getElementById('lbl-bombo-restante').innerHTML = `Quedan 14 Bolillas`;
+            const nombresYaSorteados = slotsAsignadosSorteados.filter(x => x !== null).map(x => x.nombre);
+            let clubesRestantes = arrayClubesActuales.filter(c => !nombresYaSorteados.includes(c.nombre));
+            bolsaDeSorteo = clubesRestantes.sort(() => Math.random() - 0.5);
+
+            document.getElementById('lbl-bombo-restante').innerHTML = `Quedan ${14 - contadorSorteados} Bolillas`;
+            document.getElementById('progreso-sorteo-texto').innerHTML = `Progreso: ${contadorSorteados} / 14 Sorteados`;
+
+            const btnSacar = document.getElementById('btn-sacar-bola');
+            if (contadorSorteados >= 14) {
+                btnSacar.setAttribute('disabled', 'true');
+                btnSacar.style.opacity = '0.5';
+                document.getElementById('fixture-actions-panel').classList.remove('opacity-40', 'pointer-events-none');
+            } else {
+                btnSacar.removeAttribute('disabled');
+                btnSacar.style.opacity = '1';
+                document.getElementById('fixture-actions-panel').classList.add('opacity-40', 'pointer-events-none');
+            }
 
             const gridMap = document.getElementById('posiciones-sorteo-map');
             gridMap.innerHTML = '';
+            for (let i = 0; i < 14; i++) {
+                let labelPos = (formatoTorneoSeleccionado === "zonas") 
+                    ? (i < 7 ? `A${i+1}` : `B${i-6}`)
+                    : `${i+1}`;
 
-            if (formatoTorneoSeleccionado === "zonas") {
-                gridMap.className = "grid grid-cols-1 md:grid-cols-2 gap-4 w-full";
-                gridMap.innerHTML = `
-                    <div class="space-y-2">
-                        <h4 class="text-[9px] font-black text-meta-gold uppercase tracking-widest border-b border-slate-900 pb-1.5 font-display">ZONA A</h4>
-                        <div id="draw-slots-zonaA" class="grid grid-cols-2 gap-2"></div>
-                    </div>
-                    <div class="space-y-2">
-                        <h4 class="text-[9px] font-black text-meta-emerald uppercase tracking-widest border-b border-slate-900 pb-1.5 font-display">ZONA B</h4>
-                        <div id="draw-slots-zonaB" class="grid grid-cols-2 gap-2"></div>
-                    </div>
-                `;
-                const cA = document.getElementById('draw-slots-zonaA');
-                const cB = document.getElementById('draw-slots-zonaB');
-
-                for (let i = 0; i < 7; i++) {
-                    cA.innerHTML += `
-                        <div id="caja-slot-sorteado-${i}" class="bg-slate-950/80 border border-slate-900 rounded-lg p-2 flex flex-col justify-between min-h-[44px]">
-                            <span class="text-[8px] font-bold text-slate-500 uppercase font-display">Posición A${i+1}</span>
-                            <div id="text-slot-sorteado-${i}" class="text-[9px] font-bold text-slate-600 italic truncate">— Vacante —</div>
-                        </div>
-                    `;
-                    cB.innerHTML += `
-                        <div id="caja-slot-sorteado-${i+7}" class="bg-slate-950/80 border border-slate-900 rounded-lg p-2 flex flex-col justify-between min-h-[44px]">
-                            <span class="text-[8px] font-bold text-slate-500 uppercase font-display">Posición B${i+1}</span>
-                            <div id="text-slot-sorteado-${i+7}" class="text-[9px] font-bold text-slate-600 italic truncate">— Vacante —</div>
-                        </div>
-                    `;
-                }
-            } else {
-                gridMap.className = "grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2";
-                for (let i = 0; i < 14; i++) {
+                let clubObj = slotsAsignadosSorteados[i];
+                if (clubObj) {
                     gridMap.innerHTML += `
-                        <div id="caja-slot-sorteado-${i}" class="bg-slate-950/80 border border-slate-900 rounded-lg p-2 flex flex-col justify-between min-h-[44px]">
-                            <span class="text-[8px] font-bold text-slate-500 uppercase font-display">Posición ${i+1}</span>
-                            <div id="text-slot-sorteado-${i}" class="text-[9px] font-bold text-slate-600 italic truncate">— Vacante —</div>
+                        <div id="caja-slot-sorteado-${i}" class="bg-slate-900 border-2 rounded-lg p-1.5 text-center shadow-lg transition-all" style="border-color: ${clubObj.color1}">
+                            <span class="text-[7.5px] font-bold text-slate-500 uppercase block">Pos. ${labelPos}</span>
+                            <div id="text-slot-sorteado-${i}" class="text-[8.5px] font-black uppercase truncate mt-0.5" style="color: ${clubObj.color1}">${clubObj.abreviatura}</div>
+                        </div>
+                    `;
+                } else {
+                    gridMap.innerHTML += `
+                        <div id="caja-slot-sorteado-${i}" class="bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-center transition-all duration-300">
+                            <span class="text-[7.5px] font-bold text-slate-500 uppercase block">Pos. ${labelPos}</span>
+                            <div id="text-slot-sorteado-${i}" class="text-[8px] font-black text-slate-600 truncate mt-0.5">— Vacante —</div>
                         </div>
                     `;
                 }
             }
 
-            document.getElementById('pantalla-revelador-tv').innerHTML = `
-                <div class="text-meta-gold font-extrabold text-[10px] tracking-widest uppercase flex items-center justify-center gap-1.5 font-display"><i class="fa-solid fa-circle-notch animate-spin text-xs"></i> Canal Listo</div>
-                <p class="text-slate-400 text-[9px] mt-1 font-display">Presione "Extraer Bola 3D" para comenzar el sorteo oficial.</p>
-            `;
+            const screen = document.getElementById('pantalla-revelador-tv');
+            if (contadorSorteados >= 14) {
+                screen.innerHTML = `
+                    <div class="text-meta-gold text-xs font-black uppercase tracking-widest animate-pulse font-display"><i class="fa-solid fa-circle-check"></i> Sorteo Concluido</div>
+                    <p class="text-[9px] text-slate-300 mt-1 max-w-sm">La asignación de posiciones está consolidada y el fixture de equidad se encuentra listo.</p>
+                `;
+            } else if (contadorSorteados > 0) {
+                screen.innerHTML = `
+                    <div class="text-meta-gold text-[10px] font-bold uppercase tracking-widest font-display">Sorteo en Progreso</div>
+                    <p class="text-slate-400 text-[9px] mt-1 font-display">Canal listo. Extraiga la siguiente bolilla.</p>
+                `;
+            } else {
+                screen.innerHTML = `
+                    <div class="text-meta-gold font-extrabold text-[10px] tracking-widest uppercase flex items-center justify-center gap-1.5 font-display"><i class="fa-solid fa-circle-notch animate-spin text-xs"></i> Canal Listo</div>
+                    <p class="text-slate-400 text-[9px] mt-1 font-display">Presione "Extraer Bola 3D" para comenzar.</p>
+                `;
+            }
+
             inicializarThreeSorteo();
+            actualizarFixtureView();
         }
 
+        // --- EXTRACCIÓN INTERACTIVA DE BOLILLAS ---
         function extraerBolilla3D() {
             if (contadorSorteados >= 14) return;
 
             const btn = document.getElementById('btn-sacar-bola');
-            btn.disabled = true;
+            btn.setAttribute('disabled', 'true');
+
+            const video = document.getElementById('draw-video');
+            if(video) video.playbackRate = 2.5;
+
+            balls3D.forEach(b => {
+                b.userData.velocity.multiplyScalar(3.0);
+            });
+
+            playDrawTensionSound(2.2);
 
             if (balls3D.length > 0) {
                 const removedBall = balls3D.pop();
                 scene3D.remove(removedBall);
             }
 
+            if (!bolsaDeSorteo || bolsaDeSorteo.length === 0) {
+                const nombresYaSorteados = slotsAsignadosSorteados.filter(x => x !== null).map(x => x.nombre);
+                let clubesRestantes = arrayClubesActuales.filter(c => !nombresYaSorteados.includes(c.nombre));
+                bolsaDeSorteo = clubesRestantes.sort(() => Math.random() - 0.5);
+            }
+
             let clubSeleccionado = bolsaDeSorteo.pop();
+            if (!clubSeleccionado) {
+                mostrarToast("Error crítico: no se encontró ningún club restante en el bombo.", "error");
+                btn.removeAttribute('disabled');
+                return;
+            }
             
             let targetSlotIdx = contadorSorteados;
             if (formatoTorneoSeleccionado === "zonas") {
@@ -1712,42 +1736,57 @@
 
             slotsAsignadosSorteados[targetSlotIdx] = clubSeleccionado;
 
-            ejecutarAperturaBolillaGlow(clubSeleccionado, () => {
-                const screen = document.getElementById('pantalla-revelador-tv');
-                let labelPos = formatoTorneoSeleccionado === "zonas" 
-                    ? (targetSlotIdx < 7 ? `Zona A - Posición ${targetSlotIdx + 1}` : `Zona B - Posición ${targetSlotIdx - 6}`)
-                    : `Posición ${targetSlotIdx + 1}`;
+            setTimeout(() => {
+                if(video) video.playbackRate = 1.0;
+                balls3D.forEach(b => {
+                    b.userData.velocity.multiplyScalar(0.35);
+                });
 
-                screen.innerHTML = `
-                    <div class="flex items-center gap-3 animate-bounce justify-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-lg flex-shrink-0" style="background-color: ${clubSeleccionado.color1}; border-color: ${clubSeleccionado.color2}">
-                            <span class="text-white font-black text-[10px] font-display">${clubSeleccionado.abreviatura}</span>
+                ejecutarAperturaBolillaGlow(clubSeleccionado, () => {
+                    const screen = document.getElementById('pantalla-revelador-tv');
+                    let labelPos = formatoTorneoSeleccionado === "zonas" 
+                        ? (targetSlotIdx < 7 ? `Zona A - Posición ${targetSlotIdx + 1}` : `Zona B - Posición ${targetSlotIdx - 6}`)
+                        : `Posición ${targetSlotIdx + 1}`;
+
+                    screen.innerHTML = `
+                        <div class="flex items-center gap-2.5 justify-center animate-slide-up">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center border text-[8px] font-black font-display shadow-lg flex-shrink-0" style="background-color: ${clubSeleccionado.color1}; border-color: ${clubSeleccionado.color2}">
+                                <span class="text-white">${clubSeleccionado.abreviatura}</span>
+                            </div>
+                            <div class="text-left">
+                                <span class="text-meta-gold font-extrabold text-[8px] tracking-widest uppercase">Revelado</span>
+                                <h3 class="text-[11px] font-black text-white uppercase tracking-tight">${clubSeleccionado.nombre}</h3>
+                                <p class="text-[8px] text-slate-400">Asignado: <span class="text-meta-emerald font-bold">${labelPos}</span>.</p>
+                            </div>
                         </div>
-                        <div class="text-left">
-                            <span class="text-meta-gold font-extrabold text-[8px] tracking-widest uppercase">Revelado</span>
-                            <h3 class="text-xs sm:text-sm font-black text-white uppercase tracking-tight">${clubSeleccionado.nombre}</h3>
-                            <p class="text-[8px] text-slate-400">Posición asignada: <span class="text-meta-emerald font-bold">${labelPos}</span>.</p>
-                        </div>
-                    </div>
-                `;
+                    `;
 
-                const slotBox = document.getElementById(`caja-slot-sorteado-${targetSlotIdx}`);
-                slotBox.className = "bg-slate-900 border-2 rounded-lg p-2 flex flex-col justify-between min-h-[44px] scale-102 transition-all shadow-lg";
-                slotBox.style.borderColor = clubSeleccionado.color1;
+                    const slotBox = document.getElementById(`caja-slot-sorteado-${targetSlotIdx}`);
+                    if (slotBox) {
+                        slotBox.className = "bg-slate-900 border-2 rounded-lg p-1.5 text-center shadow-lg transform scale-102 transition-all";
+                        slotBox.style.borderColor = clubSeleccionado.color1;
+                    }
 
-                const textSlot = document.getElementById(`text-slot-sorteado-${targetSlotIdx}`);
-                textSlot.className = "text-[9px] font-black text-slate-100 uppercase truncate";
-                textSlot.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full mr-1 animate-pulse" style="background-color:${clubSeleccionado.color1}"></span>${clubSeleccionado.nombre}`;
+                    const textSlot = document.getElementById(`text-slot-sorteado-${targetSlotIdx}`);
+                    if (textSlot) {
+                        textSlot.className = "text-[8.5px] font-black uppercase truncate mt-0.5";
+                        textSlot.style.color = clubSeleccionado.color1;
+                        textSlot.innerHTML = clubSeleccionado.abreviatura;
+                    }
 
-                contadorSorteados++;
-                document.getElementById('lbl-bombo-restante').innerHTML = `Quedan ${14 - contadorSorteados} Bolillas`;
+                    contadorSorteados++;
+                    document.getElementById('lbl-bombo-restante').innerHTML = `Quedan ${14 - contadorSorteados} Bolillas`;
+                    document.getElementById('progreso-sorteo-texto').innerHTML = `Progreso: ${contadorSorteados} / 14 Sorteados`;
 
-                btn.disabled = false;
+                    actualizarFixtureView();
 
-                if (contadorSorteados === 14) {
-                    finalizarSorteoOficial();
-                }
-            });
+                    btn.removeAttribute('disabled');
+
+                    if (contadorSorteados === 14) {
+                        finalizarSorteoOficial();
+                    }
+                });
+            }, 2200);
         }
 
         function ejecutarAperturaBolillaGlow(club, callback) {
@@ -1770,27 +1809,23 @@
 
             leftHalf.style.transform = 'translateX(0)';
             rightHalf.style.transform = 'translateX(0)';
-            paper.className = "absolute w-44 h-24 bg-gradient-to-br from-yellow-50 via-amber-100 to-yellow-50 text-slate-900 border-2 border-yellow-300 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-2xl scale-0 opacity-0 transition-all duration-1000";
+            paper.className = "absolute w-44 h-24 bg-gradient-to-br from-yellow-50 via-amber-100 to-yellow-50 text-slate-900 border-2 border-yellow-300 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-2xl scale-0 opacity-0 transition-all duration-1000 z-30";
             titleBox.className = "mt-6 z-10 transition-all duration-500 scale-0 opacity-0";
 
             modal.classList.remove('hidden');
 
-            sintetizarEfectoSonido(180, 0.6, 'sine', 0.12);
-            setTimeout(() => sintetizarEfectoSonido(220, 0.6, 'triangle', 0.1), 150);
+            playRevealClimaxSound();
+            vociferarClub(club.nombre);
 
             let tl = gsap.timeline();
             tl.fromTo("#container-bolilla-reveal", { scale: 0.1, rotation: -360 }, { duration: 1.1, scale: 1, rotation: 0, ease: "back.out(1)" });
             
             tl.add(() => {
-                sintetizarEfectoSonido(440, 0.15, 'sine', 0.1);
-                setTimeout(() => sintetizarEfectoSonido(554, 0.15, 'sine', 0.1), 80);
-                setTimeout(() => sintetizarEfectoSonido(659, 0.35, 'triangle', 0.08), 160);
-                
                 confetti({
-                    particleCount: 80,
-                    spread: 60,
+                    particleCount: 110,
+                    spread: 75,
                     origin: { y: 0.6 },
-                    colors: ['#d4af37', '#ffffff', '#fae69e']
+                    colors: ['#d4af37', '#ffffff', '#fae69e', club.color1, club.color2]
                 });
             }, "+=0.15");
 
@@ -1804,7 +1839,7 @@
                 titleBox.classList.add('scale-100', 'opacity-100');
             }, "-=0.15");
 
-            tl.to({}, { duration: 1.8 }); 
+            tl.to({}, { duration: 2.2 }); 
 
             tl.add(() => {
                 modal.classList.add('hidden');
@@ -1814,6 +1849,12 @@
         }
 
         function simulacionInstantanea() {
+            if (!bolsaDeSorteo || bolsaDeSorteo.length === 0) {
+                const nombresYaSorteados = slotsAsignadosSorteados.filter(x => x !== null).map(x => x.nombre);
+                let clubesRestantes = arrayClubesActuales.filter(c => !nombresYaSorteados.includes(c.nombre));
+                bolsaDeSorteo = clubesRestantes.sort(() => Math.random() - 0.5);
+            }
+
             while(contadorSorteados < 14) {
                 let clubSeleccionado = bolsaDeSorteo.pop();
                 
@@ -1829,35 +1870,43 @@
                 slotsAsignadosSorteados[targetSlotIdx] = clubSeleccionado;
 
                 const slotBox = document.getElementById(`caja-slot-sorteado-${targetSlotIdx}`);
-                slotBox.className = "bg-slate-900 border rounded-lg p-2 flex flex-col justify-between min-h-[44px] shadow";
-                slotBox.style.borderColor = clubSeleccionado.color1;
+                if (slotBox) {
+                    slotBox.className = "bg-slate-900 border rounded-lg p-1.5 text-center shadow";
+                    slotBox.style.borderColor = clubSeleccionado.color1;
+                }
 
                 const textSlot = document.getElementById(`text-slot-sorteado-${targetSlotIdx}`);
-                textSlot.className = "text-[9px] font-black text-slate-100 uppercase truncate";
-                textSlot.innerHTML = `${clubSeleccionado.nombre}`;
+                if (textSlot) {
+                    textSlot.className = "text-[8.5px] font-black uppercase truncate mt-0.5";
+                    textSlot.style.color = clubSeleccionado.color1;
+                    textSlot.innerHTML = clubSeleccionado.abreviatura;
+                }
 
                 contadorSorteados++;
             }
+            actualizarFixtureView();
             finalizarSorteoOficial();
         }
 
         function finalizarSorteoOficial() {
-            document.getElementById('btn-sacar-bola').disabled = true;
+            document.getElementById('btn-sacar-bola').setAttribute('disabled', 'true');
             document.getElementById('btn-sacar-bola').style.opacity = '0.5';
             document.getElementById('lbl-bombo-restante').innerHTML = `Asignación Completa`;
+            document.getElementById('progreso-sorteo-texto').innerHTML = `Sorteo Concluido exitosamente`;
+
+            document.getElementById('fixture-actions-panel').classList.remove('opacity-40', 'pointer-events-none');
 
             document.getElementById('pantalla-revelador-tv').innerHTML = `
                 <div class="text-meta-gold text-xs font-black uppercase tracking-widest animate-pulse font-display"><i class="fa-solid fa-circle-check"></i> Sorteo Concluido</div>
-                <p class="text-[9px] text-slate-300 mt-1 max-w-sm">La asignación está consolidada. Procede a calcular el fixture equitativo de MetaFutbol.</p>
-                <button onclick="ejecutarMotorTermicoAnnealing()" class="mt-3 bg-gradient-to-r from-meta-gold to-yellow-500 text-slate-950 font-black text-[9px] px-5 py-2.5 rounded-lg shadow-lg hover:scale-105 transition-all cursor-pointer uppercase tracking-wider active:scale-95 font-display">
-                    <i class="fa-solid fa-server mr-1"></i> Optimizar Fixture
-                </button>
+                <p class="text-[9px] text-slate-300 mt-1 max-w-sm">La asignación de posiciones está consolidada y el fixture de equidad se encuentra listo.</p>
             `;
+
+            renderizarTablaAuditoriaCompleta();
             guardarCopiaLocal();
-            mostrarToast("Sorteo de posiciones finalizado con éxito.");
+            mostrarToast("Asignación de posiciones consolidada al 100%.");
         }
 
-        // --- OPTIMIZACIÓN MATEMÁTICA: RECUPERACIÓN TÉRMICA (SIMULATED ANNEALING) ---
+        // --- ALGORITMO DE RECOCIDO TÉRMICO CON REPARTO EQUITATIVO DE ALTA FIDELIDAD ---
         function ejecutarMotorTermicoAnnealing() {
             const loadingScreen = document.getElementById('pantalla-cargando');
             loadingScreen.classList.remove('hidden');
@@ -1876,8 +1925,8 @@
             let estado = inicializarAsignacionesBase(rounds);
             let costoActual = evaluarFuncionEntropia(estado);
 
-            let temp = 120.0;
-            const coolingRate = 0.9994;
+            let temp = 150.0;
+            const coolingRate = 0.9993;
 
             function pasoTermico() {
                 const subSteps = 600; 
@@ -1899,7 +1948,7 @@
                 let porc = Math.floor((iter / maxIter) * 100);
                 bar.style.width = `${porc}%`;
                 lblIter.innerHTML = `Iteraciones: ${iter}/${maxIter}`;
-                lblCosto.innerHTML = `Entropía Fixture: ${costoActual.toFixed(2)}`;
+                lblCosto.innerHTML = `Entropía Equidad: ${costoActual.toFixed(2)}`;
 
                 if (iter < maxIter) {
                     requestAnimationFrame(pasoTermico);
@@ -1907,13 +1956,13 @@
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
                         document.getElementById('lbl-entropy-cost').innerHTML = costoActual.toFixed(2);
-                        fixtureConsolidadoFinal = procesarMapeoAClubsReales(estado);
                         
+                        abstractFixtureBase = estado;
+
                         habilitarTabsParaUso();
                         poblarSelectoresFiltro();
-                        switchTab('fixture');
-                        actualizarFixtureView();
-                        renderizarTablaAuditoriaCompleta();
+                        switchTab('sorteo');
+                        prepararEstructuraSorteo3D(true); 
                         guardarCopiaLocal();
                         mostrarToast("¡Fixture óptimo de alta equidad construido!");
                     }, 500);
@@ -1924,7 +1973,6 @@
 
         function habilitarTabsParaUso() {
             document.getElementById('tab-sorteo').removeAttribute('disabled');
-            document.getElementById('tab-fixture').removeAttribute('disabled');
             document.getElementById('tab-equidad').removeAttribute('disabled');
         }
 
@@ -2050,7 +2098,6 @@
                 let esFechaEspecial = (configEspecial === "primera" && numeroFecha === 1) || 
                                       (configEspecial === "ultima" && numeroFecha === maxFechas);
 
-                // Utilizar horarios editados de forma dinámica
                 if (esFechaEspecial) {
                     slots = [
                         { cancha: arrayCanchasActuales[0], hora: horarioEspecial1, terna: arrayTernasActuales[0] },
@@ -2096,8 +2143,11 @@
             return estado;
         }
 
+        // --- FUNCIÓN DE ENTROPÍA MEJORADA: GARANTIZA DESVIACIÓN MÍNIMA DE CANCHAS Y TERNAS ---
         function evaluarFuncionEntropia(estado) {
             let penalizacion = 0;
+            
+            // Inicializar contadores individuales por cada uno de los 14 equipos
             let tracker = Array.from({length: 14}, () => {
                 let hMap = {};
                 hMap[horarioEspecial1] = 0;
@@ -2106,18 +2156,17 @@
                 hMap[horarioNormal2] = 0;
                 hMap[horarioEspecial3] = 0;
 
-                return {
-                    canchas: {},
-                    horarios: hMap,
-                    ternas: {}
-                };
-            });
+                let cMap = {};
+                arrayCanchasActuales.forEach(c => cMap[c] = 0);
 
-            arrayCanchasActuales.forEach(c => {
-                tracker.forEach(t => t.canchas[c] = 0);
-            });
-            arrayTernasActuales.forEach(t => {
-                tracker.forEach(tr => tr.ternas[t] = 0);
+                let tMap = {};
+                arrayTernasActuales.forEach(t => tMap[t] = 0);
+
+                return {
+                    canchas: cMap,
+                    horarios: hMap,
+                    ternas: tMap
+                };
             });
 
             let ultimaCancha = Array(14).fill(null);
@@ -2136,8 +2185,10 @@
                         if (tracker[eq].horarios[h] !== undefined) tracker[eq].horarios[h]++;
                         if (tracker[eq].ternas[t] !== undefined) tracker[eq].ternas[t]++;
 
-                        if (ultimaCancha[eq] === c) penalizacion += 15; 
-                        if (ultimoHorario[eq] === h) penalizacion += 10;  
+                        // Penalizar canchas consecutivas repetidas (Evita que jueguen siempre en la misma cancha)
+                        if (ultimaCancha[eq] === c) penalizacion += 100; // Penalización elevada
+                        // Penalizar repetición de horarios consecutivos
+                        if (ultimoHorario[eq] === h) penalizacion += 50;  
 
                         ultimaCancha[eq] = c;
                         ultimoHorario[eq] = h;
@@ -2150,23 +2201,39 @@
                 });
             });
 
-            let targetHora14Ideal = (formatoTorneoSeleccionado === "zonas") ? 3 : 6;
-            let targetHora16Ideal = (formatoTorneoSeleccionado === "zonas") ? 3 : 6;
+            // Fórmulas de desviación ideales para un balance perfecto
+            // Todos contra todos: 15 fechas totales, 13 PJ reales. El promedio exacto es 13/3 = 4.33 partidos por cancha/terna.
+            // Zonas de 7 equipos: 7 fechas totales, 6 PJ reales. El promedio exacto es 6/3 = 2.0 partidos por cancha/terna.
+            let idealCancha = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
+            let idealTerna = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
 
-            tracker.forEach(tr => {
+            tracker.forEach((tr, eqIdx) => {
+                // Desviación de Canchas: Suma de diferencias cuadráticas respecto al ideal
                 Object.values(tr.canchas).forEach(val => {
-                    if (formatoTorneoSeleccionado === "zonas") {
-                        if (val < 1) penalizacion += 30;
-                        if (val > 3) penalizacion += 30;
+                    let desvio = Math.abs(val - idealCancha);
+                    if (desvio > 1.4) {
+                        penalizacion += Math.pow(desvio * 50, 2); // Exponencialmente destructivo para evitar diferencias grandes
                     } else {
-                        if (val < 3) penalizacion += 30;
-                        if (val > 6) penalizacion += 30;
+                        penalizacion += desvio * 15;
                     }
                 });
+
+                // Desviación de Ternas: Ningún árbitro debe dirigir más de 4-5 veces a un mismo club
+                Object.values(tr.ternas).forEach(val => {
+                    let desvio = Math.abs(val - idealTerna);
+                    if (desvio > 1.4) {
+                        penalizacion += Math.pow(desvio * 50, 2); 
+                    } else {
+                        penalizacion += desvio * 15;
+                    }
+                });
+
+                // Desviación de horarios estándar
                 let h14 = tr.horarios[horarioNormal1];
                 let h16 = tr.horarios[horarioNormal2];
-                penalizacion += Math.abs(h14 - targetHora14Ideal) * 20;
-                penalizacion += Math.abs(h16 - targetHora16Ideal) * 20;
+                let idealHorario = (formatoTorneoSeleccionado === "zonas") ? 3.0 : 6.5;
+                penalizacion += Math.abs(h14 - idealHorario) * 35;
+                penalizacion += Math.abs(h16 - idealHorario) * 35;
             });
 
             return penalizacion;
@@ -2195,8 +2262,8 @@
             return nuevoEst;
         }
 
-        function procesarMapeoAClubsReales(estadoOptimo) {
-            return estadoOptimo.map(jornada => {
+        function obtenerFixtureProgresivoMapeado() {
+            return abstractFixtureBase.map(jornada => {
                 let partidosFormat = jornada.mapeo.map(m => {
                     let locObj = slotsAsignadosSorteados[m.partido.local];
                     let visObj = slotsAsignadosSorteados[m.partido.visitante];
@@ -2207,21 +2274,30 @@
                     }
 
                     return {
-                        local: locObj.nombre,
-                        localAbr: locObj.abreviatura,
-                        localCol1: locObj.color1,
-                        localCol2: locObj.color2,
-                        visitante: visObj.nombre,
-                        visitanteAbr: visObj.abreviatura,
-                        visitanteCol1: visObj.color1,
-                        visitanteCol2: visObj.color2,
+                        local: locObj ? locObj.nombre : `Posición ${m.partido.local + 1}`,
+                        localAbr: locObj ? locObj.abreviatura : `P${m.partido.local + 1}`,
+                        localCol1: locObj ? locObj.color1 : "#1e2937",
+                        localCol2: locObj ? locObj.color2 : "#475569",
+                        localSorteado: !!locObj,
+
+                        visitante: visObj ? visObj.nombre : `Posición ${m.partido.visitante + 1}`,
+                        visitanteAbr: visObj ? visObj.abreviatura : `P${m.partido.visitante + 1}`,
+                        visitanteCol1: visObj ? visObj.color1 : "#1e2937",
+                        visitanteCol2: visObj ? visObj.color2 : "#475569",
+                        visitanteSorteado: !!visObj,
+
                         cancha: m.slot.cancha,
                         hora: m.slot.hora,
                         terna: m.slot.terna,
                         zona: zonaPartido
                     };
                 });
-                let libresFormat = jornada.libres.map(id => slotsAsignadosSorteados[id].nombre);
+
+                let libresFormat = jornada.libres.map(id => {
+                    let obj = slotsAsignadosSorteados[id];
+                    return obj ? obj.nombre : `Posición ${id + 1}`;
+                });
+
                 return {
                     fecha: jornada.fecha,
                     partidos: partidosFormat,
@@ -2234,37 +2310,46 @@
             let maxFechas = (formatoTorneoSeleccionado === "zonas") ? 7 : 15;
 
             const selFecha = document.getElementById('sel-fecha-filter');
-            selFecha.innerHTML = `<option value="todas">Todas las Fechas (1-${maxFechas})</option>`;
-            for(let f=1; f<=maxFechas; f++) {
-                selFecha.innerHTML += `<option value="${f}">Jornada ${f}</option>`;
+            if (selFecha) {
+                selFecha.innerHTML = `<option value="todas">Todas las Fechas (1-${maxFechas})</option>`;
+                for(let f=1; f<=maxFechas; f++) {
+                    selFecha.innerHTML += `<option value="${f}">Jornada ${f}</option>`;
+                }
             }
 
             const selClub = document.getElementById('sel-club-filter');
-            selClub.innerHTML = '<option value="todos">Todos los Clubes</option>';
-            arrayClubesActuales.forEach(eq => {
-                selClub.innerHTML += `<option value="${eq.nombre}">${eq.nombre}</option>`;
-            });
+            if (selClub) {
+                selClub.innerHTML = '<option value="todos">Todos los Clubes</option>';
+                arrayClubesActuales.forEach(eq => {
+                    selClub.innerHTML += `<option value="${eq.nombre}">${eq.nombre}</option>`;
+                });
+            }
 
-            // Selectores de Flyers
             const storyClub = document.getElementById('story-club-select');
-            storyClub.innerHTML = '';
-            arrayClubesActuales.forEach(eq => {
-                storyClub.innerHTML += `<option value="${eq.nombre}">${eq.nombre}</option>`;
-            });
+            if (storyClub) {
+                storyClub.innerHTML = '';
+                arrayClubesActuales.forEach(eq => {
+                    storyClub.innerHTML += `<option value="${eq.nombre}">${eq.nombre}</option>`;
+                });
+            }
 
             const storyFechaUnica = document.getElementById('story-fecha-select');
-            storyFechaUnica.innerHTML = '';
-            for(let f=1; f<=maxFechas; f++) {
-                storyFechaUnica.innerHTML += `<option value="${f}">Fecha ${f}</option>`;
+            if (storyFechaUnica) {
+                storyFechaUnica.innerHTML = '';
+                for(let f=1; f<=maxFechas; f++) {
+                    storyFechaUnica.innerHTML += `<option value="${f}">Fecha ${f}</option>`;
+                }
             }
 
             const storyDesde = document.getElementById('story-rango-desde');
             const storyHasta = document.getElementById('story-rango-hasta');
-            storyDesde.innerHTML = '';
-            storyHasta.innerHTML = '';
-            for(let f=1; f<=maxFechas; f++) {
-                storyDesde.innerHTML += `<option value="${f}">Fecha ${f}</option>`;
-                storyHasta.innerHTML += `<option value="${f}" ${f===3?'selected':''}>Fecha ${f}</option>`;
+            if (storyDesde && storyHasta) {
+                storyDesde.innerHTML = '';
+                storyHasta.innerHTML = '';
+                for(let f=1; f<=maxFechas; f++) {
+                    storyDesde.innerHTML += `<option value="${f}">Fecha ${f}</option>`;
+                    storyHasta.innerHTML += `<option value="${f}" ${f===3?'selected':''}>Fecha ${f}</option>`;
+                }
             }
 
             document.getElementById('aud-th-c1').innerText = arrayCanchasActuales[0];
@@ -2274,40 +2359,36 @@
             document.getElementById('aud-th-t2').innerText = arrayTernasActuales[1].split(' ')[2] || "Terna 2";
             document.getElementById('aud-th-t3').innerText = arrayTernasActuales[2].split(' ')[2] || "Terna 3";
 
-            // Modificar cabecera de auditoria de horas dinámicas
             document.getElementById('aud-th-h1').innerText = horarioEspecial1 + "hs";
             document.getElementById('aud-th-h2').innerText = horarioNormal1 + "hs";
             document.getElementById('aud-th-h3').innerText = horarioEspecial2 + "hs";
             document.getElementById('aud-th-h4').innerText = horarioNormal2 + "hs";
             document.getElementById('aud-th-h5').innerText = horarioEspecial3 + "hs";
 
-            document.getElementById('print-lbl-canchas').innerText = `SEDES: ${arrayCanchasActuales.join(' • ')}`;
-            document.getElementById('print-lbl-ternas').innerText = `ÁRBITROS: ${arrayTernasActuales.join(' • ')}`;
-            
-            const printFormLabel = document.getElementById('print-lbl-formato');
-            if (formatoTorneoSeleccionado === "zonas") {
-                printFormLabel.innerText = "SISTEMA: Dos Zonas de 7 (7 Fechas)";
-            } else {
-                printFormLabel.innerText = "SISTEMA: Todos Contra Todos (15 Fechas)";
-            }
-
             const printGridEl = document.getElementById('print-grid-a4');
-            if (formatoTorneoSeleccionado === "zonas") {
-                printGridEl.style.setProperty('--print-cols', 'repeat(4, 1fr)');
-                printGridEl.style.setProperty('--print-rows', 'repeat(2, 1fr)');
-            } else {
-                printGridEl.style.setProperty('--print-cols', 'repeat(5, 1fr)');
-                printGridEl.style.setProperty('--print-rows', 'repeat(3, 1fr)');
+            if (printGridEl) {
+                if (formatoTorneoSeleccionado === "zonas") {
+                    printGridEl.style.setProperty('--print-cols', 'repeat(4, 1fr)');
+                    printGridEl.style.setProperty('--print-rows', 'repeat(2, 1fr)');
+                } else {
+                    printGridEl.style.setProperty('--print-cols', 'repeat(5, 1fr)');
+                    printGridEl.style.setProperty('--print-rows', 'repeat(3, 1fr)');
+                }
             }
 
             actualizarTogglesAcceso();
         }
 
         function actualizarFixtureView() {
-            const filterFecha = document.getElementById('sel-fecha-filter').value;
-            const filterClub = document.getElementById('sel-club-filter').value;
+            const filterFechaEl = document.getElementById('sel-fecha-filter');
+            const filterClubEl = document.getElementById('sel-club-filter');
+            const filterFecha = filterFechaEl ? filterFechaEl.value : 'todas';
+            const filterClub = filterClubEl ? filterClubEl.value : 'todos';
             const container = document.getElementById('fixture-grid-viewer');
+            if (!container) return;
             container.innerHTML = '';
+
+            fixtureConsolidadoFinal = obtenerFixtureProgresivoMapeado();
 
             fixtureConsolidadoFinal.forEach(jornada => {
                 if (filterFecha !== 'todas' && String(jornada.fecha) !== filterFecha) return;
@@ -2341,7 +2422,7 @@
                 if (estaLibreElClub) {
                     descansoHtml = `
                         <div class="bg-yellow-500/10 border border-yellow-500/20 text-meta-gold text-[10px] p-3 rounded-xl text-center font-bold uppercase tracking-wider my-2">
-                            <i class="fa-solid fa-circle-pause mr-1.5"></i> El club tiene descanso obligatorio en esta jornada
+                            <i class="fa-solid fa-circle-pause mr-1.5"></i> Descanso obligatorio en esta jornada
                         </div>
                     `;
                 }
@@ -2356,15 +2437,23 @@
                             ? `<span class="text-[8px] bg-slate-950 text-meta-emerald px-2 py-0.5 rounded font-bold uppercase border border-meta-emerald/15">${partido.zona}</span>`
                             : `<span class="text-[8px] bg-slate-950 text-slate-500 px-2 py-0.5 rounded font-bold uppercase">MetaFutbol</span>`;
 
+                        let localStyle = partido.localSorteado 
+                            ? `background-color: ${partido.localCol1}; border-color: ${partido.localCol2};`
+                            : `background-color: #111827; border-color: #374151; border-style: dashed;`;
+
+                        let visitanteStyle = partido.visitanteSorteado 
+                            ? `background-color: ${partido.visitanteCol1}; border-color: ${partido.visitanteCol2};`
+                            : `background-color: #111827; border-color: #374151; border-style: dashed;`;
+
                         partidosHtml += `
-                            <div class="glass-panel hover:bg-slate-900/50 p-3 rounded-xl border border-slate-900 flex flex-col justify-between transition-all duration-300 hover:border-slate-850">
+                            <div class="glass-panel p-3 rounded-xl border border-slate-900 flex flex-col justify-between transition-all duration-300">
                                 <div class="flex flex-col gap-2 mb-3">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-2 max-w-[70%]">
-                                            <div class="w-6 h-6 rounded-full flex items-center justify-center border text-[8px] font-black font-display shadow flex-shrink-0" style="background-color: ${partido.localCol1}; border-color: ${partido.localCol2}">
+                                            <div class="w-6 h-6 rounded-full flex items-center justify-center border text-[8px] font-black font-display shadow flex-shrink-0" style="${localStyle}">
                                                 <span class="text-white">${partido.localAbr}</span>
                                             </div>
-                                            <span class="text-xs font-bold truncate ${isFocusLoc ? 'text-meta-gold font-black' : 'text-slate-200'}">${partido.local}</span>
+                                            <span class="text-xs font-bold truncate ${partido.localSorteado ? 'text-slate-100' : 'text-slate-500 italic'} ${isFocusLoc ? 'text-meta-gold font-black' : ''}">${partido.local}</span>
                                         </div>
                                         ${zoneBadge}
                                     </div>
@@ -2373,10 +2462,10 @@
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-2 max-w-[70%]">
-                                            <div class="w-6 h-6 rounded-full flex items-center justify-center border text-[8px] font-black font-display shadow flex-shrink-0" style="background-color: ${partido.visitanteCol1}; border-color: ${partido.visitanteCol2}">
+                                            <div class="w-6 h-6 rounded-full flex items-center justify-center border text-[8px] font-black font-display shadow flex-shrink-0" style="${visitanteStyle}">
                                                 <span class="text-white">${partido.visitanteAbr}</span>
                                             </div>
-                                            <span class="text-xs font-bold truncate ${isFocusVis ? 'text-meta-gold font-black' : 'text-slate-200'}">${partido.visitante}</span>
+                                            <span class="text-xs font-bold truncate ${partido.visitanteSorteado ? 'text-slate-100' : 'text-slate-500 italic'} ${isFocusVis ? 'text-meta-gold font-black' : ''}">${partido.visitante}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -2400,6 +2489,7 @@
 
         function renderImpresionLandscapeCompacta() {
             const printContainer = document.getElementById('print-grid-a4');
+            if (!printContainer) return;
             printContainer.innerHTML = '';
 
             fixtureConsolidadoFinal.forEach(jornada => {
@@ -2430,33 +2520,14 @@
             });
         }
 
-        function ajustarLetraImpresion(val) {
-            document.getElementById('print-scale-val').innerText = val + "px";
-            let styleEl = document.getElementById('print-scale-override-style');
-            if (!styleEl) {
-                styleEl = document.createElement('style');
-                styleEl.id = 'print-scale-override-style';
-                document.head.appendChild(styleEl);
-            }
-            styleEl.innerHTML = `
-                @media print {
-                    .print-row {
-                        font-size: ${val}px !important;
-                    }
-                    .print-card h3 {
-                        font-size: ${parseFloat(val) + 1.5}px !important;
-                    }
-                }
-            `;
-        }
-
         function solicitarImpresion() {
             sintetizarEfectoSonido(900, 0.1, 'sine');
             window.print();
         }
 
         function generarArchivoICS() {
-            const filterClub = document.getElementById('sel-club-filter').value;
+            const filterClubEl = document.getElementById('sel-club-filter');
+            const filterClub = filterClubEl ? filterClubEl.value : 'todos';
             let ics = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Plexcel.py Evolution//MetaFutbol//ES\nCALSCALE:GREGORIAN\n";
 
             let baseDate = new Date();
@@ -2502,6 +2573,7 @@
             mostrarToast("Calendario oficial de MetaFutbol descargado.");
         }
 
+        // --- DISEÑADOR DE FLYERS ---
         function abrirCreadorFlyers() {
             document.getElementById('modal-flyer-designer').classList.remove('hidden');
             adaptarControlesFlyer();
@@ -2707,23 +2779,22 @@
                     let key1 = `${p.local} vs ${p.visitante}`;
                     let key2 = `${p.visitante} vs ${p.local}`;
 
-                    if (matchesTracker[key1] || matchesTracker[key2]) {
-                        duplicates++;
-                    } else {
-                        matchesTracker[key1] = true;
-                    }
+                    if (matchesTracker[key1] || matchesTracker[key2]) duplicates++;
+                    else matchesTracker[key1] = true;
                 });
             });
 
             const statusLabel = document.getElementById('lbl-cruce-verifier-msg');
-            if (duplicates === 0) {
-                statusLabel.innerText = `ÉXITO: ${totalChecked} cruces únicos (0 duplicaciones).`;
-                statusLabel.className = "text-[10px] font-black text-meta-emerald font-mono";
-                mostrarToast("✓ Auditoría completa: Todos los cruces son únicos.");
-            } else {
-                statusLabel.innerText = `ERROR: ${duplicates} duplicados detectados.`;
-                statusLabel.className = "text-[10px] font-black text-red-400 font-mono";
-                mostrarToast("Se han detectado colisiones repetidas en el fixture.", "error");
+            if (statusLabel) {
+                if (duplicates === 0) {
+                    statusLabel.innerText = `ÉXITO: ${totalChecked} cruces únicos (0 duplicaciones).`;
+                    statusLabel.className = "text-[10px] font-black text-meta-emerald font-mono";
+                    mostrarToast("✓ Auditoría completa: Todos los cruces son únicos.");
+                } else {
+                    statusLabel.innerText = `ERROR: ${duplicates} duplicados detectados.`;
+                    statusLabel.className = "text-[10px] font-black text-red-400 font-mono";
+                    mostrarToast("Se han detectado colisiones en el fixture.", "error");
+                }
             }
         }
 
@@ -2762,6 +2833,7 @@
             });
 
             const tbody = document.getElementById('equidad-tabla-cuerpo');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             Object.keys(tracker).forEach(name => {
