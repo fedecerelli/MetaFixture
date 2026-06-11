@@ -14,8 +14,8 @@
                         meta: {
                             gold: '#d4af37',
                             goldglow: '#f3e5ab',
-                            dark: '#0a0f1e',
-                            panel: 'rgba(15, 23, 42, 0.65)',
+                            dark: '#05070f',
+                            panel: 'rgba(10, 15, 30, 0.7)',
                             emerald: '#00f59b',
                             emeraldglow: '#34d399',
                             slate: '#0f172a',
@@ -25,6 +25,7 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         display: ['Montserrat', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
                     }
                 }
             }
@@ -33,7 +34,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -43,28 +44,59 @@
 
     <style>
         body {
-            background-color: #0a0f1e;
-            background-image: radial-gradient(circle at 50% 0%, #172554 0%, #0a0f1e 75%);
+            background: #05070f;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(23, 37, 84, 0.45) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(212, 175, 55, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(0, 245, 155, 0.05) 0px, transparent 50%);
+            background-size: 200% 200%;
+            animation: meshGlow 12s ease infinite;
             -webkit-tap-highlight-color: transparent;
             overflow-x: hidden;
             font-feature-settings: "ss01";
         }
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        
+        @keyframes meshGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+
+        .glass-panel {
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
         .glow-text-gold {
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
         }
+
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+
+        /* Scrollbar premium para la tabla de calor */
+        .beauty-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .beauty-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 10px;
+        }
+        .beauty-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+        }
+        .beauty-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.6);
         }
         
         button, select, input {
@@ -127,7 +159,7 @@
             animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* --- Sistema Failsafe de Impresión A4 Horizontal --- */
+        /* --- Sistema Failsafe de Impresión A4 Horizontal Certificado --- */
         @media print {
             body {
                 background: #ffffff !important;
@@ -145,7 +177,7 @@
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 12px !important;
                 box-sizing: border-box !important;
-                padding: 10px !important;
+                padding: 15px !important;
                 background: #ffffff !important;
                 color: #000000 !important;
             }
@@ -269,161 +301,185 @@
         </nav>
     </div>
 
-    <main class="w-full px-4 sm:px-6 xl:px-12 py-4 flex-grow">
+    <main class="w-full px-4 sm:px-6 xl:px-8 py-4 flex-grow">
 
         <section id="sec-config" class="tab-content block no-print">
-            <div class="glass-panel rounded-2xl p-4 sm:p-6 shadow-2xl border border-meta-gold/20 max-w-5xl mx-auto">
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-900 pb-4 mb-5 gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 bg-meta-gold/10 text-meta-gold rounded-lg flex items-center justify-center">
-                            <i class="fa-solid fa-gears"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-sm sm:text-base font-bold text-white font-display">Configuración de Torneo</h2>
-                            <p class="text-[9px] text-slate-400 font-bold">Personalización de Roster, Estructuras, Canchas y Árbitros.</p>
-                        </div>
-                    </div>
-                    <button id="btn-restaurar-config" onclick="restaurarPresets()" class="w-full md:w-auto bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-2 rounded-lg cursor-pointer active:scale-95">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Restablecer Valores
-                    </button>
-                </div>
-
-                <div id="alerta-espectador-config" class="bg-blue-950/20 border border-blue-500/30 text-blue-300 text-xs p-3.5 rounded-xl mb-5 hidden">
-                    <i class="fa-solid fa-circle-info mr-2"></i> Estás en modo de visualización. Los campos se encuentran bloqueados para edición. Solo un Administrador u Operador puede realizar modificaciones.
-                </div>
-
-                <div class="bg-slate-950/80 border border-slate-900 p-3 sm:p-4 rounded-xl mb-5 grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div>
-                        <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-trophy mr-1"></i> Formato de Competencia</label>
-                        <select id="config-formato" onchange="cambioDeFormatoTorneo()" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
-                            <option value="todos">Todos contra Todos (15 Fechas / 1 Zona Unificada)</option>
-                            <option value="zonas">Fase de Grupos (7 Fechas / 2 Zonas de 7 Equipos)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-clock mr-1"></i> Jornada Especial (3 Horarios)</label>
-                        <select id="config-horario-especial" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
-                            <option value="primera">La Fecha 1 se juega en 3 Horarios (Especial)</option>
-                            <option value="ultima">La última Fecha se juega en 3 Horarios (Especial)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-user-lock mr-1"></i> Seguridad de Funciones</label>
-                        <div class="flex items-center gap-1.5 mt-1.5">
-                            <input type="checkbox" id="auth-print" checked class="w-4 h-4 accent-meta-gold" onchange="actualizarTogglesAcceso()">
-                            <label for="auth-print" class="text-[10px] text-slate-300 font-semibold font-display">Permitir Impresión y Flyers a Espectadores</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="panel-seguridad-admin" class="bg-slate-950/90 border border-meta-gold/20 p-4 rounded-xl mb-5">
-                    <h3 class="text-xs font-bold text-meta-gold uppercase tracking-widest mb-3 flex items-center gap-1.5 font-display">
-                        <i class="fa-solid fa-user-shield"></i> Consola de Seguridad de Super Administrador
-                    </h3>
-                    <p class="text-[9.5px] text-slate-400 mb-4">Administra las llaves de acceso para el personal de tu liga. Cambia los códigos de acceso aquí.</p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label class="text-[9px] text-slate-400 font-bold uppercase block mb-1">Clave de Administrador (Acceso Total)</label>
-                            <input type="text" id="sec-key-admin" value="FIFA2026" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 font-mono">
-                        </div>
-                        <div>
-                            <label class="text-[9px] text-slate-400 font-bold uppercase block mb-1">Clave de Operador (Solo Sorteo)</label>
-                            <input type="text" id="sec-key-operator" value="OP2026" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 font-mono">
-                        </div>
-                        <div>
-                            <label class="text-[9px] text-slate-400 font-bold uppercase block mb-1">Clave de Espectador (Solo Lectura)</label>
-                            <input type="text" id="sec-key-viewer" value="VER2026" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 font-mono">
-                        </div>
-                    </div>
-                    <div class="mt-4 flex justify-end">
-                        <button onclick="salvarClavesSeguridad()" class="bg-meta-gold hover:bg-yellow-500 text-slate-950 text-[10px] font-black px-4 py-2 rounded-lg transition-all active:scale-95 cursor-pointer font-display uppercase tracking-wider">
-                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> Actualizar Claves de Seguridad
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex overflow-x-auto no-scrollbar gap-1 bg-slate-950 p-1 rounded-xl border border-slate-900 mb-5">
-                    <button type="button" onclick="switchConfigSubTab('equipos')" id="subtab-equipos" class="flex-1 py-2 text-[10px] font-extrabold uppercase rounded-lg transition-all bg-meta-gold text-slate-950">
-                        <i class="fa-solid fa-shield-halved mr-1"></i> Roster (14)
-                    </button>
-                    <button type="button" onclick="switchConfigSubTab('canchas')" id="subtab-canchas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-map-location-dot mr-1"></i> Canchas
-                    </button>
-                    <button type="button" onclick="switchConfigSubTab('ternas')" id="subtab-ternas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-gavel mr-1"></i> Árbitros
-                    </button>
-                    <button type="button" onclick="switchConfigSubTab('horarios')" id="subtab-horarios" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-clock mr-1"></i> Horarios
-                    </button>
-                </div>
-
-                <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-900 min-h-[360px]">
-                    <div id="panel-config-equipos" class="config-subpanel block">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center justify-between">
-                            <span id="label-equipos-roster">Clubes Participantes (14)</span>
-                        </h3>
-                        <div id="equipos-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 no-scrollbar"></div>
-                    </div>
-
-                    <div id="panel-config-canchas" class="config-subpanel hidden">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Sedes Fijas</h3>
-                        <div id="canchas-grid" class="space-y-3 max-w-md mx-auto"></div>
-                    </div>
-
-                    <div id="panel-config-ternas" class="config-subpanel hidden">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Ternas Arbitrales</h3>
-                        <div id="ternas-grid" class="space-y-3 max-w-md mx-auto"></div>
-                    </div>
-
-                    <div id="panel-config-horarios" class="config-subpanel hidden">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Editor de Horarios Deportivos</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
-                            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                <h4 class="text-[10px] text-meta-emerald font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-sun"></i> Fecha Estándar</h4>
-                                <div class="space-y-3">
-                                    <div class="flex items-center justify-between gap-3">
-                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
-                                        <input type="time" id="time-std-1" value="14:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-emerald outline-none w-28">
-                                    </div>
-                                    <div class="flex items-center justify-between gap-3">
-                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Segundo Turno:</label>
-                                        <input type="time" id="time-std-2" value="16:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-emerald outline-none w-28">
-                                    </div>
+            <!-- Bento Layout de Configuración -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="glass-panel rounded-2xl p-4 sm:p-6 shadow-2xl border border-meta-gold/20">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-900 pb-4 mb-5 gap-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 bg-meta-gold/10 text-meta-gold rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-gears"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-sm sm:text-base font-bold text-white font-display">Configuración de Torneo</h2>
+                                    <p class="text-[9px] text-slate-400 font-bold">Personalización de Roster, Estructuras, Canchas y Árbitros.</p>
                                 </div>
                             </div>
+                            <button id="btn-restaurar-config" onclick="restaurarPresets()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold px-3 py-2 rounded-lg cursor-pointer active:scale-95">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Restablecer Valores
+                            </button>
+                        </div>
 
-                            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                <h4 class="text-[10px] text-meta-gold font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-moon"></i> Fecha Especial</h4>
-                                <div class="space-y-3">
-                                    <div class="flex items-center justify-between gap-3">
-                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
-                                        <input type="time" id="time-spc-1" value="13:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
-                                    </div>
-                                    <div class="flex items-center justify-between gap-3">
-                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Segundo Turno:</label>
-                                        <input type="time" id="time-spc-2" value="15:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
-                                    </div>
-                                    <div class="flex items-center justify-between gap-3">
-                                        <label class="text-[10px] text-slate-300 font-bold uppercase">Tercer Turno:</label>
-                                        <input type="time" id="time-spc-3" value="17:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
-                                    </div>
+                        <div id="alerta-espectador-config" class="bg-blue-950/20 border border-blue-500/30 text-blue-300 text-xs p-3.5 rounded-xl mb-5 hidden">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Estás en modo de visualización. Los campos se encuentran bloqueados para edición. Solo un Administrador u Operador puede realizar modificaciones.
+                        </div>
+
+                        <div class="bg-slate-950/80 border border-slate-900 p-3 sm:p-4 rounded-xl mb-5 grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-trophy mr-1"></i> Formato de Competencia</label>
+                                <select id="config-formato" onchange="cambioDeFormatoTorneo()" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
+                                    <option value="todos">Todos contra Todos (15 Fechas / 1 Zona Unificada)</option>
+                                    <option value="zonas">Fase de Grupos (7 Fechas / 2 Zonas de 7 Equipos)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-clock mr-1"></i> Jornada Especial</label>
+                                <select id="config-horario-especial" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer">
+                                    <option value="primera">La Fecha 1 se juega en 3 Horarios (Especial)</option>
+                                    <option value="ultima">La última Fecha se juega en 3 Horarios (Especial)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-meta-gold font-bold uppercase tracking-widest block mb-1"><i class="fa-solid fa-user-lock mr-1"></i> Seguridad de Funciones</label>
+                                <div class="flex items-center gap-1.5 mt-1.5">
+                                    <input type="checkbox" id="auth-print" checked class="w-4 h-4 accent-meta-gold" onchange="actualizarTogglesAcceso()">
+                                    <label for="auth-print" class="text-[10px] text-slate-300 font-semibold font-display">Permitir Impresión y Flyers a Espectadores</label>
                                 </div>
                             </div>
                         </div>
+
+                        <div id="panel-seguridad-admin" class="bg-slate-950/90 border border-meta-gold/20 p-4 rounded-xl mb-5">
+                            <h3 class="text-xs font-bold text-meta-gold uppercase tracking-widest mb-3 flex items-center gap-1.5 font-display">
+                                <i class="fa-solid fa-user-shield"></i> Consola de Seguridad de Super Administrador
+                            </h3>
+                            <p class="text-[9.5px] text-slate-400 mb-4">Administra las llaves de acceso para el personal de tu liga. Cambia los códigos de acceso aquí.</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="text-[9px] text-slate-400 font-bold uppercase block mb-1">Clave de Administrador (Acceso Total)</label>
+                                    <input type="text" id="sec-key-admin" value="FIFA2026" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 font-mono">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] text-slate-400 font-bold uppercase block mb-1">Clave de Operador (Solo Sorteo)</label>
+                                    <input type="text" id="sec-key-operator" value="OP2026" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 font-mono">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] text-slate-400 font-bold uppercase block mb-1">Clave de Espectador (Solo Lectura)</label>
+                                    <input type="text" id="sec-key-viewer" value="VER2026" class="w-full bg-slate-900 border border-slate-800 focus:border-meta-gold rounded-lg p-2 text-xs font-semibold text-slate-200 font-mono">
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-end">
+                                <button onclick="salvarClavesSeguridad()" class="bg-meta-gold hover:bg-yellow-500 text-slate-950 text-[10px] font-black px-4 py-2 rounded-lg transition-all active:scale-95 cursor-pointer font-display uppercase tracking-wider">
+                                    <i class="fa-solid fa-floppy-disk mr-1.5"></i> Actualizar Claves de Seguridad
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex overflow-x-auto no-scrollbar gap-1 bg-slate-950 p-1 rounded-xl border border-slate-900 mb-5">
+                            <button type="button" onclick="switchConfigSubTab('equipos')" id="subtab-equipos" class="flex-1 py-2 text-[10px] font-extrabold uppercase rounded-lg transition-all bg-meta-gold text-slate-950">
+                                <i class="fa-solid fa-shield-halved mr-1"></i> Roster (14)
+                            </button>
+                            <button type="button" onclick="switchConfigSubTab('canchas')" id="subtab-canchas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-map-location-dot mr-1"></i> Canchas
+                            </button>
+                            <button type="button" onclick="switchConfigSubTab('ternas')" id="subtab-ternas" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-gavel mr-1"></i> Árbitros
+                            </button>
+                            <button type="button" onclick="switchConfigSubTab('horarios')" id="subtab-horarios" class="flex-1 py-2 text-[10px] font-bold uppercase rounded-lg transition-all text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-clock mr-1"></i> Horarios
+                            </button>
+                        </div>
+
+                        <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-900 min-h-[360px]">
+                            <div id="panel-config-equipos" class="config-subpanel block">
+                                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center justify-between">
+                                    <span id="label-equipos-roster">Clubes Participantes (14)</span>
+                                </h3>
+                                <div id="equipos-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 no-scrollbar"></div>
+                            </div>
+
+                            <div id="panel-config-canchas" class="config-subpanel hidden">
+                                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Sedes Fijas</h3>
+                                <div id="canchas-grid" class="space-y-3 max-w-md mx-auto"></div>
+                            </div>
+
+                            <div id="panel-config-ternas" class="config-subpanel hidden">
+                                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Ternas Arbitrales</h3>
+                                <div id="ternas-grid" class="space-y-3 max-w-md mx-auto"></div>
+                            </div>
+
+                            <div id="panel-config-horarios" class="config-subpanel hidden">
+                                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Editor de Horarios Deportivos</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
+                                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                        <h4 class="text-[10px] text-meta-emerald font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-sun"></i> Fecha Estándar</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center justify-between gap-3">
+                                                <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
+                                                <input type="time" id="time-std-1" value="14:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-emerald outline-none w-28">
+                                            </div>
+                                            <div class="flex items-center justify-between gap-3">
+                                                <label class="text-[10px] text-slate-300 font-bold uppercase">Segundo Turno:</label>
+                                                <input type="time" id="time-std-2" value="16:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-emerald outline-none w-28">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                        <h4 class="text-[10px] text-meta-gold font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-1.5"><i class="fa-solid fa-moon"></i> Fecha Especial</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center justify-between gap-3">
+                                                <label class="text-[10px] text-slate-300 font-bold uppercase">Primer Turno:</label>
+                                                <input type="time" id="time-spc-1" value="13:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
+                                            </div>
+                                            <div class="flex items-center justify-between gap-3">
+                                                <label class="text-[10px] text-slate-300 font-bold uppercase">Segundo Turno:</label>
+                                                <input type="time" id="time-spc-2" value="15:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
+                                            </div>
+                                            <div class="flex items-center justify-between gap-3">
+                                                <label class="text-[10px] text-slate-300 font-bold uppercase">Tercer Turno:</label>
+                                                <input type="time" id="time-spc-3" value="17:00" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-black text-meta-gold outline-none w-28">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-5 border-t border-slate-900 flex justify-end">
+                            <button id="btn-validar-config" onclick="preCalcularEquidadYIrSorteo()" class="w-full sm:w-auto bg-gradient-to-r from-meta-gold to-yellow-500 hover:from-yellow-500 hover:to-meta-gold text-slate-950 font-black px-8 py-3 rounded-xl shadow-lg transition-all uppercase tracking-wider text-xs cursor-pointer active:scale-95 flex items-center justify-center gap-1.5 font-display">
+                                Validar y Pre-calcular Fixture <i class="fa-solid fa-circle-nodes text-[12px]"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-6 pt-5 border-t border-slate-900 flex justify-end">
-                    <button id="btn-validar-config" onclick="preCalcularEquidadYIrSorteo()" class="w-full sm:w-auto bg-gradient-to-r from-meta-gold to-yellow-500 hover:from-yellow-500 hover:to-meta-gold text-slate-950 font-black px-8 py-3 rounded-xl shadow-lg transition-all uppercase tracking-wider text-xs cursor-pointer active:scale-95 flex items-center justify-center gap-1.5 font-display">
-                        Validar y Pre-calcular Fixture <i class="fa-solid fa-circle-nodes text-[12px]"></i>
-                    </button>
+                <!-- Bento Tarjeta 3: Consola Real-Time de Logs -->
+                <div class="space-y-6">
+                    <div class="glass-panel rounded-2xl p-4 sm:p-5 shadow-2xl border border-meta-gold/20 flex flex-col justify-between h-full min-h-[400px]">
+                        <div>
+                            <span class="text-meta-gold font-bold text-[9px] uppercase tracking-widest block mb-1">Monitorización Algorítmica</span>
+                            <h3 class="text-xs font-extrabold text-white uppercase tracking-tight mb-3 font-display"><i class="fa-solid fa-terminal mr-2"></i>Consola de logs en vivo</h3>
+                            <p class="text-[9.5px] text-slate-400 mb-4">Registro técnico del procesamiento heurístico del torneo para garantizar la transparencia deportiva total.</p>
+                            
+                            <div id="admin-console-logs" class="bg-slate-950 border border-slate-900 p-3 rounded-xl h-64 overflow-y-auto font-mono text-[9.5px] text-meta-emerald leading-relaxed space-y-1 beauty-scrollbar">
+                                <div>[11:00:01] CONSOLE: Iniciando módulo de auditoría de liga.</div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-900 flex justify-between items-center text-[10px] text-slate-400">
+                            <span>Estado: <b class="text-meta-emerald font-black uppercase">En Espera</b></span>
+                            <button onclick="limpiarLogsConsola()" class="text-slate-500 hover:text-slate-300 font-bold uppercase"><i class="fa-solid fa-trash mr-1"></i>Borrar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="sec-sorteo" class="tab-content hidden no-print">
-            <div id="live-unified-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div id="live-unified-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start max-w-7xl mx-auto">
                 
                 <!-- Columna Izquierda: Bolillero (Fijo en Lateral de Pantalla) -->
                 <div class="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
@@ -432,15 +488,12 @@
                             <span id="badge-live-status" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
                             <span class="text-[10px] font-black uppercase tracking-wider text-slate-200 font-display">Sorteo en vivo</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="toggleFondoSonido()" id="btn-audio-himno" class="bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
-                                <i class="fa-solid fa-music"></i> Himno: OFF
-                            </button>
-                        </div>
+                        <button onclick="toggleFondoSonido()" id="btn-audio-himno" class="bg-slate-900 border border-slate-800 text-slate-300 text-[9px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                            <i class="fa-solid fa-music"></i> Himno: OFF
+                        </button>
                     </div>
 
                     <div id="broadcast-viewport" class="broadcast-container ratio-16-9 p-4 flex flex-col justify-between">
-                        <!-- Video deportivo en streaming realista -->
                         <video id="draw-video" class="absolute inset-0 w-full h-full object-cover z-0 opacity-30 transition-all duration-700 brightness-75" loop playsinline muted autoplay>
                             <source src="https://assets.mixkit.co/videos/43490/43490-720.mp4" type="video/mp4">
                         </video>
@@ -472,7 +525,7 @@
                         <div id="marquee-sports-ticker" class="absolute bottom-0 left-0 w-full bg-slate-950/90 border-t border-meta-gold/25 py-1 px-4 overflow-hidden z-20 flex items-center gap-2">
                             <span class="bg-meta-gold text-slate-950 text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0">EN VIVO</span>
                             <div class="text-[8px] text-slate-300 font-bold uppercase tracking-widest whitespace-nowrap overflow-hidden relative w-full">
-                                <div class="inline-block animate-marquee">
+                                <div class="inline-block animate-marquee font-mono">
                                     SORTEO OFICIAL DE LA COPA METAFUTBOL 2026 • TRANSMISIÓN DE ALTA FIDELIDAD EN TIEMPO REAL • RECOCIDO SIMULADO COMPLETADO CON ÉXITO • 
                                 </div>
                             </div>
@@ -528,14 +581,14 @@
                         </div>
                     </div>
 
-                    <!-- Grilla del Fixture Dashboard sin Scroll en PC (Optimizado a 3 Columnas para Legibilidad Superior) -->
+                    <!-- Grilla del Fixture Dashboard sin Scroll en PC (3 Columnas de Alta Definición) -->
                     <div id="fixture-grid-viewer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 pb-6"></div>
                 </div>
             </div>
         </section>
 
         <section id="sec-equidad" class="tab-content hidden no-print">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 max-w-7xl mx-auto">
                 <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl flex items-center gap-3">
                     <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg flex items-center justify-center text-lg">
                         <i class="fa-solid fa-shield-check"></i>
@@ -574,7 +627,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 max-w-7xl mx-auto">
                 <div class="lg:col-span-1 bg-slate-950/80 border border-slate-900 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
                     <div>
                         <span class="text-meta-gold font-bold text-[9px] uppercase tracking-widest block mb-1">Garantía de Equidad</span>
@@ -618,34 +671,51 @@
                         </div>
                     </h3>
 
-                    <div class="flex items-center gap-3 mb-3 text-[8.5px] font-bold uppercase text-slate-400">
+                    <div class="flex items-center gap-3 mb-3 text-[8.5px] font-bold uppercase text-slate-400 flex-wrap">
                         <span>Leyenda de Asignación:</span>
                         <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-emerald-500/20 rounded border border-emerald-500"></span> Equilibrio Perfecto</span>
                         <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-yellow-500/20 rounded border border-yellow-500"></span> Desviación Ligera (+/-1)</span>
                         <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-red-500/20 rounded border border-red-500"></span> Desequilibrio (+/-2)</span>
                     </div>
 
-                    <div class="overflow-x-auto rounded-xl border border-slate-900/80 no-scrollbar">
-                        <table class="w-full text-left text-[10px] border-collapse min-w-[800px]">
+                    <!-- Solución Definitiva de Visualización y Contención de la Tabla -->
+                    <div class="w-full overflow-x-auto rounded-xl border border-slate-900/80 beauty-scrollbar">
+                        <table class="w-full text-left text-[10px] border-collapse min-w-[850px] table-fixed">
+                            <colgroup>
+                                <col class="w-[140px]">
+                                <col class="w-[45px]">
+                                <col class="w-[50px]">
+                                <col class="w-[65px]">
+                                <col class="w-[65px]">
+                                <col class="w-[65px]">
+                                <col class="w-[40px]">
+                                <col class="w-[40px]">
+                                <col class="w-[40px]">
+                                <col class="w-[40px]">
+                                <col class="w-[40px]">
+                                <col class="w-[65px]">
+                                <col class="w-[65px]">
+                                <col class="w-[65px]">
+                            </colgroup>
                             <thead>
                                 <tr class="bg-slate-950 border-b border-slate-900 text-slate-400 uppercase tracking-wider text-[8px] font-bold">
-                                    <th class="p-2.5 text-white">Equipo</th>
-                                    <th class="p-2.5 text-center bg-blue-950/30 text-blue-300">PJ</th>
-                                    <th class="p-2.5 text-center bg-purple-950/30 text-purple-300">Libre</th>
-                                    <th id="aud-th-c1" class="p-2.5 text-center border-l border-slate-900 text-meta-gold">Cancha 1</th>
-                                    <th id="aud-th-c2" class="p-2.5 text-center text-meta-gold">Cancha 2</th>
-                                    <th id="aud-th-c3" class="p-2.5 text-center text-meta-gold">Cancha 3</th>
-                                    <th id="aud-th-h1" class="p-2.5 text-center border-l border-slate-900 text-meta-emerald">H1</th>
-                                    <th id="aud-th-h2" class="p-2.5 text-center text-meta-emerald">H2</th>
-                                    <th id="aud-th-h3" class="p-2.5 text-center text-meta-emerald">H3</th>
-                                    <th id="aud-th-h4" class="p-2.5 text-center text-meta-emerald">H4</th>
-                                    <th id="aud-th-h5" class="p-2.5 text-center text-meta-emerald">H5</th>
-                                    <th id="aud-th-t1" class="p-2.5 text-center border-l border-slate-900 text-yellow-500">Terna 1</th>
-                                    <th id="aud-th-t2" class="p-2.5 text-center text-yellow-500">Terna 2</th>
-                                    <th id="aud-th-t3" class="p-2.5 text-center text-yellow-500">Terna 3</th>
+                                    <th class="p-2 text-white font-display">Equipo</th>
+                                    <th class="p-2 text-center bg-blue-950/30 text-blue-300">PJ</th>
+                                    <th class="p-2 text-center bg-purple-950/30 text-purple-300">Libre</th>
+                                    <th id="aud-th-c1" class="p-2 text-center border-l border-slate-900 text-meta-gold font-mono">Cancha 1</th>
+                                    <th id="aud-th-c2" class="p-2 text-center text-meta-gold font-mono">Cancha 2</th>
+                                    <th id="aud-th-c3" class="p-2 text-center text-meta-gold font-mono">Cancha 3</th>
+                                    <th id="aud-th-h1" class="p-1 text-center border-l border-slate-900 text-meta-emerald font-mono">H1</th>
+                                    <th id="aud-th-h2" class="p-1 text-center text-meta-emerald font-mono">H2</th>
+                                    <th id="aud-th-h3" class="p-1 text-center text-meta-emerald font-mono">H3</th>
+                                    <th id="aud-th-h4" class="p-1 text-center text-meta-emerald font-mono">H4</th>
+                                    <th id="aud-th-h5" class="p-1 text-center text-meta-emerald font-mono">H5</th>
+                                    <th id="aud-th-t1" class="p-2 text-center border-l border-slate-900 text-yellow-500 font-mono">Terna 1</th>
+                                    <th id="aud-th-t2" class="p-2 text-center text-yellow-500 font-mono">Terna 2</th>
+                                    <th id="aud-th-t3" class="p-2 text-center text-yellow-500 font-mono">Terna 3</th>
                                 </tr>
                             </thead>
-                            <tbody id="equidad-tabla-cuerpo" class="divide-y divide-slate-900 bg-slate-900/10 text-slate-300 font-medium"></tbody>
+                            <tbody id="equidad-tabla-cuerpo" class="divide-y divide-slate-900 bg-slate-900/10 text-slate-300 font-medium font-mono text-[9.5px]"></tbody>
                         </table>
                     </div>
                 </div>
@@ -776,6 +846,23 @@
         let horarioEspecial2 = localStorage.getItem('metafutbol_he2') || "15:00";
         let horarioEspecial3 = localStorage.getItem('metafutbol_he3') || "17:00";
 
+        // --- SISTEMA DE LOGS DE CONSOLA ---
+        function logConsola(msg) {
+            const consoleBox = document.getElementById('admin-console-logs');
+            if (!consoleBox) return;
+            const now = new Date();
+            const timestamp = now.toTimeString().split(' ')[0];
+            const logLine = document.createElement('div');
+            logLine.innerHTML = `<span class="text-slate-500">[${timestamp}]</span> ${msg}`;
+            consoleBox.appendChild(logLine);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        function limpiarLogsConsola() {
+            const consoleBox = document.getElementById('admin-console-logs');
+            if (consoleBox) consoleBox.innerHTML = '<div>[CONSOLE: Logs limpiados]</div>';
+        }
+
         function inicializarSeguridadUI() {
             const panelSeg = document.getElementById('panel-seguridad-admin');
             const alertEspectador = document.getElementById('alerta-espectador-config');
@@ -894,6 +981,7 @@
             localStorage.setItem('metafutbol_raw_viewer', rawViewer);
 
             sintetizarEfectoSonido(880, 0.2, 'triangle');
+            logConsola("CLAVES: Llaves criptográficas actualizadas correctamente.");
             mostrarToast("✓ Claves de acceso actualizadas con éxito.");
         }
 
@@ -957,15 +1045,17 @@
             document.getElementById('pantalla-login').classList.add('hidden');
             inicializarAudioEngine();
             inicializarSeguridadUI();
+            logConsola(`ACCESO: Sesión iniciada para perfil: ${nombrePerfil}`);
             mostrarToast(`Acceso como ${nombrePerfil}.`);
         }
 
         function bloquearSistema() {
             document.getElementById('input-password').value = "";
             document.getElementById('pantalla-login').classList.remove('hidden');
+            logConsola("SISTEMA: Sesión bloqueada por operador.");
         }
 
-        // --- CONFIGURACIÓN DE ROSTER Y VARIABLES GLOBALES ---
+        // --- STREAMING_CHUNK: Presets de Equipos y Roster... ---
         const PRESETS_CLUBES_METAFUTBOL = [
             { nombre: "Boca Juniors", abreviatura: "BOC", color1: "#003893", color2: "#fabc05" },
             { nombre: "River Plate", abreviatura: "CAR", color1: "#e51d2e", color2: "#ffffff" },
@@ -1004,7 +1094,7 @@
             window.addEventListener('resize', autoDetectScreenFormat);
             autoDetectScreenFormat();
             
-            // Vincular de manera nativa los cambios de Flyers
+            // Event Listeners Dinámicos para el Diseñador de Flyers
             document.getElementById('story-club-select').addEventListener('change', actualizarStoryPrevisualizacion);
             document.getElementById('story-fecha-select').addEventListener('change', actualizarStoryPrevisualizacion);
             document.getElementById('story-rango-desde').addEventListener('change', actualizarStoryPrevisualizacion);
@@ -1033,6 +1123,7 @@
             }
         }
 
+        // --- STREAMING_CHUNK: Persistencia de Configuración... ---
         function recuperarCopiaLocal() {
             try {
                 const cClubes = localStorage.getItem('metafutbol_clubes_v4');
@@ -1074,6 +1165,7 @@
                     poblarSelectoresFiltro();
                     prepararEstructuraSorteo3D(false); 
                     actualizarFixtureView();
+                    renderizarTablaAuditoriaCompleta();
                 }
             } catch (e) {
                 console.error("Error cargando LocalStorage", e);
@@ -1126,6 +1218,7 @@
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+                logConsola("SISTEMA: Archivo de torneo JSON descargado correctamente.");
                 mostrarToast("Respaldo del torneo exportado con éxito.");
             } catch (err) {
                 mostrarToast("No se pudo exportar el archivo", "error");
@@ -1177,6 +1270,7 @@
                         renderizarTablaAuditoriaCompleta();
                         switchTab('sorteo');
                     }
+                    logConsola("SISTEMA: Copia de seguridad importada con éxito.");
                     mostrarToast("Torneo restaurado exitosamente.");
                 } catch (err) {
                     mostrarToast("Error en formato de respaldo JSON", "error");
@@ -1193,6 +1287,7 @@
             } else {
                 labelRoster.innerText = "Clubes Participantes (14 Equipos - Todos contra Todos)";
             }
+            logConsola(`CONFIG: Cambiando formato de torneo a: ${formatoTorneoSeleccionado.toUpperCase()}`);
         }
 
         function restaurarPresets() {
@@ -1218,17 +1313,19 @@
             cambioDeFormatoTorneo();
             renderConfigInputs();
             guardarCopiaLocal();
+            logConsola("SISTEMA: Configuración del roster restaurada a valores por defecto.");
             mostrarToast("Valores iniciales cargados.");
         }
 
+        // --- STREAMING_CHUNK: Renderizado de Inputs de Configuración... ---
         function renderConfigInputs() {
             const containerEquipos = document.getElementById('equipos-grid');
             containerEquipos.innerHTML = '';
             arrayClubesActuales.forEach((eq, idx) => {
                 containerEquipos.innerHTML += `
-                    <div class="flex flex-col gap-2 bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 shadow-md">
+                    <div class="flex flex-col gap-2 bg-slate-900/80 p-3 rounded-2xl border border-slate-800 shadow-md">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-black text-meta-gold font-display bg-slate-950 px-2 py-0.5 rounded-md border border-meta-gold/20">CLUB #${idx + 1}</span>
+                            <span class="text-[9px] font-black text-meta-gold font-display bg-slate-950 px-2 py-0.5 rounded-md border border-meta-gold/20">CLUB #${idx + 1}</span>
                             <div class="flex items-center gap-1.5">
                                 <span class="text-[8px] text-slate-400 font-extrabold uppercase">Colores:</span>
                                 <input type="color" id="inp-col1-${idx}" value="${eq.color1}" class="w-8 h-8 rounded-full cursor-pointer border-2 border-slate-950 p-0 block shadow-inner bg-transparent">
@@ -1238,11 +1335,11 @@
                         <div class="grid grid-cols-4 gap-2">
                             <div class="col-span-3">
                                 <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre Oficial</label>
-                                <input type="text" id="inp-eq-${idx}" value="${eq.nombre}" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-xl p-2.5 text-xs font-bold text-slate-100 outline-none">
+                                <input type="text" id="inp-eq-${idx}" value="${eq.nombre}" class="w-full bg-slate-950 border border-slate-800 focus:border-meta-gold rounded-xl p-2 text-xs font-bold text-slate-100 outline-none">
                             </div>
                             <div class="col-span-1">
                                 <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Abrev.</label>
-                                <input type="text" id="inp-abr-${idx}" value="${eq.abreviatura}" maxlength="3" class="w-full bg-slate-950 border border-slate-800 text-meta-gold text-center text-xs font-black rounded-xl p-2.5 uppercase font-display outline-none">
+                                <input type="text" id="inp-abr-${idx}" value="${eq.abreviatura}" maxlength="3" class="w-full bg-slate-950 border border-slate-800 text-meta-gold text-center text-xs font-black rounded-xl p-2 uppercase font-display outline-none">
                             </div>
                         </div>
                     </div>
@@ -1253,7 +1350,7 @@
             containerTernas.innerHTML = '';
             arrayTernasActuales.forEach((terna, idx) => {
                 containerTernas.innerHTML += `
-                    <div class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 shadow-md">
+                    <div class="flex items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800 shadow-md">
                         <div class="w-9 h-9 bg-yellow-500/10 text-yellow-500 rounded-xl flex items-center justify-center font-black text-xs font-display flex-shrink-0 border border-yellow-500/20">T${idx+1}</div>
                         <div class="flex-grow">
                             <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre / Designación</label>
@@ -1267,7 +1364,7 @@
             containerCanchas.innerHTML = '';
             arrayCanchasActuales.forEach((cancha, idx) => {
                 containerCanchas.innerHTML += `
-                    <div class="flex items-center gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 shadow-md">
+                    <div class="flex items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800 shadow-md">
                         <div class="w-9 h-9 bg-meta-emerald/10 text-meta-emerald rounded-xl flex items-center justify-center text-sm flex-shrink-0 border border-meta-emerald/20">🏟️</div>
                         <div class="flex-grow">
                             <label class="text-[8px] text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Nombre del Estadio</label>
@@ -1424,7 +1521,7 @@
             }
         }
 
-        // --- PRE-CÁLCULO Y OPTIMIZACIÓN DE EQUIDAD ---
+        // --- STREAMING_CHUNK: Algoritmo de Recocido Simulado... ---
         function preCalcularEquidadYIrSorteo() {
             formatoTorneoSeleccionado = document.getElementById('config-formato').value;
             for(let i=0; i<14; i++) {
@@ -1676,6 +1773,7 @@
             actualizarFixtureView();
         }
 
+        // --- STREAMING_CHUNK: Extracción física 3D y apertura de bolilla... ---
         function extraerBolilla3D() {
             if (contadorSorteados >= 14) return;
 
@@ -1809,7 +1907,7 @@
                     particleCount: 110,
                     spread: 75,
                     origin: { y: 0.6 },
-                    colors: ['#d4af37', '#ffffff', '#fae69e', club.color1, club.color2]
+                    colors: [club.color1, club.color2, '#d4af37', '#ffffff']
                 });
             }, "+=0.15");
 
@@ -1885,11 +1983,13 @@
                 <p class="text-[9px] text-slate-300 mt-1 max-w-sm">La asignación de posiciones está consolidada y el fixture de equidad se encuentra listo.</p>
             `;
 
+            logConsola("SORTEO: Sorteo Oficial Concluido con distribución óptima.");
             renderizarTablaAuditoriaCompleta();
             guardarCopiaLocal();
             mostrarToast("Asignación de posiciones consolidada al 100%.");
         }
 
+        // --- STREAMING_CHUNK: Heurística Combinatoria y Simulated Annealing... ---
         function ejecutarMotorTermicoAnnealing() {
             const loadingScreen = document.getElementById('pantalla-cargando');
             loadingScreen.classList.remove('hidden');
@@ -1948,6 +2048,7 @@
                         switchTab('sorteo');
                         prepararEstructuraSorteo3D(true); 
                         guardarCopiaLocal();
+                        logConsola(`MOTOR: Entropía final optimizada a: ${costoActual.toFixed(2)} tras ${maxIter} iteraciones.`);
                         mostrarToast("¡Fixture óptimo de alta equidad construido!");
                     }, 500);
                 }
@@ -2127,6 +2228,7 @@
             return estado;
         }
 
+        // --- STREAMING_CHUNK: Evaluación de Entropía y Balance Estricto... ---
         function evaluarFuncionEntropia(estado) {
             let penalizacion = 0;
             
@@ -2353,6 +2455,7 @@
             actualizarTogglesAcceso();
         }
 
+        // --- STREAMING_CHUNK: Actualización del Fixture View... ---
         function actualizarFixtureView() {
             const filterFechaEl = document.getElementById('sel-fecha-filter');
             const filterClubEl = document.getElementById('sel-club-filter');
@@ -2537,7 +2640,7 @@
             mostrarToast("Calendario oficial de MetaFutbol descargado.");
         }
 
-        // --- DISEÑADOR DE FLYERS INTERACTIVO ---
+        // --- STREAMING_CHUNK: Diseño y Generación de Flyers... ---
         function abrirCreadorFlyers() {
             document.getElementById('modal-flyer-designer').classList.remove('hidden');
             adaptarControlesFlyer();
@@ -2732,6 +2835,7 @@
             mostrarToast("Flyer PNG de MetaFutbol descargado.");
         }
 
+        // --- STREAMING_CHUNK: Auditoría de Equidad y Rendimiento... ---
         function auditarCrucesManual() {
             if (!fixtureConsolidadoFinal || fixtureConsolidadoFinal.length === 0) {
                 mostrarToast("Primero debe construir el fixture.", "error");
@@ -2756,12 +2860,14 @@
             const statusLabel = document.getElementById('lbl-cruce-verifier-msg');
             if (statusLabel) {
                 if (duplicates === 0) {
-                    statusLabel.innerText = `ÉXITO: ${totalChecked} cruces únicos (0 duplicaciones).`;
+                    statusLabel.innerText = `ÉXITO: ${totalChecked} cruces únicos (0 colisiones).`;
                     statusLabel.className = "text-[10px] font-black text-meta-emerald font-mono";
+                    logConsola("AUDITORÍA: Verificación de colisiones completada con 0 colisiones.");
                     mostrarToast("✓ Auditoría completa: Todos los cruces son únicos.");
                 } else {
-                    statusLabel.innerText = `ERROR: ${duplicates} duplicados detectados.`;
+                    statusLabel.innerText = `ERROR: ${duplicates} colisiones detectadas.`;
                     statusLabel.className = "text-[10px] font-black text-red-400 font-mono";
+                    logConsola(`ERROR: Se han detectado ${duplicates} colisiones de fixture.`);
                     mostrarToast("Se han detectado colisiones en el fixture.", "error");
                 }
             }
@@ -2808,7 +2914,7 @@
             let idealCancha = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
             let idealTerna = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
 
-            // Semáforo dinámico de auditoría
+            // Semáforo dinámico de mapa de calor con Tooltip Contextual integrado
             const getHeatmapClass = (val, ideal) => {
                 const diff = Math.abs(val - ideal);
                 if (diff < 0.9) return "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
@@ -2820,20 +2926,53 @@
                 let r = tracker[name];
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-900/40 transition-colors">
-                        <td class="p-2.5 font-bold text-slate-100 text-xs truncate max-w-[120px]">${name}</td>
-                        <td class="p-2.5 text-center bg-blue-950/20 text-blue-400 font-extrabold">${r.pj}</td>
-                        <td class="p-2.5 text-center bg-purple-950/20 text-purple-400 font-extrabold">${r.libres}</td>
-                        <td class="p-2.5 text-center border-l border-slate-900 font-bold"><span class="px-2 py-1 rounded ${getHeatmapClass(r.M1, idealCancha)}">${r.M1}</span></td>
-                        <td class="p-2.5 text-center font-bold"><span class="px-2 py-1 rounded ${getHeatmapClass(r.M2, idealCancha)}">${r.M2}</span></td>
-                        <td class="p-2.5 text-center font-bold"><span class="px-2 py-1 rounded ${getHeatmapClass(r.Benitez, idealCancha)}">${r.Benitez}</span></td>
-                        <td class="p-2.5 text-center border-l border-slate-900 text-slate-500 font-bold">${r.h13}</td>
-                        <td class="p-2.5 text-center font-bold text-slate-200 bg-emerald-950/10">${r.h14}</td>
-                        <td class="p-2.5 text-center text-slate-500 font-bold">${r.h15}</td>
-                        <td class="p-2.5 text-center font-bold text-slate-200 bg-emerald-950/10">${r.h16}</td>
-                        <td class="p-2.5 text-center text-slate-500 font-bold">${r.h17}</td>
-                        <td class="p-2.5 text-center border-l border-slate-900 font-bold"><span class="px-2 py-1 rounded ${getHeatmapClass(r.t1, idealTerna)}">${r.t1}</span></td>
-                        <td class="p-2.5 text-center font-bold"><span class="px-2 py-1 rounded ${getHeatmapClass(r.t2, idealTerna)}">${r.t2}</span></td>
-                        <td class="p-2.5 text-center font-bold"><span class="px-2 py-1 rounded ${getHeatmapClass(r.t3, idealTerna)}">${r.t3}</span></td>
+                        <td class="p-2 font-bold text-slate-100 text-xs truncate max-w-[140px] font-display" title="${name}">${name}</td>
+                        <td class="p-2 text-center bg-blue-950/20 text-blue-400 font-extrabold font-mono">${r.pj}</td>
+                        <td class="p-2 text-center bg-purple-950/20 text-purple-400 font-extrabold font-mono">${r.libres}</td>
+                        
+                        <td class="p-2 text-center border-l border-slate-900 font-bold group relative cursor-pointer">
+                            <span class="px-1 py-0.5 rounded block ${getHeatmapClass(r.M1, idealCancha)} font-mono">${r.M1}</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-32 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[8px] p-1.5 rounded shadow-xl z-30 font-display">
+                                Sede 1 asignada ${r.M1} veces.
+                            </div>
+                        </td>
+                        <td class="p-2 text-center font-bold group relative cursor-pointer">
+                            <span class="px-1 py-0.5 rounded block ${getHeatmapClass(r.M2, idealCancha)} font-mono">${r.M2}</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-32 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[8px] p-1.5 rounded shadow-xl z-30 font-display">
+                                Sede 2 asignada ${r.M2} veces.
+                            </div>
+                        </td>
+                        <td class="p-2 text-center font-bold group relative cursor-pointer">
+                            <span class="px-1 py-0.5 rounded block ${getHeatmapClass(r.Benitez, idealCancha)} font-mono">${r.Benitez}</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-32 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[8px] p-1.5 rounded shadow-xl z-30 font-display">
+                                Sede 3 asignada ${r.Benitez} veces.
+                            </div>
+                        </td>
+
+                        <td class="p-1 text-center border-l border-slate-900 text-slate-500 font-bold font-mono">${r.h13}</td>
+                        <td class="p-1 text-center font-bold text-slate-200 bg-emerald-950/15 font-mono">${r.h14}</td>
+                        <td class="p-1 text-center text-slate-500 font-bold font-mono">${r.h15}</td>
+                        <td class="p-1 text-center font-bold text-slate-200 bg-emerald-950/15 font-mono">${r.h16}</td>
+                        <td class="p-1 text-center text-slate-500 font-bold font-mono">${r.h17}</td>
+                        
+                        <td class="p-2 text-center border-l border-slate-900 font-bold group relative cursor-pointer">
+                            <span class="px-1 py-0.5 rounded block ${getHeatmapClass(r.t1, idealTerna)} font-mono">${r.t1}</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-32 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[8px] p-1.5 rounded shadow-xl z-30 font-display">
+                                Terna 1 asignada ${r.t1} veces.
+                            </div>
+                        </td>
+                        <td class="p-2 text-center font-bold group relative cursor-pointer">
+                            <span class="px-1 py-0.5 rounded block ${getHeatmapClass(r.t2, idealTerna)} font-mono">${r.t2}</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-32 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[8px] p-1.5 rounded shadow-xl z-30 font-display">
+                                Terna 2 asignada ${r.t2} veces.
+                            </div>
+                        </td>
+                        <td class="p-2 text-center font-bold group relative cursor-pointer">
+                            <span class="px-1 py-0.5 rounded block ${getHeatmapClass(r.t3, idealTerna)} font-mono">${r.t3}</span>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-32 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[8px] p-1.5 rounded shadow-xl z-30 font-display">
+                                Terna 3 asignada ${r.t3} veces.
+                            </div>
+                        </td>
                     </tr>
                 `;
             });
