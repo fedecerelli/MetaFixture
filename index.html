@@ -351,6 +351,32 @@
                             </div>
                         </div>
 
+                        <!-- Panel Asignación Manual de Zonas -->
+                        <div id="panel-zonas-assignment" class="hidden bg-slate-950/80 border border-blue-500/20 p-3 sm:p-4 rounded-xl mb-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-[9px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-layer-group"></i> Distribución de Zonas</h4>
+                                <div class="flex bg-slate-900 rounded-lg p-0.5 gap-0.5">
+                                    <button id="btn-modo-auto" onclick="toggleModoAsignacion('auto')" class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg bg-meta-gold text-slate-950 transition-all cursor-pointer px-3">Auto</button>
+                                    <button id="btn-modo-manual" onclick="toggleModoAsignacion('manual')" class="flex-1 py-1.5 text-[9px] font-bold uppercase rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer px-3">Manual</button>
+                                </div>
+                            </div>
+                            <div id="zonas-assignment-grid" class="max-h-64 overflow-y-auto no-scrollbar"></div>
+                        </div>
+
+                        <!-- Panel Fechas Interzonales -->
+                        <div id="panel-interzonal-config" class="hidden bg-slate-950/80 border border-amber-500/20 p-3 sm:p-4 rounded-xl mb-3">
+                            <h4 class="text-[9px] font-black text-amber-400 uppercase tracking-widest flex items-center gap-1.5 mb-2"><i class="fa-solid fa-arrows-left-right"></i> Fechas Interzonales</h4>
+                            <div class="flex items-center gap-3">
+                                <p class="text-[9px] text-slate-400 flex-1">Cantidad de fechas donde Zona A vs Zona B (sin nadie libre, sin repetir cruces):</p>
+                                <div class="flex items-center gap-2 bg-slate-900 rounded-xl p-1.5 border border-slate-800">
+                                    <button onclick="ajustarFechasInterzonales(-1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black text-sm cursor-pointer transition-all flex items-center justify-center">−</button>
+                                    <span id="lbl-fechas-interzonales" class="text-sm font-black text-amber-400 w-6 text-center font-mono">0</span>
+                                    <button onclick="ajustarFechasInterzonales(1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black text-sm cursor-pointer transition-all flex items-center justify-center">+</button>
+                                </div>
+                            </div>
+                            <p id="lbl-interzonal-info" class="text-[8.5px] text-slate-500 mt-1.5"></p>
+                        </div>
+
                         <div id="panel-seguridad-admin" class="bg-slate-950/90 border border-meta-gold/20 p-4 rounded-xl mb-5">
                             <h3 class="text-xs font-bold text-meta-gold uppercase tracking-widest mb-3 flex items-center gap-1.5 font-display">
                                 <i class="fa-solid fa-user-shield"></i> Consola de Seguridad de Super Administrador
@@ -1282,12 +1308,105 @@
         function cambioDeFormatoTorneo() {
             formatoTorneoSeleccionado = document.getElementById('config-formato').value;
             const labelRoster = document.getElementById('label-equipos-roster');
+            const panelZonas = document.getElementById('panel-zonas-assignment');
+            const panelInterzonal = document.getElementById('panel-interzonal-config');
             if (formatoTorneoSeleccionado === "zonas") {
                 labelRoster.innerText = "Clubes Participantes (14 Equipos - 7 por Zona)";
+                if (panelZonas) panelZonas.classList.remove('hidden');
+                if (panelInterzonal) panelInterzonal.classList.remove('hidden');
+                renderZonasAssignment();
             } else {
                 labelRoster.innerText = "Clubes Participantes (14 Equipos - Todos contra Todos)";
+                if (panelZonas) panelZonas.classList.add('hidden');
+                if (panelInterzonal) panelInterzonal.classList.add('hidden');
             }
             logConsola(`CONFIG: Cambiando formato de torneo a: ${formatoTorneoSeleccionado.toUpperCase()}`);
+        }
+
+        // --- ASIGNACIÓN MANUAL DE ZONAS ---
+        // zonaManualAsignacion[i] = 'A' | 'B' | null (null = aleatorio)
+        let zonaManualAsignacion = Array(14).fill(null);
+        let modoAsignacionZona = 'auto'; // 'auto' | 'manual'
+
+        function renderZonasAssignment() {
+            const container = document.getElementById('zonas-assignment-grid');
+            if (!container) return;
+            
+            // Leer nombres actuales de los equipos
+            let nombres = [];
+            for (let i = 0; i < 14; i++) {
+                const inp = document.getElementById(`inp-eq-${i}`);
+                nombres.push(inp ? inp.value.trim() || `Club ${i+1}` : `Club ${i+1}`);
+            }
+
+            if (modoAsignacionZona === 'auto') {
+                container.innerHTML = `<p class="text-[9px] text-slate-400 text-center py-3">El sistema distribuirá los equipos aleatoriamente entre las dos zonas durante el sorteo.</p>`;
+                return;
+            }
+
+            // Contar cuántos hay en cada zona
+            let countA = zonaManualAsignacion.filter(z => z === 'A').length;
+            let countB = zonaManualAsignacion.filter(z => z === 'B').length;
+
+            container.innerHTML = `
+                <div class="flex justify-between items-center mb-2 text-[9px] font-bold uppercase">
+                    <span class="text-blue-400"><i class="fa-solid fa-shield mr-1"></i> Zona A: <span id="count-zona-a">${countA}</span>/7</span>
+                    <span class="text-[8px] text-slate-500">Hacé clic en un equipo para asignarlo</span>
+                    <span class="text-amber-400"><i class="fa-solid fa-shield mr-1"></i> Zona B: <span id="count-zona-b">${countB}</span>/7</span>
+                </div>
+                <div class="grid grid-cols-1 gap-1.5" id="zonas-clubs-list"></div>
+            `;
+
+            const list = document.getElementById('zonas-clubs-list');
+            for (let i = 0; i < 14; i++) {
+                const zona = zonaManualAsignacion[i];
+                const isA = zona === 'A';
+                const isB = zona === 'B';
+                const clubName = nombres[i];
+
+                list.innerHTML += `
+                    <div class="flex items-center gap-2 bg-slate-900/60 rounded-xl p-2 border ${isA ? 'border-blue-500/50' : isB ? 'border-amber-500/50' : 'border-slate-800'}">
+                        <span class="text-[9px] font-black text-slate-400 w-5 text-right">${i+1}.</span>
+                        <span class="flex-1 text-[10px] font-bold text-slate-200 truncate">${clubName}</span>
+                        <div class="flex gap-1">
+                            <button onclick="asignarZona(${i}, 'A')" class="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase transition-all cursor-pointer ${isA ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/40' : 'bg-slate-800 text-slate-400 hover:bg-blue-900/50 hover:text-blue-300'}">A</button>
+                            <button onclick="asignarZona(${i}, 'B')" class="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase transition-all cursor-pointer ${isB ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/40' : 'bg-slate-800 text-slate-400 hover:bg-amber-900/50 hover:text-amber-300'}">B</button>
+                            ${zona ? `<button onclick="asignarZona(${i}, null)" class="px-2 py-1 rounded-lg text-[9px] text-slate-500 hover:text-red-400 bg-slate-800 cursor-pointer transition-all">✕</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function asignarZona(idx, zona) {
+            const countA = zonaManualAsignacion.filter(z => z === 'A').length;
+            const countB = zonaManualAsignacion.filter(z => z === 'B').length;
+
+            if (zona === 'A' && countA >= 7 && zonaManualAsignacion[idx] !== 'A') {
+                mostrarToast("La Zona A ya tiene 7 equipos.", "error");
+                return;
+            }
+            if (zona === 'B' && countB >= 7 && zonaManualAsignacion[idx] !== 'B') {
+                mostrarToast("La Zona B ya tiene 7 equipos.", "error");
+                return;
+            }
+            zonaManualAsignacion[idx] = zona;
+            renderZonasAssignment();
+        }
+
+        function toggleModoAsignacion(modo) {
+            modoAsignacionZona = modo;
+            zonaManualAsignacion = Array(14).fill(null);
+            const btnAuto = document.getElementById('btn-modo-auto');
+            const btnManual = document.getElementById('btn-modo-manual');
+            if (modo === 'auto') {
+                btnAuto.className = "flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg bg-meta-gold text-slate-950 transition-all cursor-pointer";
+                btnManual.className = "flex-1 py-1.5 text-[9px] font-bold uppercase rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer";
+            } else {
+                btnManual.className = "flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg bg-meta-gold text-slate-950 transition-all cursor-pointer";
+                btnAuto.className = "flex-1 py-1.5 text-[9px] font-bold uppercase rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer";
+            }
+            renderZonasAssignment();
         }
 
         function restaurarPresets() {
@@ -1310,6 +1429,9 @@
             document.getElementById('config-horario-especial').value = "primera";
             document.getElementById('config-formato').value = "todos";
             formatoTorneoSeleccionado = "todos";
+            zonaManualAsignacion = Array(14).fill(null);
+            modoAsignacionZona = 'auto';
+            fechasInterzonales = 0;
             cambioDeFormatoTorneo();
             renderConfigInputs();
             guardarCopiaLocal();
@@ -1373,6 +1495,9 @@
                     </div>
                 `;
             });
+            if (formatoTorneoSeleccionado === 'zonas') {
+                renderZonasAssignment();
+            }
         }
 
         function switchConfigSubTab(subId) {
@@ -1521,6 +1646,21 @@
             }
         }
 
+        let fechasInterzonales = 0;
+        const MAX_FECHAS_INTERZONALES = 7; // máximo posible con 7 equipos por zona sin repetir
+
+        function ajustarFechasInterzonales(delta) {
+            fechasInterzonales = Math.max(0, Math.min(MAX_FECHAS_INTERZONALES, fechasInterzonales + delta));
+            document.getElementById('lbl-fechas-interzonales').innerText = fechasInterzonales;
+            const totalFechas = 7 + fechasInterzonales;
+            const info = document.getElementById('lbl-interzonal-info');
+            if (fechasInterzonales === 0) {
+                info.innerText = 'Solo se juegan las 7 fechas de zona. Sin cruces interzonales.';
+            } else {
+                info.innerText = `Total: ${totalFechas} fechas (7 intrazonal + ${fechasInterzonales} interzonal). Cada fecha interzonal: 7 partidos, nadie libre.`;
+            }
+        }
+
         // --- STREAMING_CHUNK: Algoritmo de Recocido Simulado... ---
         function preCalcularEquidadYIrSorteo() {
             formatoTorneoSeleccionado = document.getElementById('config-formato').value;
@@ -1544,6 +1684,26 @@
             horarioEspecial1 = document.getElementById('time-spc-1').value;
             horarioEspecial2 = document.getElementById('time-spc-2').value;
             horarioEspecial3 = document.getElementById('time-spc-3').value;
+
+            // Validar asignación manual de zonas
+            if (formatoTorneoSeleccionado === 'zonas' && modoAsignacionZona === 'manual') {
+                const countA = zonaManualAsignacion.filter(z => z === 'A').length;
+                const countB = zonaManualAsignacion.filter(z => z === 'B').length;
+                const unassigned = zonaManualAsignacion.filter(z => z === null).length;
+                if (unassigned > 0 && (countA > 0 || countB > 0)) {
+                    // Completar automáticamente los que faltan
+                    let restantesA = 7 - countA;
+                    let restantesB = 7 - countB;
+                    for (let i = 0; i < 14; i++) {
+                        if (zonaManualAsignacion[i] === null) {
+                            if (restantesA > 0) { zonaManualAsignacion[i] = 'A'; restantesA--; }
+                            else { zonaManualAsignacion[i] = 'B'; restantesB--; }
+                        }
+                    }
+                } else if (countA !== 7 || countB !== 7) {
+                    // Si no asignaron nada, tratar como auto
+                }
+            }
 
             ejecutarMotorTermicoAnnealing();
         }
@@ -1716,6 +1876,27 @@
             document.getElementById('progreso-sorteo-texto').innerHTML = `Progreso: ${contadorSorteados} / 14 Sorteados`;
 
             const btnSacar = document.getElementById('btn-sacar-bola');
+            const btnInstante = document.getElementById('btn-completar-instante');
+            
+            if (formatoTorneoSeleccionado === 'zonas' && modoAsignacionZona === 'manual') {
+                // En modo manual con zonas completas, solo está disponible "al instante"
+                const countA = zonaManualAsignacion.filter(z => z === 'A').length;
+                const countB = zonaManualAsignacion.filter(z => z === 'B').length;
+                if (countA === 7 && countB === 7 && contadorSorteados < 14) {
+                    btnSacar.setAttribute('disabled', 'true');
+                    btnSacar.style.opacity = '0.4';
+                    if (btnInstante) btnInstante.innerHTML = '✓ Aplicar Asignación Manual';
+                    if (contadorSorteados >= 14) {
+                        document.getElementById('fixture-actions-panel').classList.remove('opacity-40', 'pointer-events-none');
+                    } else {
+                        document.getElementById('fixture-actions-panel').classList.add('opacity-40', 'pointer-events-none');
+                    }
+                    inicializarThreeSorteo();
+                    actualizarFixtureView();
+                    return;
+                }
+            }
+            
             if (contadorSorteados >= 14) {
                 btnSacar.setAttribute('disabled', 'true');
                 btnSacar.style.opacity = '0.5';
@@ -1931,6 +2112,28 @@
         }
 
         function simulacionInstantanea() {
+            // Si hay asignación manual de zonas, usarla directamente
+            if (formatoTorneoSeleccionado === 'zonas' && modoAsignacionZona === 'manual') {
+                const countA = zonaManualAsignacion.filter(z => z === 'A').length;
+                const countB = zonaManualAsignacion.filter(z => z === 'B').length;
+                if (countA === 7 && countB === 7) {
+                    // Colocar equipos en slots según asignación manual
+                    let slotA = 0, slotB = 7;
+                    for (let i = 0; i < 14; i++) {
+                        if (zonaManualAsignacion[i] === 'A') {
+                            slotsAsignadosSorteados[slotA++] = arrayClubesActuales[i];
+                        } else {
+                            slotsAsignadosSorteados[slotB++] = arrayClubesActuales[i];
+                        }
+                    }
+                    contadorSorteados = 14;
+                    actualizarSlotsMapa();
+                    actualizarFixtureView();
+                    finalizarSorteoOficial();
+                    return;
+                }
+            }
+
             if (!bolsaDeSorteo || bolsaDeSorteo.length === 0) {
                 const nombresYaSorteados = slotsAsignadosSorteados.filter(x => x !== null).map(x => x.nombre);
                 let clubesRestantes = arrayClubesActuales.filter(c => !nombresYaSorteados.includes(c.nombre));
@@ -1970,6 +2173,25 @@
             finalizarSorteoOficial();
         }
 
+        function actualizarSlotsMapa() {
+            for (let i = 0; i < 14; i++) {
+                const clubObj = slotsAsignadosSorteados[i];
+                const slotBox = document.getElementById(`caja-slot-sorteado-${i}`);
+                const textSlot = document.getElementById(`text-slot-sorteado-${i}`);
+                if (slotBox && clubObj) {
+                    slotBox.className = "bg-slate-900 border rounded-lg p-1.5 text-center shadow";
+                    slotBox.style.borderColor = clubObj.color1;
+                }
+                if (textSlot && clubObj) {
+                    textSlot.className = "text-[8.5px] font-black uppercase truncate mt-0.5";
+                    textSlot.style.color = clubObj.color1;
+                    textSlot.innerHTML = clubObj.abreviatura;
+                }
+            }
+            document.getElementById('lbl-bombo-restante').innerHTML = `Asignación Completa`;
+            document.getElementById('progreso-sorteo-texto').innerHTML = `Progreso: 14 / 14 Sorteados`;
+        }
+
         function finalizarSorteoOficial() {
             document.getElementById('btn-sacar-bola').setAttribute('disabled', 'true');
             document.getElementById('btn-sacar-bola').style.opacity = '0.5';
@@ -2002,7 +2224,7 @@
             const maxIter = 30000;
 
             let rounds = (formatoTorneoSeleccionado === "zonas") 
-                ? generarMatrizGrupoZonas7() 
+                ? generarMatrizZonasCompleta() 
                 : generarMatrizBergerSinDescansosConsecutivos();
 
             let estado = inicializarAsignacionesBase(rounds);
@@ -2132,6 +2354,41 @@
             return roundsPermutados;
         }
 
+        // --- Genera fixture completo: 7 fechas intrazonal + N fechas interzonales ---
+        function generarMatrizZonasCompleta() {
+            // Fase intrazonal (round-robin circular para 7 equipos en cada zona)
+            let intraRounds = generarMatrizGrupoZonas7();
+
+            if (fechasInterzonales === 0) return intraRounds;
+
+            // Fase interzonal: cruces A[i] vs B[j], sin libre, sin repetir
+            // Con 7 equipos en cada zona, hay 49 cruces posibles (7x7).
+            // Para N fechas, necesitamos N fechas de 7 partidos cada una donde 
+            // cada equipo juega exactamente 1 partido por fecha (ronda latina / cuadrado latino).
+            // Usamos rotación circular: fecha k -> A[i] vs B[(i+k) % 7]
+            let interRounds = generarFechasInterzonales(fechasInterzonales);
+
+            return [...intraRounds, ...interRounds];
+        }
+
+        function generarFechasInterzonales(n) {
+            // Zona A: índices 0-6, Zona B: índices 7-13
+            // Fecha k: A[i] vs B[(i+k)%7] para i=0..6
+            // Esto garantiza: 7 partidos por fecha, nadie libre, y ningún cruce A[i]-B[j] se repite
+            // (porque cada par único aparece en exactamente una "clave k" de 0..6)
+            let rounds = [];
+            for (let k = 0; k < n; k++) {
+                let matches = [];
+                for (let i = 0; i < 7; i++) {
+                    let tA = i;          // índices 0-6 (Zona A)
+                    let tB = ((i + k) % 7) + 7; // índices 7-13 (Zona B)
+                    matches.push([tA, tB]);
+                }
+                rounds.push(matches);
+            }
+            return rounds;
+        }
+
         function generarMatrizGrupoZonas7() {
             let rounds = [];
             for (let r = 0; r < 7; r++) {
@@ -2159,11 +2416,21 @@
                 let restingClubes = [];
 
                 if (formatoTorneoSeleccionado === "zonas") {
+                    // Determinar si es fecha interzonal (cruces entre A y B)
+                    const esInterzonal = juegos.some(p => (p[0] < 7 && p[1] >= 7) || (p[0] >= 7 && p[1] < 7));
+                    
                     juegos.forEach(p => {
                         partidosReales.push({ local: p[0], visitante: p[1] });
                     });
-                    restingClubes.push(rIdx); 
-                    restingClubes.push(rIdx + 7); 
+                    
+                    if (esInterzonal) {
+                        // Fecha interzonal: 7 partidos, nadie libre
+                        restingClubes = [];
+                    } else {
+                        // Fecha intrazonal: 6 partidos, 1 libre por zona = rIdx (mod 7)
+                        restingClubes.push(rIdx % 7); 
+                        restingClubes.push((rIdx % 7) + 7); 
+                    }
                 } else {
                     juegos.forEach(p => {
                         let t1 = p[0];
@@ -2179,11 +2446,29 @@
 
                 let slots = [];
                 const configEspecial = document.getElementById('config-horario-especial').value;
-                let maxFechas = (formatoTorneoSeleccionado === "zonas") ? 7 : 15;
+                const totalFechas = (formatoTorneoSeleccionado === "zonas") ? (7 + fechasInterzonales) : 15;
                 let esFechaEspecial = (configEspecial === "primera" && numeroFecha === 1) || 
-                                      (configEspecial === "ultima" && numeroFecha === maxFechas);
+                                      (configEspecial === "ultima" && numeroFecha === totalFechas);
 
-                if (esFechaEspecial) {
+                const esInterzonalRound = (formatoTorneoSeleccionado === "zonas") && 
+                    juegos.some(p => (p[0] < 7 && p[1] >= 7) || (p[0] >= 7 && p[1] < 7));
+
+                if (esInterzonalRound) {
+                    // Fecha interzonal: 7 partidos, 3 canchas con 2+2+3 distribución equitativa
+                    // Cancha 1: 2 partidos, Cancha 2: 2 partidos, Cancha 3: 3 partidos
+                    let ternaM1 = arrayTernasActuales[(rIdx - 1 + 3) % 3];
+                    let ternaM2 = arrayTernasActuales[rIdx % 3];
+                    let ternaBen = arrayTernasActuales[(rIdx + 1) % 3];
+                    slots = [
+                        { cancha: arrayCanchasActuales[0], hora: horarioNormal1, terna: ternaM1 },
+                        { cancha: arrayCanchasActuales[0], hora: horarioNormal2, terna: ternaM1 },
+                        { cancha: arrayCanchasActuales[1], hora: horarioNormal1, terna: ternaM2 },
+                        { cancha: arrayCanchasActuales[1], hora: horarioNormal2, terna: ternaM2 },
+                        { cancha: arrayCanchasActuales[2], hora: horarioNormal1, terna: ternaBen },
+                        { cancha: arrayCanchasActuales[2], hora: horarioNormal2, terna: ternaBen },
+                        { cancha: arrayCanchasActuales[2], hora: horarioEspecial2, terna: ternaBen },
+                    ];
+                } else if (esFechaEspecial) {
                     slots = [
                         { cancha: arrayCanchasActuales[0], hora: horarioEspecial1, terna: arrayTernasActuales[0] },
                         { cancha: arrayCanchasActuales[0], hora: horarioEspecial2, terna: arrayTernasActuales[0] },
@@ -2283,8 +2568,9 @@
                 });
             });
 
-            let idealCancha = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
-            let idealTerna = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
+            let totalFechasActual = (formatoTorneoSeleccionado === "zonas") ? (7 + fechasInterzonales) : 15;
+            let idealCancha = (formatoTorneoSeleccionado === "zonas") ? ((6 + fechasInterzonales) / 3) : 4.33;
+            let idealTerna = idealCancha;
 
             tracker.forEach((tr, eqIdx) => {
                 Object.values(tr.canchas).forEach(val => {
@@ -2307,7 +2593,7 @@
 
                 let h14 = tr.horarios[horarioNormal1];
                 let h16 = tr.horarios[horarioNormal2];
-                let idealHorario = (formatoTorneoSeleccionado === "zonas") ? 3.0 : 6.5;
+                let idealHorario = (formatoTorneoSeleccionado === "zonas") ? ((6 + fechasInterzonales) / 2) : 6.5;
                 penalizacion += Math.abs(h14 - idealHorario) * 35;
                 penalizacion += Math.abs(h16 - idealHorario) * 35;
             });
@@ -2346,7 +2632,9 @@
                     
                     let zonaPartido = "Unificada";
                     if (formatoTorneoSeleccionado === "zonas") {
-                        zonaPartido = (m.partido.local < 7) ? "Zona A" : "Zona B";
+                        const isInterzon = (m.partido.local < 7 && m.partido.visitante >= 7) || 
+                                           (m.partido.local >= 7 && m.partido.visitante < 7);
+                        zonaPartido = isInterzon ? "Interzonal" : (m.partido.local < 7 ? "Zona A" : "Zona B");
                     }
 
                     return {
@@ -2383,7 +2671,7 @@
         }
 
         function poblarSelectoresFiltro() {
-            let maxFechas = (formatoTorneoSeleccionado === "zonas") ? 7 : 15;
+            let maxFechas = (formatoTorneoSeleccionado === "zonas") ? (7 + fechasInterzonales) : 15;
 
             const selFecha = document.getElementById('sel-fecha-filter');
             if (selFecha) {
@@ -2911,8 +3199,8 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            let idealCancha = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
-            let idealTerna = (formatoTorneoSeleccionado === "zonas") ? 2.0 : 4.33;
+            let idealCancha = (formatoTorneoSeleccionado === "zonas") ? ((6 + fechasInterzonales) / 3) : 4.33;
+            let idealTerna = idealCancha;
 
             // Semáforo dinámico de mapa de calor con Tooltip Contextual integrado
             const getHeatmapClass = (val, ideal) => {
